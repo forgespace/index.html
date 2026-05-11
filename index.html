@@ -97,11 +97,7 @@
         .progress-fill { height: 100%; background: var(--orange); width: 0%; border-radius: 2px; }
 
         .auto-slots { margin: 4px 0; }
-        .auto-slot {
-            display: flex; align-items: center; gap: 4px; padding: 3px 6px;
-            background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
-            margin-bottom: 2px; font-size: 8px;
-        }
+        .auto-slot { display: flex; align-items: center; gap: 4px; padding: 3px 6px; background: var(--panel); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 2px; font-size: 8px; }
         .auto-slot select { background: #0a0f17; color: #e8e8e8; border: 1px solid var(--border); padding: 1px 3px; font-family: 'Courier New', monospace; font-size: 8px; border-radius: 2px; flex: 1; }
         .btn-slot { padding: 2px 6px; border: none; border-radius: 2px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; font-size: 7px; }
         .btn-slot-on { background: var(--green); color: #000; }
@@ -145,32 +141,16 @@
         .auto-sell-item { display: flex; align-items: center; gap: 3px; margin: 2px 0; }
 
         .lab-tabs { display: flex; gap: 2px; margin-bottom: 6px; }
-        .lab-tab {
-            flex: 1; padding: 6px 4px; background: var(--panel); border: 1px solid var(--border);
-            color: #78909c; text-align: center; cursor: pointer; font-size: 9px;
-            font-family: 'Courier New', monospace; border-radius: 3px;
-        }
+        .lab-tab { flex: 1; padding: 6px 4px; background: var(--panel); border: 1px solid var(--border); color: #78909c; text-align: center; cursor: pointer; font-size: 9px; font-family: 'Courier New', monospace; border-radius: 3px; }
         .lab-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
 
         .tree-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 4px 0; }
-        .tree-node {
-            padding: 5px 6px; border: 1px solid var(--border); border-radius: 4px;
-            cursor: pointer; font-size: 8px; text-align: center; position: relative;
-        }
+        .tree-node { padding: 5px 6px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 8px; text-align: center; position: relative; }
         .tree-node.locked { opacity: 0.3; cursor: not-allowed; background: #0a0a0a; }
         .tree-node.available { border-color: var(--purple); background: #1a0a2e; }
         .tree-node.researched { border-color: var(--green); background: #0a1a0a; }
         .tree-node .node-icon { font-size: 18px; display: block; }
-        .tree-node .node-help {
-            position: absolute; top: 2px; right: 4px; width: 14px; height: 14px;
-            background: #555; color: #fff; border-radius: 50%; font-size: 7px;
-            line-height: 14px; cursor: pointer; z-index: 10;
-        }
-        .tree-tooltip {
-            display: none; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-            background: #1a1a2e; border: 1px solid var(--accent); padding: 4px 8px;
-            border-radius: 4px; font-size: 8px; white-space: nowrap; z-index: 20;
-        }
+        .tree-node .node-help { position: absolute; top: 2px; right: 4px; width: 14px; height: 14px; background: #555; color: #fff; border-radius: 50%; font-size: 7px; line-height: 14px; cursor: pointer; z-index: 10; }
 
         .save-panel { margin-top: 8px; }
         .save-slots { display: flex; gap: 4px; }
@@ -194,11 +174,7 @@
         .achievement.pending { background: #0a0a0a; border: 1px solid #555; color: #555; }
 
         .stats-tabs { display: flex; gap: 2px; margin-bottom: 6px; }
-        .stats-tab {
-            flex: 1; padding: 5px 3px; background: var(--panel); border: 1px solid var(--border);
-            color: #78909c; text-align: center; cursor: pointer; font-size: 8px;
-            font-family: 'Courier New', monospace; border-radius: 3px;
-        }
+        .stats-tab { flex: 1; padding: 5px 3px; background: var(--panel); border: 1px solid var(--border); color: #78909c; text-align: center; cursor: pointer; font-size: 8px; font-family: 'Courier New', monospace; border-radius: 3px; }
         .stats-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
     </style>
 </head>
@@ -299,13 +275,11 @@
                 <br>
                 <button onclick="prestige()" style="padding:10px;background:var(--red);color:#fff;border:none;border-radius:4px;font-family:'Courier New';cursor:pointer;font-size:12px;width:100%;">🔄 ПРЕСТИЖ</button>
                 <div id="prestigeInfo" style="font-size:8px;color:#78909c;margin-top:4px;"></div>
-                <!-- Колесо фортуны -->
                 <div style="background:#1a0a2e;border:1px solid var(--purple);border-radius:4px;padding:6px;margin-top:8px;text-align:center;">
                     <h4 style="color:var(--purple);margin:0 0 4px;">🎰 Колесо фортуны</h4>
                     <button id="btnWheel" onclick="spinWheel()" style="padding:6px 12px;background:var(--purple);color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:'Courier New';font-size:10px;">Крутить</button>
                     <div id="wheelResult" style="font-size:10px;margin-top:4px;color:var(--gold);"></div>
                 </div>
-                <!-- Режим разработчика (спрятан) -->
                 <div style="margin-top:12px;text-align:center;opacity:0.3;">
                     <button onclick="toggleDevMode()" style="background:none;border:none;color:#555;font-size:7px;cursor:pointer;font-family:'Courier New';">dev</button>
                     <span id="devModeStatus" style="font-size:7px;color:#555;">x1</span>
@@ -378,8 +352,8 @@ const treeNodes = {
     d0: { id:'d0', icon:'⚔️', name:'Оса-Боевая', desc:'Боевой дрон', cost:300, requires:[], branch:'drone', researched:false, droneType:'wasp' },
     d1: { id:'d1', icon:'🚛', name:'Тяжеловоз', desc:'Грузовой дрон', cost:300, requires:[], branch:'drone', researched:false, droneType:'cargo' },
     d2: { id:'d2', icon:'🛰️', name:'Разведчик', desc:'Зонд', cost:300, requires:[], branch:'drone', researched:false, droneType:'scout' },
-    d3: { id:'d3', icon:'💣', name:'Камикадзе', desc:'Одноразовый', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' },
-();
+    d3: { id:'d3', icon:'💣', name:'Камикадзе', desc:'Одноразовый', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' }
+};
 
 let currentLabBranch = 'prod';
 function showLabBranch(branch) {
@@ -576,8 +550,33 @@ function renderUpgrades(){
     h+='<div style="font-size:8px;text-align:center;">⭐ ОП: <b>'+prestigePoints+'</b></div>';
     document.getElementById('permUpgrades').innerHTML=h;
 }
-function completeOrder(id){let o=activeOrders.find(x=>x.id===id);if(!o)return;if(o.mega){if((storage[o.droneType]||0)<o.amount1||(storage[o.droneType2]||0)<o.amount2){notify('❌ Не хватает!','error');return;}storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;credits+=o.bonus;totalEarned+=o.bonus;ordersCompleted++;todayEarned+=o.bonus;if(o.amount1+o.amount2>recBiggestOrder)recBiggestOrder=o.amount1+o.amount2;if(o.megaReward==='prestige'){prestigePoints++;notify('⭐ +1 ОП!','success');}if(o.megaReward==='free_upgrade'){let avail=[];for(let i=0;i<upgradeLevels.length;i++)if((upgradeLevels[i]||0)<getMaxUpgradeLevel(i))avail.push(i);if(avail.length){let uid=avail[Math.floor(Math.random()*avail.length)];upgradeLevels[uid]++;notify('🎁 '+upgradeNames[uid]+' +1','success');}}if(o.megaReward==='lab_points'){labPoints+=getLabRate()*5;notify('🔬 +'+getLabRate()*5+' очков!','success');}for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();notify('🏆 +'+o.bonus+' ГК','success');return;}if(o.auction){let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}storage[rt]-=o.amount;credits+=o.price*o.amount;totalEarned+=o.price*o.amount;ordersCompleted++;todayEarned+=o.price*o.amount;if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();updateUI();return;}let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}storage[rt]-=o.amount;let reward;if(o.noTime){reward=o.price*o.amount+(o.bonus||0);}else{let tr=Math.max(0.2,o.timeRemaining/o.totalTime);reward=Math.floor((o.price*o.amount+(o.bonus||0))*tr);reward=Math.max(reward,getMinOrderPrice(rt,o.amount));}if(investorActive)reward=Math.floor(reward*0.8);credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;if(reputation[o.faction]!==undefined)reputation[o.faction]=Math.min(100,reputation[o.faction]+5);activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();notify('📦 +'+reward+' ГК','success');}
-function declineOrder(id){let o=activeOrders.find(x=>x.id===id);if(o&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.max(0,reputation[o.faction]-3);activeOrders=activeOrders.filter(x=>x.id!==id);renderOrders();}
+function completeOrder(id){
+    let o=activeOrders.find(x=>x.id===id);if(!o)return;
+    if(o.mega){
+        if((storage[o.droneType]||0)<o.amount1||(storage[o.droneType2]||0)<o.amount2){notify('❌ Не хватает!','error');return;}
+        storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;credits+=o.bonus;totalEarned+=o.bonus;ordersCompleted++;todayEarned+=o.bonus;
+        if(o.amount1+o.amount2>recBiggestOrder)recBiggestOrder=o.amount1+o.amount2;
+        if(o.megaReward==='prestige'){prestigePoints++;notify('⭐ +1 ОП!','success');}
+        if(o.megaReward==='free_upgrade'){let avail=[];for(let i=0;i<upgradeLevels.length;i++)if((upgradeLevels[i]||0)<getMaxUpgradeLevel(i))avail.push(i);if(avail.length){let uid=avail[Math.floor(Math.random()*avail.length)];upgradeLevels[uid]++;notify('🎁 '+upgradeNames[uid]+' +1','success');}}
+        if(o.megaReward==='lab_points'){labPoints+=getLabRate()*5;notify('🔬 +'+getLabRate()*5+' очков!','success');}
+        for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);
+        activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();
+        notify('🏆 +'+o.bonus+' ГК','success');return;
+    }
+    let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}
+    storage[rt]-=o.amount;
+    let reward;
+    if(o.auction){reward=o.price*o.amount;}
+    else if(o.noTime){reward=o.price*o.amount+(o.bonus||0);}
+    else{let tr=Math.max(0.2,o.timeRemaining/o.totalTime);reward=Math.floor((o.price*o.amount+(o.bonus||0))*tr);reward=Math.max(reward,getMinOrderPrice(rt,o.amount));}
+    if(investorActive)reward=Math.floor(reward*0.8);
+    credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;
+    if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;
+    if(!o.auction&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.min(100,reputation[o.faction]+5);
+    activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();
+    notify('📦 +'+reward+' ГК','success');
+}
+function declineOrder(id){let o=activeOrders.find(x=>x.id===id);if(o&&!o.auction&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.max(0,reputation[o.faction]-3);activeOrders=activeOrders.filter(x=>x.id!==id);renderOrders();}
 function generateOrder(){if(activeOrders.length>=5)return;let pool=[{name:'КорпТорг',bonus:15,amount:5,price:12,droneType:'ant'},{name:'Имперский флот',bonus:0,amount:3,price:18,droneType:'ant'},{name:'Синдикат «Ржавый»',bonus:30,amount:2,price:8,droneType:'ant'},{name:'Гильдия Исследователей',bonus:10,amount:4,price:11,droneType:'ant'}];if(drones_unlocked.includes('wasp'))pool.push({name:'Имперский флот',bonus:20,amount:2,price:25,droneType:'wasp'});if(drones_unlocked.includes('cargo'))pool.push({name:'КорпТорг',bonus:30,amount:2,price:30,droneType:'cargo'});if(drones_unlocked.includes('scout'))pool.push({name:'Гильдия Исследователей',bonus:15,amount:3,price:20,droneType:'scout'});if(drones_unlocked.includes('bomb'))pool.push({name:'Синдикат «Ржавый»',bonus:50,amount:1,price:50,droneType:'bomb'});let f=pool[Math.floor(Math.random()*pool.length)];let noTime=Math.random()<0.35;let tt=noTime?999:(25+Math.floor(Math.random()*35));let scale=getOrderAmountScale();let o={id:orderIdCounter++,faction:f.name,text:noTime?'📌':'',amount:Math.max(1,Math.floor(f.amount*scale)),price:Math.floor(f.price*(1+prestigeLevel*0.1)),bonus:f.bonus,droneType:f.droneType,totalTime:tt,timeRemaining:tt,startTime:Date.now(),urgent:!noTime&&Math.random()<0.3,noTime,mega:false,auction:false};if(o.urgent){o.bonus*=2;o.totalTime=Math.floor(tt*0.5);o.timeRemaining=o.totalTime;}ordersToday++;activeOrders.push(o);renderOrders();}
 function generateAuction(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));let dt=types[Math.floor(Math.random()*types.length)];let scale=getOrderAmountScale();let amt=Math.max(3,Math.floor((3+Math.floor(Math.random()*8))*scale));let o={id:orderIdCounter++,faction:'Аукцион',text:'🔨 '+drone_types[dt].name+' ×'+amt,amount:amt,price:Math.floor(drone_types[dt].base_price*0.5),droneType:dt,totalTime:30,timeRemaining:30,startTime:Date.now(),auction:true,auctionPrice:Math.floor(drone_types[dt].base_price*0.5)};activeOrders.push(o);renderOrders();}
 function generateMegaOrder(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));if(types.length<2)types=['ant','ant'];let dt1=types[Math.floor(Math.random()*types.length)],dt2=types[Math.floor(Math.random()*types.length)];let rewards=['prestige','free_upgrade','lab_points'];let mr=rewards[Math.floor(Math.random()*rewards.length)];let rn=mr==='prestige'?'⭐ ОП':mr==='free_upgrade'?'🎁 Апгрейд':'🔬 Очки';let scale=getOrderAmountScale();let a1=Math.floor((15+Math.floor(Math.random()*10))*scale),a2=Math.floor((10+Math.floor(Math.random()*10))*scale);let o={id:orderIdCounter++,faction:'Галакт. Совет',text:'🏆 '+drone_types[dt1].name+'×'+a1+' + '+drone_types[dt2].name+'×'+a2,bonus:(a1+a2)*5+100,droneType:dt1,droneType2:dt2,amount1:a1,amount2:a2,totalTime:45,timeRemaining:45,startTime:Date.now(),mega:true,megaReward:mr,rewardName:rn};activeOrders.push(o);notify('🏆 МЕГА!','success');renderOrders();}
@@ -613,15 +612,14 @@ function showStatsTab(tab){
 function getPrestigeCost(){return{drones:1000+prestigeLevel*500,credits:40000+prestigeLevel*20000};}
 function updatePrestigeInfo(){let c=getPrestigeCost();document.getElementById('prestigeInfo').innerHTML='Требования: '+c.drones+' дронов и '+c.credits+' ГК';}
 function prestige(){let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}credits-=c.credits;prestigeLevel++;prestigePoints++;credits+=500;totalMade=0;for(let k in storage)storage[k]=0;produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();warehouse=20;hasTurrets=false;marketing=1.0;upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;autoSlots=[{type:'ant',active:false}];wheelUsedToday=false;investorActive=false;investorDaysLeft=0;recDronesDay=0;recEarnedDay=0;recBiggestOrder=0;todayDrones=0;todayEarned=0;for(let f in reputation)reputation[f]=50;priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';document.getElementById('turretBar').classList.remove('active');document.getElementById('autoSlots').style.display='none';document.getElementById('autoClickerStatus').style.display='none';applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'!','success');}
-function spinWheel(){if(wheelUsedToday){notify('🎰 Уже крутили!','warning');return;}wheelUsedToday=true;document.getElementById('btnWheel').disabled=true;let prizes=[{text:'💰 50 ГК',act:()=>{credits+=50;}},{text:'🔬 +3 очка',act:()=>{labPoints+=3;}},{text:'📦 +5 дронов',act:()=>{storage[currentDrone]+=5;}},{text:'⚡ x2 30с',act:()=>{activatePriceBoost(100,30000);}},{text:'💎 200 ГК',act:()=>{credits+=200;}},{text:'🛡️ +10 реп',act:()=>{for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);}},{text:'💣 -3 дрона',act:()=>{for(let k in storage)storage[k]=Math.max(0,storage[k]-1);}},{text:'Пусто',act:()=>{}},];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('wheelResult').innerText='🎰 '+p.text;p.act();updateUI();notify('🎰 '+p.text,p.text.includes('-')?'error':'success');}
+function spinWheel(){if(wheelUsedToday){notify('🎰 Уже крутили!','warning');return;}wheelUsedToday=true;document.getElementById('btnWheel').disabled=true;let prizes=[{text:'💰 50 ГК',act:()=>{credits+=50;}},{text:'🔬 +3 очка',act:()=>{labPoints+=3;}},{text:'📦 +5 дронов',act:()=>{storage[currentDrone]+=5;}},{text:'⚡ x2 30с',act:()=>{activatePriceBoost(100,30000);}},{text:'💎 200 ГК',act:()=>{credits+=200;}},{text:'🛡️ +10 реп',act:()=>{for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);}},{text:'Пусто',act:()=>{}},];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('wheelResult').innerText='🎰 '+p.text;p.act();updateUI();notify('🎰 '+p.text,p.text.includes('Пусто')?'':'success');}
 function triggerEvent(){let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'+50% цены на 60с (40 ГК).',btn1:'Купить',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Нет',act2:function(){}},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:hasTurrets?'Сбить?':'Пропустить?',btn1:hasTurrets?'Сбить':'Пропустить',act1:function(){if(hasTurrets){if(Math.random()<0.4){for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}else{credits+=40;notify('🛸 +40','success');}}else{credits+=Math.floor(Math.random()*50);}},btn2:hasTurrets?'Мимо':'Ничего',act2:function(){}},{title:'💻 Хакатака',text:cyberShield>=5?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<5){let s=Math.floor(labPoints*(50-cyberShield*10)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},{title:'💼 Инвестор',text:'500 ГК сейчас, но -20% дохода на 3 дня.',btn1:'Да',act1:function(){if(!investorActive){credits+=500;investorActive=true;investorDaysLeft=3;notify('💼 Инвестор вошёл!','success');}},btn2:'Нет',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
-function renderFactionRep(){let h='<p><b>Репутация:</b></p>';for(let f in reputation){let r=reputation[f];h+=`<div>${f}: ${r}/100<div style="height:3px;background:#333;"><div style="height:100%;width:${r}%;background:${r>70?'#66bb6a':r>30?'#ffd54f':'#ff5252'}"></div></div></div>`;}document.getElementById('factionReputation').innerHTML=h;}
+function renderFactionRep(){let h='';for(let f in reputation){let r=reputation[f];h+=`<div>${f}: ${r}/100<div style="height:3px;background:#333;"><div style="height:100%;width:${r}%;background:${r>70?'#66bb6a':r>30?'#ffd54f':'#ff5252'}"></div></div></div>`;}document.getElementById('factionReputation').innerHTML=h;}
 function renderAchievements(){let ach=[{id:'p100',text:'100 дронов',check:()=>totalMade>=100},{id:'p1000',text:'1000 дронов',check:()=>totalMade>=1000},{id:'prestige',text:'Первый престиж',check:()=>prestigeLevel>=1},{id:'all',text:'Все дроны',check:()=>drones_unlocked.length>=5},{id:'ricman',text:'1000 ГК',check:()=>credits>=1000},{id:'bank',text:'Вклад 500 ГК',check:()=>bankDeposit>=500},];let h='';for(let a of ach){let d=a.check();h+=`<div class="achievement ${d?'done':'pending'}">${d?'✅':'⬜'} ${a.text}</div>`;}document.getElementById('achievements').innerHTML=h;}
 function newDay(){
     day++;dayStartTime=Date.now();ordersToday=0;
     for(let i=0;i<Math.floor(Math.random()*3)+1;i++)generateOrder();
     credits+=5*day+Math.floor(bankDeposit*0.05);
-    // Рекорды дня
     if(day>1){if(todayDrones>recDronesDay)recDronesDay=todayDrones;if(todayEarned>recEarnedDay)recEarnedDay=todayEarned;}
     todayDrones=totalMade;todayEarned=0;
     wheelUsedToday=false;document.getElementById('btnWheel').disabled=false;document.getElementById('wheelResult').innerText='';
@@ -669,6 +667,7 @@ setInterval(renderOrders,1000);
 setInterval(()=>{if(Math.random()<0.3*gameSpeed)triggerEvent();},25000);
 setInterval(()=>{saveGame(3);},30000);
 gameLoop();updateUI();
+notify('🚀 Добро пожаловать!','');
 </script>
 </body>
 </html>
