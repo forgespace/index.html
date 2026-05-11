@@ -36,7 +36,6 @@
         .game-notification.error { border-color: var(--red); background: #1a0a0a; }
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* Модальное окно */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 1000; display: none;
@@ -115,7 +114,6 @@
         .progress-bar { width: 100%; height: 3px; background: #333; border-radius: 2px; margin-top: 2px; margin-bottom: 4px; }
         .progress-fill { height: 100%; background: var(--orange); width: 0%; border-radius: 2px; }
 
-        /* Бургер-меню авто */
         .burger-btn {
             width: 100%; padding: 8px; background: var(--panel); border: 1px solid var(--border);
             border-radius: 4px; color: var(--accent); cursor: pointer; font-family: 'Courier New', monospace;
@@ -141,6 +139,7 @@
         .order-card.urgent { border-color: var(--red); animation: pulse 0.4s infinite alternate; }
         .order-card.mega { border-color: #ffd700; background: #1a1a0a; }
         .order-card.notime { border-color: var(--green); }
+        .order-card.express { border-color: #ff9800; background: #1a0500; }
         .order-card.auction { border-color: #ff9800; background: #1a1000; }
         @keyframes pulse { from { border-color: var(--red); } to { border-color: var(--orange); } }
         .order-info { flex: 1; }
@@ -174,13 +173,15 @@
         .lab-tab { flex: 1; padding: 6px 4px; background: var(--panel); border: 1px solid var(--border); color: #78909c; text-align: center; cursor: pointer; font-size: 9px; font-family: 'Courier New', monospace; border-radius: 3px; }
         .lab-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
 
-        .tree-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin: 4px 0; }
-        .tree-node { padding: 5px 4px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 7px; text-align: center; position: relative; }
+        .tree-chain { display: flex; flex-direction: column; align-items: center; margin: 0 4px; }
+        .tree-node { padding: 5px 4px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 7px; text-align: center; position: relative; width: 95px; margin: 2px 0; }
         .tree-node.locked { opacity: 0.3; cursor: not-allowed; background: #0a0a0a; }
         .tree-node.available { border-color: var(--purple); background: #1a0a2e; }
         .tree-node.researched { border-color: var(--green); background: #0a1a0a; }
+        .tree-node.prestige-locked { opacity: 0.4; cursor: not-allowed; background: #0a0a0a; border-color: #555; }
         .tree-node .node-icon { font-size: 16px; display: block; }
         .tree-node .node-help { position: absolute; top: 2px; right: 3px; width: 12px; height: 12px; background: #555; color: #fff; border-radius: 50%; font-size: 6px; line-height: 12px; cursor: pointer; z-index: 10; }
+        .tree-arrow { color: #555; font-size: 12px; }
 
         .save-slots { display: flex; gap: 4px; }
         .save-slot { flex: 1; padding: 5px; background: #0a0f17; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 8px; font-family: 'Courier New', monospace; }
@@ -215,7 +216,7 @@
         <div class="speed-btns">
             <button class="btn-speed active-speed" onclick="setSpeed(1)">1x</button>
             <button class="btn-speed" onclick="setSpeed(0.75)">0.75x</button>
-            <button class="btn-speed" id="btnDevSpeed" onclick="setSpeed(5)" style="opacity:0.4;font-size:8px;">x5</button>
+            <button class="btn-speed" id="btnDevSpeed" onclick="setSpeed(5)">x5</button>
         </div>
     </div>
 
@@ -224,7 +225,9 @@
         <div><span class="res-lbl">🤖</span> <span class="res-item" id="drones">0</span></div>
         <div><span class="res-lbl">📦</span> <span class="res-item"><span id="warehouseUsed">0</span>/<span id="warehouseMax">20</span></span></div>
         <div><span class="res-lbl">🔬</span> <span class="res-item" id="labPoints">0</span></div>
-        <div><span class="res-lbl">📋</span> <span class="res-item"><span id="ordersToday">1</span>/<span id="ordersMax">4</span></span></div>
+        <div><span class="res-lbl">🔩</span> <span class="res-item" id="parts">0</span></div>
+        <div><span class="res-lbl">🧪</span> <span class="res-item" id="catalysts">0</span></div>
+        <div><span class="res-lbl">🔮</span> <span class="res-item" id="darkMatter">0</span></div>
     </div>
 
     <div class="boost-bar" id="boostBar">⚡ БУСТ: +<span id="boostPercent">50</span>% | <span id="boostTimer">0</span>с</div>
@@ -234,7 +237,7 @@
         <!-- ЦЕХ -->
         <div class="tab-content active" id="tab-game">
             <div class="drone-area">
-                <div class="drone-icon" id="droneIcon">🛸</div>
+                <div class="drone-icon" id="droneIcon">🐜</div>
                 <div class="drone-name" id="currentDrone">Муравей МК-1</div>
                 <div class="min-price">Мин: <span id="minDronePrice">2</span> | База: <span id="baseDronePriceDisplay">10</span> ГК</div>
                 <div class="storage-breakdown" id="storageBreakdown"></div>
@@ -249,11 +252,11 @@
             <button class="btn-night" id="btnNight" onclick="nightShift()">🌙 НОЧНАЯ СМЕНА (2x, 30с)</button>
             <div style="text-align:center;font-size:9px;">Перезарядка: <span id="intervalText">2.0</span>с</div>
 
-            <!-- Бургер авто-кликера -->
             <div class="burger-btn" id="burgerBtn" onclick="toggleBurger()" style="display:none;">🤖 Автопроизводство</div>
             <div class="burger-panel" id="burgerPanel"></div>
 
-            <div class="auto-sell-panel" id="autoSellPanel"><h4>📤 Автопродажа</h4><div id="autoSellOptions"></div></div>
+            <div class="burger-btn" id="sellBurgerBtn" onclick="toggleSellBurger()" style="display:none;">📤 Автопродажа</div>
+            <div class="burger-panel" id="sellBurgerPanel"></div>
 
             <div class="bank-panel" id="bankPanel">
                 <div><h4>🏦 Банк</h4>Вклад: <b id="bankDeposit">0</b> ГК | +<b id="bankIncome">0</b>/день</div>
@@ -294,7 +297,7 @@
         <!-- СТАТИСТИКА -->
         <div class="tab-content" id="tab-stats">
             <div class="stats-tabs">
-                <div class="stats-tab active" onclick="showStatsTab('general')">📊 Общее</div>
+                <div class="stats-tab active" onclick="showStatsTab('general')">📊</div>
                 <div class="stats-tab" onclick="showStatsTab('achievements')">🏆</div>
                 <div class="stats-tab" onclick="showStatsTab('records')">📈</div>
                 <div class="stats-tab" onclick="showStatsTab('saves')">💾</div>
@@ -315,8 +318,8 @@
                     <div id="wheelResult" style="font-size:10px;margin-top:4px;color:var(--gold);"></div>
                 </div>
                 <div style="margin-top:12px;text-align:center;opacity:0.3;">
-                    <button onclick="toggleDevStop()" style="background:none;border:none;color:#555;font-size:7px;cursor:pointer;font-family:'Courier New';">dev стоп</button>
-                    <span id="devStopStatus" style="font-size:7px;color:#555;">выкл</span>
+                    <button onclick="toggleDevStop()" style="background:none;border:none;color:#555;font-size:7px;cursor:pointer;font-family:'Courier New';">dev</button>
+                    <span id="devStopStatus" style="font-size:7px;color:#555;">▶</span>
                 </div>
             </div>
             <div id="statsAchievements" style="display:none;"><div id="achievements"></div></div>
@@ -343,7 +346,6 @@
     </div>
 </div>
 
-<!-- Модальное окно -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
     <div class="modal-box" id="modalBox" onclick="event.stopPropagation()">
         <h3 id="modalTitle"></h3>
@@ -353,7 +355,7 @@
 </div>
 
 <script>
-// ==================== МОДАЛЬНОЕ ОКНО ====================
+// ==================== МОДАЛКА ====================
 function showModal(title, text) {
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalText').innerText = text;
@@ -370,7 +372,7 @@ function notify(text, type = '') {
     setTimeout(() => el.remove(), 3000);
 }
 
-// ==================== СКОРОСТЬ / DEV ====================
+// ==================== СКОРОСТЬ ====================
 let gameSpeed = 1.0;
 let devStop = false;
 function setSpeed(s) {
@@ -382,40 +384,54 @@ function setSpeed(s) {
 }
 function toggleDevStop() {
     devStop = !devStop;
-    document.getElementById('devStopStatus').innerText = devStop ? 'СТОП' : 'выкл';
-    notify(devStop ? '⏸ Игра остановлена' : '▶ Игра продолжается', 'warning');
+    document.getElementById('devStopStatus').innerText = devStop ? '⏸' : '▶';
+    notify(devStop ? '⏸ Пауза' : '▶ Игра продолжается', 'warning');
 }
 
 // ==================== ДЕРЕВО ====================
 const treeNodes = {
-    t0: { id:'t0', icon:'⚙️', name:'Конвейер 2', desc:'Разрешён 2 ур. Конвейера (покупка за ГК)', cost:5, requires:[], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t1: { id:'t1', icon:'⚙️', name:'Конвейер 3', desc:'Разрешён 3 ур. Конвейера', cost:7, requires:['t0'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t2: { id:'t2', icon:'⚙️', name:'Конвейер 4', desc:'Разрешён 4 ур. Конвейера', cost:9, requires:['t1'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t3: { id:'t3', icon:'⚙️', name:'Конвейер 5', desc:'Разрешён 5 ур. Конвейера', cost:12, requires:['t2'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t4: { id:'t4', icon:'🤖', name:'Роботиз. 2', desc:'Разрешён 2 ур. Робота (покупка за ГК)', cost:6, requires:[], branch:'prod', researched:false, unlocksUpgrade:2 },
-    t5: { id:'t5', icon:'🤖', name:'Роботиз. 3', desc:'Разрешён 3 ур. Робота', cost:8, requires:['t4'], branch:'prod', researched:false, unlocksUpgrade:2 },
-    t6: { id:'t6', icon:'🤖', name:'Роботиз. 4', desc:'Разрешён 4 ур. Робота + бесплатный слот', cost:11, requires:['t5'], branch:'prod', researched:false, unlocksUpgrade:2, freeSlot:true },
-    t7: { id:'t7', icon:'🏭', name:'Цех 2', desc:'+5% производства, уровень верфи', cost:8, requires:[], branch:'prod', researched:false },
-    t8: { id:'t8', icon:'🏭', name:'Цех 3', desc:'+10% производства, уровень верфи', cost:10, requires:['t7'], branch:'prod', researched:false },
-    e0: { id:'e0', icon:'📜', name:'Сертифик. 2', desc:'Разрешён 2 ур. Сертификации', cost:5, requires:[], branch:'econ', researched:false, unlocksUpgrade:1 },
-    e1: { id:'e1', icon:'📜', name:'Сертифик. 3', desc:'Разрешён 3 ур. Сертификации', cost:7, requires:['e0'], branch:'econ', researched:false, unlocksUpgrade:1 },
-    e2: { id:'e2', icon:'📜', name:'Сертифик. 4', desc:'Разрешён 4 ур. Сертификации', cost:10, requires:['e1'], branch:'econ', researched:false, unlocksUpgrade:1 },
-    e3: { id:'e3', icon:'📦', name:'Логистика 1', desc:'+15 склада сразу', cost:6, requires:[], branch:'econ', researched:false },
-    e4: { id:'e4', icon:'📦', name:'Логистика 2', desc:'Разрешён 2 ур. Склада', cost:8, requires:['e3'], branch:'econ', researched:false, unlocksUpgrade:3 },
-    e5: { id:'e5', icon:'📦', name:'Логистика 3', desc:'Разрешён 3 ур. Склада', cost:10, requires:['e4'], branch:'econ', researched:false, unlocksUpgrade:3 },
-    e6: { id:'e6', icon:'📋', name:'Маркетинг 2', desc:'Разрешён 2 ур. Маркетинга', cost:6, requires:[], branch:'econ', researched:false, unlocksUpgrade:4 },
-    e7: { id:'e7', icon:'📋', name:'Маркетинг 3', desc:'Разрешён 3 ур. Маркетинга', cost:8, requires:['e6'], branch:'econ', researched:false, unlocksUpgrade:4 },
-    d0: { id:'d0', icon:'🔥', name:'Противопожарка', desc:'-70% пожары', cost:5, requires:[], branch:'def', researched:false },
-    d1: { id:'d1', icon:'🔥', name:'Противопожарка 2', desc:'Пожары устранены', cost:8, requires:['d0'], branch:'def', researched:false },
-    d2: { id:'d2', icon:'🛡️', name:'Брандмауэр 1', desc:'Защита от хака', cost:6, requires:[], branch:'def', researched:false, maxLevel:3, level:0 },
-    d3: { id:'d3', icon:'🛰️', name:'Орбит. щит 1', desc:'+20% сбитие НЛО', cost:7, requires:[], branch:'def', researched:false },
-    d4: { id:'d4', icon:'🛰️', name:'Орбит. щит 2', desc:'+40% сбитие НЛО', cost:10, requires:['d3'], branch:'def', researched:false },
-    d5: { id:'d5', icon:'👮', name:'Патруль 1', desc:'-50% диверсанты', cost:6, requires:[], branch:'def', researched:false },
-    d6: { id:'d6', icon:'👮', name:'Патруль 2', desc:'-75% диверсанты', cost:9, requires:['d5'], branch:'def', researched:false },
-    dr0: { id:'dr0', icon:'⚔️', name:'Оса-Боевая', desc:'Боевой дрон. +10% к боевым заказам', cost:300, requires:[], branch:'drone', researched:false, droneType:'wasp' },
-    dr1: { id:'dr1', icon:'🚛', name:'Тяжеловоз', desc:'Грузовой дрон. +10 к складу', cost:300, requires:[], branch:'drone', researched:false, droneType:'cargo' },
-    dr2: { id:'dr2', icon:'🛰️', name:'Разведчик', desc:'Зонд. +1 очко за заказ', cost:300, requires:[], branch:'drone', researched:false, droneType:'scout' },
-    dr3: { id:'dr3', icon:'💣', name:'Камикадзе', desc:'Одноразовый. +20% к мега-заказам', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' },
+    // Производство
+    t0: { id:'t0', icon:'⚙️', name:'Конвейер 2', desc:'Разрешён 2 ур. Конвейера', cost:5, requires:[], branch:'prod', researched:false, unlocksUpgrade:0, prestigeRequired:0 },
+    t1: { id:'t1', icon:'⚙️', name:'Конвейер 3', desc:'Разрешён 3 ур. Конвейера', cost:7, requires:['t0'], branch:'prod', researched:false, unlocksUpgrade:0, prestigeRequired:0 },
+    t2: { id:'t2', icon:'⚙️', name:'Конвейер 4', desc:'Разрешён 4 ур. Конвейера', cost:9, requires:['t1'], branch:'prod', researched:false, unlocksUpgrade:0, prestigeRequired:0 },
+    t3: { id:'t3', icon:'⚙️', name:'Конвейер 5', desc:'Разрешён 5 ур. Конвейера', cost:12, requires:['t2'], branch:'prod', researched:false, unlocksUpgrade:0, prestigeRequired:0 },
+    t4: { id:'t4', icon:'🤖', name:'Роботиз. 2', desc:'Разрешён 2 ур. Робота', cost:6, requires:[], branch:'prod', researched:false, unlocksUpgrade:2, prestigeRequired:0 },
+    t5: { id:'t5', icon:'🤖', name:'Роботиз. 3', desc:'Разрешён 3 ур. Робота', cost:8, requires:['t4'], branch:'prod', researched:false, unlocksUpgrade:2, prestigeRequired:0 },
+    t6: { id:'t6', icon:'🤖', name:'Роботиз. 4', desc:'Разрешён 4 ур. +бесплатный слот', cost:11, requires:['t5'], branch:'prod', researched:false, unlocksUpgrade:2, freeSlot:true, prestigeRequired:0 },
+    t7: { id:'t7', icon:'🏭', name:'Цех 2', desc:'+5% производства', cost:8, requires:[], branch:'prod', researched:false, prestigeRequired:0 },
+    t8: { id:'t8', icon:'🏭', name:'Цех 3', desc:'+10% производства', cost:10, requires:['t7'], branch:'prod', researched:false, prestigeRequired:0 },
+    // Экономика
+    e0: { id:'e0', icon:'📜', name:'Сертифик. 2', desc:'Разрешён 2 ур. Сертификации', cost:5, requires:[], branch:'econ', researched:false, unlocksUpgrade:1, prestigeRequired:0 },
+    e1: { id:'e1', icon:'📜', name:'Сертифик. 3', desc:'Разрешён 3 ур. Сертификации', cost:7, requires:['e0'], branch:'econ', researched:false, unlocksUpgrade:1, prestigeRequired:0 },
+    e2: { id:'e2', icon:'📜', name:'Сертифик. 4', desc:'Разрешён 4 ур. Сертификации', cost:10, requires:['e1'], branch:'econ', researched:false, unlocksUpgrade:1, prestigeRequired:0 },
+    e3: { id:'e3', icon:'📦', name:'Логистика 1', desc:'+15 склада сразу', cost:6, requires:[], branch:'econ', researched:false, prestigeRequired:0 },
+    e4: { id:'e4', icon:'📦', name:'Логистика 2', desc:'Разрешён 2 ур. Склада', cost:8, requires:['e3'], branch:'econ', researched:false, unlocksUpgrade:3, prestigeRequired:0 },
+    e5: { id:'e5', icon:'📦', name:'Логистика 3', desc:'Разрешён 3 ур. Склада', cost:10, requires:['e4'], branch:'econ', researched:false, unlocksUpgrade:3, prestigeRequired:0 },
+    e6: { id:'e6', icon:'📋', name:'Маркетинг 2', desc:'Разрешён 2 ур. Маркетинга', cost:6, requires:[], branch:'econ', researched:false, unlocksUpgrade:4, prestigeRequired:0 },
+    e7: { id:'e7', icon:'📋', name:'Маркетинг 3', desc:'Разрешён 3 ур. Маркетинга', cost:8, requires:['e6'], branch:'econ', researched:false, unlocksUpgrade:4, prestigeRequired:0 },
+    // Защита
+    d0: { id:'d0', icon:'🔥', name:'Противопожарка', desc:'-70% пожары', cost:5, requires:[], branch:'def', researched:false, prestigeRequired:0 },
+    d1: { id:'d1', icon:'🔥', name:'Противопожарка 2', desc:'Пожары устранены', cost:8, requires:['d0'], branch:'def', researched:false, prestigeRequired:0 },
+    d2: { id:'d2', icon:'🛡️', name:'Брандмауэр', desc:'Защита от хака (макс 3 ур.)', cost:6, requires:[], branch:'def', researched:false, maxLevel:3, level:0, prestigeRequired:0 },
+    d3: { id:'d3', icon:'🛰️', name:'Орбит. щит 1', desc:'+20% сбитие НЛО', cost:7, requires:[], branch:'def', researched:false, prestigeRequired:2 },
+    d4: { id:'d4', icon:'🛰️', name:'Орбит. щит 2', desc:'+40% сбитие НЛО', cost:10, requires:['d3'], branch:'def', researched:false, prestigeRequired:2 },
+    d5: { id:'d5', icon:'👮', name:'Патруль 1', desc:'-50% диверсанты', cost:6, requires:[], branch:'def', researched:false, prestigeRequired:0 },
+    d6: { id:'d6', icon:'👮', name:'Патруль 2', desc:'-75% диверсанты', cost:9, requires:['d5'], branch:'def', researched:false, prestigeRequired:0 },
+    // Дроны
+    dr0: { id:'dr0', icon:'🐜', name:'Муравей МК-2', desc:'+10% произв. (🔩×2)', cost:50, requires:[], branch:'drone', researched:false, droneUpgrade:'ant', mk:2, partsCost:2, prestigeRequired:2 },
+    dr1: { id:'dr1', icon:'🐜', name:'Муравей МК-3', desc:'+15% произв. (🔩×3+🧪×1)', cost:100, requires:['dr0'], branch:'drone', researched:false, droneUpgrade:'ant', mk:3, partsCost:3, catalystCost:1, prestigeRequired:2 },
+    dr2: { id:'dr2', icon:'⚔️', name:'Оса-Боевая', desc:'+10% боевые заказы', cost:100, requires:[], branch:'drone', researched:false, droneType:'wasp', prestigeRequired:0 },
+    dr3: { id:'dr3', icon:'⚔️', name:'Оса МК-2', desc:'+15% боевые (🔩×2)', cost:200, requires:['dr2'], branch:'drone', researched:false, droneUpgrade:'wasp', mk:2, partsCost:2, prestigeRequired:2 },
+    dr4: { id:'dr4', icon:'⚔️', name:'Оса МК-3', desc:'+20% боевые (🔩×3+🧪×1)', cost:350, requires:['dr3'], branch:'drone', researched:false, droneUpgrade:'wasp', mk:3, partsCost:3, catalystCost:1, prestigeRequired:2 },
+    dr5: { id:'dr5', icon:'🚛', name:'Тяжеловоз', desc:'+10 склада', cost:100, requires:[], branch:'drone', researched:false, droneType:'cargo', prestigeRequired:0 },
+    dr6: { id:'dr6', icon:'🚛', name:'Тяж. МК-2', desc:'+20 склада (🔩×2)', cost:200, requires:['dr5'], branch:'drone', researched:false, droneUpgrade:'cargo', mk:2, partsCost:2, prestigeRequired:2 },
+    dr7: { id:'dr7', icon:'🚛', name:'Тяж. МК-3', desc:'+30 склада (🔩×3+🧪×1)', cost:350, requires:['dr6'], branch:'drone', researched:false, droneUpgrade:'cargo', mk:3, partsCost:3, catalystCost:1, prestigeRequired:2 },
+    dr8: { id:'dr8', icon:'🛰️', name:'Разведчик', desc:'+1 очко/заказ', cost:120, requires:[], branch:'drone', researched:false, droneType:'scout', prestigeRequired:3 },
+    dr9: { id:'dr9', icon:'🛰️', name:'Развед. МК-2', desc:'+2 очка/заказ (🔩×2)', cost:250, requires:['dr8'], branch:'drone', researched:false, droneUpgrade:'scout', mk:2, partsCost:2, prestigeRequired:3 },
+    dr10: { id:'dr10', icon:'💣', name:'Камикадзе', desc:'+20% мега-заказы', cost:120, requires:[], branch:'drone', researched:false, droneType:'bomb', prestigeRequired:3 },
+    dr11: { id:'dr11', icon:'💣', name:'Камик. МК-2', desc:'+30% мега (🔩×2)', cost:250, requires:['dr10'], branch:'drone', researched:false, droneUpgrade:'bomb', mk:2, partsCost:2, prestigeRequired:3 },
+    dr12: { id:'dr12', icon:'🛡️', name:'Страж', desc:'-50% диверсанты (🔮×1)', cost:150, requires:[], branch:'drone', researched:false, droneType:'guard', prestigeRequired:3, darkMatterCost:1 },
+    dr13: { id:'dr13', icon:'🛡️', name:'Страж МК-2', desc:'-80% диверсанты (🔮×2)', cost:300, requires:['dr12'], branch:'drone', researched:false, droneUpgrade:'guard', mk:2, darkMatterCost:2, prestigeRequired:3 },
 };
 
 let currentLabBranch = 'prod';
@@ -428,14 +444,10 @@ function showLabBranch(branch) {
     renderTree();
 }
 
-function getMaxUpgradeLevel(id) {
-    if (id === 7) return 5;
-    let maxLvl = 1;
-    for (let k in treeNodes) {
-        if (treeNodes[k].researched && treeNodes[k].unlocksUpgrade === id) maxLvl++;
-    }
-    return maxLvl;
-}
+// ==================== РЕСУРСЫ ====================
+let parts = 0;
+let catalysts = 0;
+let darkMatter = 0;
 
 // ==================== СОХРАНЕНИЯ ====================
 function getState() {
@@ -455,7 +467,8 @@ function getState() {
         orderIdCounter, dayStartTime, ordersSinceLabTick, cyberShield,
         bankDeposit, nightShiftReady, gameSpeed, wheelUsedToday,
         recDronesDay, recEarnedDay, recBiggestOrder, todayDrones, todayEarned,
-        investorActive, investorDaysLeft, treeResearched: Object.keys(treeNodes).filter(k=>treeNodes[k].researched),
+        investorActive, investorDaysLeft, parts, catalysts, darkMatter,
+        treeResearched: Object.keys(treeNodes).filter(k=>treeNodes[k].researched),
         treeLevels: Object.fromEntries(Object.entries(treeNodes).filter(([k,v])=>v.maxLevel).map(([k,v])=>[k,v.level]))
     };
 }
@@ -475,8 +488,9 @@ function loadGame(slot) {
     recDronesDay=s.recDronesDay||0; recEarnedDay=s.recEarnedDay||0; recBiggestOrder=s.recBiggestOrder||0;
     todayDrones=s.todayDrones||0; todayEarned=s.todayEarned||0;
     investorActive=s.investorActive||false; investorDaysLeft=s.investorDaysLeft||0;
+    parts=s.parts||0; catalysts=s.catalysts||0; darkMatter=s.darkMatter||0;
     ordersSinceLabTick=s.ordersSinceLabTick||0;
-    storage=JSON.parse(JSON.stringify(s.storage||{ant:0,wasp:0,cargo:0,scout:0,bomb:0}));
+    storage=JSON.parse(JSON.stringify(s.storage||{ant:0,wasp:0,cargo:0,scout:0,bomb:0,guard:0}));
     reputation=JSON.parse(JSON.stringify(s.reputation||{'Имперский флот':50,'КорпТорг':50,'Синдикат «Ржавый»':50,'Гильдия Исследователей':50}));
     drones_unlocked=[...(s.drones_unlocked||['ant'])]; currentDrone=s.currentDrone||'ant';
     upgradeLevels=[...(s.upgradeLevels||[0,0,0,0,0,0,0,0])]; permUpgradeLevels=JSON.parse(JSON.stringify(s.permUpgradeLevels||{base_prod:0,start_credits:0,rep_bonus:0}));
@@ -498,14 +512,21 @@ let dayDuration=60,dayStartTime=Date.now(),ordersToday=0,baseLevelName='ГАРА
 let priceBoostActive=false,priceBoostEndTime=0,priceBoostPercent=0,boostTimerInterval=null;
 let autoSellEnabled={},autoSellLastCheck=Date.now(),hasOrbitalModule=false,hasTurrets=false;
 let labPoints=0,ordersSinceLabTick=0,autoSlots=[{type:'ant',active:false}],cyberShield=0,bankDeposit=0,nightShiftReady=true;
-let storage={ant:0,wasp:0,cargo:0,scout:0,bomb:0};
+let storage={ant:0,wasp:0,cargo:0,scout:0,bomb:0,guard:0};
 let reputation={'Имперский флот':50,'КорпТорг':50,'Синдикат «Ржавый»':50,'Гильдия Исследователей':50};
 let drones_unlocked=['ant'],currentDrone='ant';
-const drone_types={ant:{name:'Муравей МК-1',icon:'🛸',base_price:10,bonus:'+5% производство'},wasp:{name:'Оса-Боевая',icon:'⚔️',base_price:18,bonus:'+10% боевые заказы'},cargo:{name:'Тяжеловоз',icon:'🚛',base_price:22,bonus:'+10 склада'},scout:{name:'Разведчик',icon:'🛰️',base_price:15,bonus:'+1 очко/заказ'},bomb:{name:'Камикадзе',icon:'💣',base_price:35,bonus:'+20% мега-заказы'}};
+const drone_types={
+    ant:{name:'Муравей МК-1',icon:'🐜',base_price:10,bonus:'+5% произв.'},
+    wasp:{name:'Оса-Боевая',icon:'⚔️',base_price:18,bonus:'+10% боевые'},
+    cargo:{name:'Тяжеловоз',icon:'🚛',base_price:22,bonus:'+10 склада'},
+    scout:{name:'Разведчик',icon:'🛰️',base_price:15,bonus:'+1 очко/заказ'},
+    bomb:{name:'Камикадзе',icon:'💣',base_price:35,bonus:'+20% мега'},
+    guard:{name:'Страж',icon:'🛡️',base_price:25,bonus:'-50% диверс.'}
+};
 let upgradeLevels=[0,0,0,0,0,0,0,0];
 const upgradeBaseCost=[50,200,500,150,300,1000,600,2000];
 const upgradeNames=['Конвейер','Сертифик.','Робот','Склад','Маркетинг','Цех','Орб.модуль','Брандмауэр'];
-const upgradeDescs=['-7%','+12% цены','Слоты авто','+10 склада','+10% заказов','Уровень','+20 склада','Защита'];
+const upgradeDescs=['-7%','+12% цены','Авто +тур.','+10 склада','+10% заказов','Уровень','+20 склада','Защита'];
 let permUpgradeLevels={base_prod:0,start_credits:0,rep_bonus:0};
 const permUpgradeNames={base_prod:'Чертежи',start_credits:'Капитал',rep_bonus:'Дип. корпус'};
 const permUpgradeCost={base_prod:2,start_credits:2,rep_bonus:3};
@@ -513,20 +534,30 @@ let activeOrders=[],orderIdCounter=1;
 let minigameActive=false,minigameScore=0,minigameReward=0,minigameTimer=30,minigameInterval=null;
 let wheelUsedToday=false,recDronesDay=0,recEarnedDay=0,recBiggestOrder=0,todayDrones=0,todayEarned=0;
 let investorActive=false,investorDaysLeft=0;
-let burgerOpen = false;
+let burgerOpen=false,sellBurgerOpen=false;
 
 // ==================== ФУНКЦИИ ====================
 function getTotalDrones(){return Object.values(storage).reduce((a,b)=>a+b,0);}
 function getLabRate(){return Math.max(1,Math.floor(1*Math.pow(1.5,prestigeLevel)));}
+function getMaxUpgradeLevel(id){
+    if (id === 7) return 5;
+    let maxLvl = 1;
+    for (let k in treeNodes) {
+        if (treeNodes[k].researched && treeNodes[k].unlocksUpgrade === id) maxLvl++;
+    }
+    return maxLvl;
+}
 function getMaxAutoSlots(){
-    let base = 1;
-    // Бесплатные слоты от престижа
-    base += Math.floor(prestigeLevel / 3);
-    // Бесплатный слот от Роботиз. 4
+    let base = 1 + Math.floor(prestigeLevel / 3);
     if (treeNodes.t6?.researched) base++;
     return base;
 }
-function getAutoInterval(){return (3000+Math.max(0,autoSlots.length-3)*500)/gameSpeed;}
+function getAutoInterval(){
+    let base = 3000 + Math.max(0, autoSlots.length - 3) * 500;
+    let robotLevel = upgradeLevels[2] || 0;
+    base *= Math.pow(0.9, robotLevel);
+    return base / gameSpeed;
+}
 function getMinOrderPrice(type,amt){return Math.floor(drone_types[type].base_price*0.2*amt);}
 function updateDronePrice(){let b=baseDronePrice;if(priceBoostActive)b=Math.floor(b*(1+priceBoostPercent/100));dronePrice=b;}
 function getOrderAmountScale(){return 1 + warehouse/100 + prestigeLevel*0.3;}
@@ -537,26 +568,31 @@ function applyAllEffects(){
     for(let i=0;i<upgradeLevels[0];i++)produceInterval*=0.93;
     for(let i=0;i<upgradeLevels[1];i++)baseDronePrice=Math.floor(baseDronePrice*1.12);
     if(upgradeLevels[2])hasTurrets=true;
-    // Бонусы дронов
-    if(drones_unlocked.includes('ant'))produceInterval*=0.95;
-    if(drones_unlocked.includes('cargo'))warehouse+=10;
-    // Исследования
+    if(drones_unlocked.includes('ant')&&treeNodes.dr0?.researched)produceInterval*=0.90;
+    else if(drones_unlocked.includes('ant'))produceInterval*=0.95;
+    if(treeNodes.dr1?.researched)produceInterval*=0.85;
+    if(drones_unlocked.includes('cargo')){warehouse+=treeNodes.dr6?.researched?20:treeNodes.dr7?.researched?30:10;}
     if(treeNodes.e3?.researched)warehouse+=15;
     if(treeNodes.d0?.researched)fireChance=0.06;
     if(treeNodes.d1?.researched)fireChance=0;
     if(treeNodes.d2?.level>0)cyberShield=treeNodes.d2.level;
     if(treeNodes.t7?.researched)produceInterval*=0.95;
     if(treeNodes.t8?.researched)produceInterval*=0.90;
-    for(let k of['dr0','dr1','dr2','dr3']){if(treeNodes[k]?.researched&&treeNodes[k].droneType&&!drones_unlocked.includes(treeNodes[k].droneType))drones_unlocked.push(treeNodes[k].droneType);}
+    for(let k of['dr2','dr5','dr8','dr10','dr12']){
+        if(treeNodes[k]?.researched&&treeNodes[k].droneType&&!drones_unlocked.includes(treeNodes[k].droneType)){
+            drones_unlocked.push(treeNodes[k].droneType);
+        }
+    }
     updateDronePrice();
 }
 
 function activatePriceBoost(pct,dur){priceBoostActive=true;priceBoostPercent=pct;priceBoostEndTime=Date.now()+dur;document.getElementById('boostBar').classList.add('active');document.getElementById('boostPercent').innerText=pct;if(boostTimerInterval)clearInterval(boostTimerInterval);boostTimerInterval=setInterval(()=>{let r=Math.max(0,Math.ceil((priceBoostEndTime-Date.now())/1000));document.getElementById('boostTimer').innerText=r;if(r<=0){priceBoostActive=false;document.getElementById('boostBar').classList.remove('active');clearInterval(boostTimerInterval);updateDronePrice();updateUI();}},500);updateDronePrice();}
 function processAutoSell(){if(!hasOrbitalModule)return;if(getTotalDrones()>=warehouse){for(let k in autoSellEnabled){if(autoSellEnabled[k]&&(storage[k]||0)>0){let s=Math.ceil(storage[k]*0.3);s=Math.max(1,Math.min(s,storage[k]));storage[k]-=s;credits+=s*Math.floor(drone_types[k].base_price*0.2);if(getTotalDrones()<warehouse)break;}}}}
-function sellAllDrones(){let total=0;for(let k in storage){if(drones_unlocked.includes(k)&&storage[k]>0){let price=Math.floor(drone_types[k].base_price*0.2);total+=storage[k]*price;storage[k]=0;}}credits+=total;notify('💰 Продано всё! +'+total+' ГК','success');updateUI();}
+function sellAllDrones(){let total=0;for(let k in storage){if(drones_unlocked.includes(k)&&storage[k]>0){total+=storage[k]*Math.floor(drone_types[k].base_price*0.2);storage[k]=0;}}credits+=total;notify('💰 +'+total+' ГК','success');updateUI();}
 function toggleBurger(){burgerOpen=!burgerOpen;document.getElementById('burgerPanel').classList.toggle('open',burgerOpen);renderAutoSlots();}
+function toggleSellBurger(){sellBurgerOpen=!sellBurgerOpen;document.getElementById('sellBurgerPanel').classList.toggle('open',sellBurgerOpen);renderAutoSellPanel();}
 function renderAutoSlots(){
-    if(!hasTurrets&&!upgradeLevels[2]){document.getElementById('burgerBtn').style.display='none';document.getElementById('burgerPanel').classList.remove('open');return;}
+    if(!hasTurrets&&!upgradeLevels[2]){document.getElementById('burgerBtn').style.display='none';return;}
     document.getElementById('burgerBtn').style.display='block';
     let max=getMaxAutoSlots();
     while(autoSlots.length<max)autoSlots.push({type:'ant',active:false});
@@ -568,64 +604,88 @@ function renderAutoSlots(){
 function nightShift(){if(!nightShiftReady){notify('🌙 Ждите 5 мин!','warning');return;}nightShiftReady=false;document.getElementById('btnNight').disabled=true;document.getElementById('btnNight').innerText='🌙 АКТИВНА!';notify('🌙 x2 на 30с!','success');let old=produceInterval;produceInterval/=2;setTimeout(()=>{produceInterval=old;document.getElementById('btnNight').innerText='🌙 Ждите...';},30000);setTimeout(()=>{nightShiftReady=true;document.getElementById('btnNight').innerText='🌙 НОЧНАЯ СМЕНА (2x, 30с)';document.getElementById('btnNight').disabled=false;},300000);}
 function depositBank(amt){if(credits<amt){notify('💎 Недостаточно!','warning');return;}credits-=amt;bankDeposit+=amt;updateUI();}
 function withdrawBank(){credits+=bankDeposit;bankDeposit=0;updateUI();}
-function researchNode(id){let n=treeNodes[id];if(!n)return;if(n.researched&&!n.maxLevel){notify('Уже изучено!','warning');return;}if(n.maxLevel&&(n.level||0)>=(n.maxLevel||5)){notify('Макс. уровень!','warning');return;}for(let r of(n.requires||[])){if(!treeNodes[r]?.researched){notify('Нужен: '+treeNodes[r]?.name,'warning');return;}}if(labPoints<n.cost){notify('Нужно '+n.cost+' очков!','error');return;}labPoints-=n.cost;if(n.maxLevel){n.level=(n.level||0)+1;if(n.level>=n.maxLevel)n.researched=true;}else{n.researched=true;}applyAllEffects();renderTree();renderAutoSlots();renderDroneSelector();renderUpgrades();updateUI();notify('🔬 '+n.name+' разблокировано!','success');}
+
+// Исследования
+function researchNode(id){
+    let n=treeNodes[id];if(!n)return;
+    if(n.prestigeRequired && prestigeLevel < n.prestigeRequired){
+        notify('🔒 Нужен престиж '+n.prestigeRequired+'!','warning');return;
+    }
+    if(n.researched&&!n.maxLevel){notify('Уже изучено!','warning');return;}
+    if(n.maxLevel&&(n.level||0)>=(n.maxLevel||5)){notify('Макс. уровень!','warning');return;}
+    for(let r of(n.requires||[])){if(!treeNodes[r]?.researched){notify('Нужен: '+treeNodes[r]?.name,'warning');return;}}
+    // Проверка ресурсов для МК
+    if(n.partsCost && parts < n.partsCost){notify('Нужно 🔩×'+n.partsCost+'!','error');return;}
+    if(n.catalystCost && catalysts < n.catalystCost){notify('Нужно 🧪×'+n.catalystCost+'!','error');return;}
+    if(n.darkMatterCost && darkMatter < n.darkMatterCost){notify('Нужно 🔮×'+n.darkMatterCost+'!','error');return;}
+    if(labPoints<n.cost){notify('Нужно '+n.cost+' очков!','error');return;}
+    labPoints-=n.cost;
+    if(n.partsCost)parts-=n.partsCost;
+    if(n.catalystCost)catalysts-=n.catalystCost;
+    if(n.darkMatterCost)darkMatter-=n.darkMatterCost;
+    if(n.maxLevel){n.level=(n.level||0)+1;if(n.level>=n.maxLevel)n.researched=true;}else{n.researched=true;}
+    if(n.droneType&&!drones_unlocked.includes(n.droneType))drones_unlocked.push(n.droneType);
+    applyAllEffects();renderTree();renderAutoSlots();renderDroneSelector();renderUpgrades();updateUI();
+    notify('🔬 '+n.name+' изучено!','success');
+}
 function renderTree(){
-    let h='';
     let nodes = Object.values(treeNodes).filter(n => n.branch === currentLabBranch);
     if (nodes.length === 0) { document.getElementById('treeContainer').innerHTML = '<p style="color:#78909c;">Пусто</p>'; return; }
-    let sorted = nodes.sort((a,b) => {
-        let aRow = a.requires&&a.requires.length>0 ? 1 : 0;
-        let bRow = b.requires&&b.requires.length>0 ? 1 : 0;
-        if (aRow !== bRow) return aRow - bRow;
-        return 0;
-    });
-    // Группируем в цепочки
     let chains = [];
     let visited = new Set();
-    for (let n of sorted) {
+    for (let n of nodes) {
         if (visited.has(n.id)) continue;
         let chain = [n];
         visited.add(n.id);
-        let next = sorted.find(x => x.requires && x.requires.includes(n.id));
-        while (next) { chain.push(next); visited.add(next.id); next = sorted.find(x => x.requires && x.requires.includes(next.id)); }
+        let next = nodes.find(x => x.requires && x.requires.includes(n.id));
+        while (next) { chain.push(next); visited.add(next.id); next = nodes.find(x => x.requires && x.requires.includes(next.id)); }
         chains.push(chain);
     }
-    // Рендерим цепочки вертикально
+    let h = '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;">';
     for (let chain of chains) {
-        h += '<div style="display:flex;flex-direction:column;align-items:center;margin:0 2px;">';
+        h += '<div class="tree-chain">';
         for (let i = 0; i < chain.length; i++) {
             let n = chain[i];
             let cls = 'tree-node ';
-            if (n.researched && !n.maxLevel) cls += 'researched';
+            if (n.prestigeRequired && prestigeLevel < n.prestigeRequired) cls += 'prestige-locked';
+            else if (n.researched && !n.maxLevel) cls += 'researched';
             else if (n.maxLevel && (n.level||0) >= (n.maxLevel||5)) cls += 'researched';
             else {
                 let can = true;
                 for (let r of (n.requires||[])) if (!treeNodes[r]?.researched) { can = false; break; }
                 cls += can ? 'available' : 'locked';
             }
-            let costT = n.maxLevel ? ((n.level||0)+'/'+(n.maxLevel||5)) : '';
-            let title = n.maxLevel ? n.name+' '+costT : n.name;
-            h += `<div class="${cls}" onclick="researchNode('${n.id}')" style="width:100px;margin:2px 0;">
+            let info = n.prestigeRequired && prestigeLevel < n.prestigeRequired ? '⭐'+n.prestigeRequired : n.cost+' очк';
+            if (n.partsCost) info += ' 🔩'+n.partsCost;
+            if (n.catalystCost) info += ' 🧪'+n.catalystCost;
+            if (n.darkMatterCost) info += ' 🔮'+n.darkMatterCost;
+            h += `<div class="${cls}" onclick="researchNode('${n.id}')">
                 <span class="node-icon">${n.icon||'?'}</span>
-                <span class="node-help" onclick="event.stopPropagation();showModal('${n.name}','${n.desc} (Стоимость: ${n.cost} очк.)')">?</span>
-                <b>${title}</b>
+                <span class="node-help" onclick="event.stopPropagation();showModal('${n.name}','${n.desc} (${info})')">?</span>
+                <b>${n.name}</b>
             </div>`;
-            if (i < chain.length - 1) h += '<div style="color:#555;">▼</div>';
+            if (i < chain.length - 1) h += '<div class="tree-arrow">▼</div>';
         }
         h += '</div>';
     }
-    document.getElementById('treeContainer').innerHTML = '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;">' + h + '</div>';
+    h += '</div>';
+    document.getElementById('treeContainer').innerHTML = h;
     document.getElementById('labPointsDisplay2').innerText = labPoints;
     document.getElementById('labRate2').innerText = getLabRate();
 }
-function renderAutoSellPanel(){if(!hasOrbitalModule){document.getElementById('autoSellPanel').style.display='none';return;}document.getElementById('autoSellPanel').style.display='block';let h='';for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<div class="auto-sell-item"><input type="checkbox" ${autoSellEnabled[k]?'checked':''} onchange="autoSellEnabled['${k}']=this.checked"><label>${drone_types[k].icon} ${drone_types[k].name}</label></div>`;document.getElementById('autoSellOptions').innerHTML=h;}
-function addLabPoints(){ordersSinceLabTick++;if(ordersSinceLabTick>=2){ordersSinceLabTick-=2;labPoints+=getLabRate();}if(drones_unlocked.includes('scout'))labPoints+=1;renderTree();updateUI();}
+function renderAutoSellPanel(){
+    if(!hasOrbitalModule){document.getElementById('sellBurgerBtn').style.display='none';return;}
+    document.getElementById('sellBurgerBtn').style.display='block';
+    let h='';
+    for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<div class="auto-sell-item"><input type="checkbox" ${autoSellEnabled[k]?'checked':''} onchange="autoSellEnabled['${k}']=this.checked"><label>${drone_types[k].icon} ${drone_types[k].name}</label></div>`;
+    document.getElementById('sellBurgerPanel').innerHTML=h||'Нет дронов';
+}
+function addLabPoints(){ordersSinceLabTick++;if(ordersSinceLabTick>=2){ordersSinceLabTick-=2;labPoints+=getLabRate();}if(drones_unlocked.includes('scout'))labPoints+=treeNodes.dr9?.researched?2:1;renderTree();updateUI();}
 function produceDrone(){if(!canProduce||devStop)return;if(getTotalDrones()>=warehouse){processAutoSell();if(getTotalDrones()>=warehouse){notify('📦 Склад полон!','warning');return;}}let count=gameSpeed===5?5:1;for(let i=0;i<count;i++){storage[currentDrone]++;totalMade++;}document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);canProduce=false;let btn=document.getElementById('produceBtn');btn.classList.add('cooldown');btn.innerText='⏳...';let i=produceInterval/gameSpeed;if(currentDrone==='wasp')i*=1.3;if(currentDrone==='cargo')i*=1.5;if(currentDrone==='scout')i*=0.7;if(currentDrone==='bomb')i*=2.0;let st=Date.now();let timer=setInterval(()=>{let rem=Math.max(0,i-(Date.now()-st)/1000);document.getElementById('progressFill').style.width=((i-rem)/i*100)+'%';document.getElementById('intervalText').innerText=rem.toFixed(1);if(rem<=0){clearInterval(timer);canProduce=true;btn.classList.remove('cooldown');btn.innerText='🔨 ПРОИЗВЕСТИ';document.getElementById('progressFill').style.width='0%';document.getElementById('intervalText').innerText=i.toFixed(1);}},50);updateUI();}
 function tryBuyUpgrade(id){
     let maxLvl = getMaxUpgradeLevel(id);
     if ((upgradeLevels[id]||0) >= maxLvl) {
-        let extraMsg = (id===0||id===1||id===2||id===3||id===4)&&maxLvl===1?' Исследуйте в Лаборатории.':'';
-        notify('🔧 Макс. уровень '+maxLvl+'!'+extraMsg,'warning');
+        notify('🔧 Макс. уровень '+maxLvl+'! Исследуйте в Лаборатории.','warning');
         return;
     }
     let cost = id===7?2000*((upgradeLevels[7]||0)+1):getUpgradeCost(id);
@@ -636,7 +696,7 @@ function tryBuyUpgrade(id){
         case 2:hasTurrets=true;renderAutoSlots();document.getElementById('burgerBtn').style.display='block';break;
         case 3:warehouse+=10;break;case 4:marketing+=0.1;break;
         case 5:let l=upgradeLevels[5];if(l>=5)baseLevelName='ОРБИТАЛЬНАЯ ВЕРФЬ';else if(l>=4)baseLevelName='МЕГА-ЗАВОД';else if(l>=3)baseLevelName='ЗАВОД';else if(l>=2)baseLevelName='ЦЕХ';else baseLevelName='МАСТЕРСКАЯ';break;
-        case 6:warehouse+=20;hasOrbitalModule=true;renderAutoSellPanel();break;
+        case 6:warehouse+=20;hasOrbitalModule=true;renderAutoSellPanel();document.getElementById('sellBurgerBtn').style.display='block';break;
         case 7:cyberShield=upgradeLevels[7];break;
     }
     notify('✅ '+upgradeNames[id]+' → '+upgradeLevels[id],'success');renderUpgrades();updateUI();
@@ -658,12 +718,14 @@ function renderUpgrades(){
     h+='<div style="font-size:8px;text-align:center;">⭐ ОП: <b>'+prestigePoints+'</b></div>';
     document.getElementById('permUpgrades').innerHTML=h;
 }
+
+// Заказы
 function completeOrder(id){
     let o=activeOrders.find(x=>x.id===id);if(!o)return;
     if(o.mega){
         if((storage[o.droneType]||0)<o.amount1||(storage[o.droneType2]||0)<o.amount2){notify('❌ Не хватает!','error');return;}
         storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;
-        let bonusMult = drones_unlocked.includes('bomb') ? 1.2 : 1;
+        let bonusMult = drones_unlocked.includes('bomb')?(treeNodes.dr11?.researched?1.3:1.2):1;
         let reward = Math.floor(o.bonus * bonusMult);
         credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;
         if(o.amount1+o.amount2>recBiggestOrder)recBiggestOrder=o.amount1+o.amount2;
@@ -671,6 +733,7 @@ function completeOrder(id){
         if(o.megaReward==='free_upgrade'){let avail=[];for(let i=0;i<upgradeLevels.length;i++)if((upgradeLevels[i]||0)<getMaxUpgradeLevel(i))avail.push(i);if(avail.length){let uid=avail[Math.floor(Math.random()*avail.length)];upgradeLevels[uid]++;notify('🎁 '+upgradeNames[uid]+' +1','success');}}
         if(o.megaReward==='lab_points'){labPoints+=getLabRate()*5;notify('🔬 +'+getLabRate()*5+' очков!','success');}
         for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);
+        if(Math.random()<0.3)catalysts++;
         activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();
         notify('🏆 +'+reward+' ГК','success');return;
     }
@@ -679,18 +742,39 @@ function completeOrder(id){
     let reward;
     if(o.auction){reward=o.price*o.amount;}
     else if(o.noTime){reward=o.price*o.amount+(o.bonus||0);}
+    else if(o.express){reward=Math.floor((o.price*o.amount+(o.bonus||0))*2);}
     else{let tr=Math.max(0.2,o.timeRemaining/o.totalTime);reward=Math.floor((o.price*o.amount+(o.bonus||0))*tr);reward=Math.max(reward,getMinOrderPrice(rt,o.amount));}
-    // Бонус Осы для боевых заказов
-    if(drones_unlocked.includes('wasp')&&o.faction==='Имперский флот')reward=Math.floor(reward*1.1);
+    if(drones_unlocked.includes('wasp')&&o.faction==='Имперский флот'){
+        let waspBonus = treeNodes.dr4?.researched?1.20:treeNodes.dr3?.researched?1.15:1.10;
+        reward=Math.floor(reward*waspBonus);
+    }
     if(investorActive)reward=Math.floor(reward*0.8);
     credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;
     if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;
     if(!o.auction&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.min(100,reputation[o.faction]+5);
+    if(Math.random()<0.05)parts++;
     activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();
     notify('📦 +'+reward+' ГК','success');
 }
 function declineOrder(id){let o=activeOrders.find(x=>x.id===id);if(o&&!o.auction&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.max(0,reputation[o.faction]-3);activeOrders=activeOrders.filter(x=>x.id!==id);renderOrders();}
-function generateOrder(){if(activeOrders.length>=5)return;let pool=[{name:'КорпТорг',bonus:15,amount:5,price:12,droneType:'ant'},{name:'Имперский флот',bonus:0,amount:3,price:18,droneType:'ant'},{name:'Синдикат «Ржавый»',bonus:30,amount:2,price:8,droneType:'ant'},{name:'Гильдия Исследователей',bonus:10,amount:4,price:11,droneType:'ant'}];if(drones_unlocked.includes('wasp'))pool.push({name:'Имперский флот',bonus:20,amount:2,price:25,droneType:'wasp'});if(drones_unlocked.includes('cargo'))pool.push({name:'КорпТорг',bonus:30,amount:2,price:30,droneType:'cargo'});if(drones_unlocked.includes('scout'))pool.push({name:'Гильдия Исследователей',bonus:15,amount:3,price:20,droneType:'scout'});if(drones_unlocked.includes('bomb'))pool.push({name:'Синдикат «Ржавый»',bonus:50,amount:1,price:50,droneType:'bomb'});let f=pool[Math.floor(Math.random()*pool.length)];let noTime=Math.random()<0.35;let tt=noTime?999:(25+Math.floor(Math.random()*35));let scale=getOrderAmountScale();let o={id:orderIdCounter++,faction:f.name,text:noTime?'📌':'',amount:Math.max(1,Math.floor(f.amount*scale)),price:Math.floor(f.price*(1+prestigeLevel*0.1)),bonus:f.bonus,droneType:f.droneType,totalTime:tt,timeRemaining:tt,startTime:Date.now(),urgent:!noTime&&Math.random()<0.3,noTime,mega:false,auction:false};if(o.urgent){o.bonus*=2;o.totalTime=Math.floor(tt*0.5);o.timeRemaining=o.totalTime;}ordersToday++;activeOrders.push(o);renderOrders();}
+function generateOrder(){
+    if(activeOrders.length>=5)return;
+    let pool=[{name:'КорпТорг',bonus:15,amount:5,price:12,droneType:'ant'},{name:'Имперский флот',bonus:0,amount:3,price:18,droneType:'ant'},{name:'Синдикат «Ржавый»',bonus:30,amount:2,price:8,droneType:'ant'},{name:'Гильдия Исследователей',bonus:10,amount:4,price:11,droneType:'ant'}];
+    if(drones_unlocked.includes('wasp'))pool.push({name:'Имперский флот',bonus:20,amount:2,price:25,droneType:'wasp'});
+    if(drones_unlocked.includes('cargo'))pool.push({name:'КорпТорг',bonus:30,amount:2,price:30,droneType:'cargo'});
+    if(drones_unlocked.includes('scout'))pool.push({name:'Гильдия Исследователей',bonus:15,amount:3,price:20,droneType:'scout'});
+    if(drones_unlocked.includes('bomb'))pool.push({name:'Синдикат «Ржавый»',bonus:50,amount:1,price:50,droneType:'bomb'});
+    if(drones_unlocked.includes('guard'))pool.push({name:'Синдикат «Ржавый»',bonus:5,amount:1,price:40,droneType:'guard'});
+    let f=pool[Math.floor(Math.random()*pool.length)];
+    let r=Math.random();
+    let express=r<0.15;
+    let noTime=r<0.50&&!express;
+    let tt=express?12:noTime?999:(25+Math.floor(Math.random()*35));
+    let scale=getOrderAmountScale();
+    let o={id:orderIdCounter++,faction:f.name,text:express?'⚡Экспресс':noTime?'📌':'',amount:Math.max(1,Math.floor(f.amount*scale)),price:Math.floor(f.price*(1+prestigeLevel*0.1)),bonus:f.bonus,droneType:f.droneType,totalTime:tt,timeRemaining:tt,startTime:Date.now(),urgent:!noTime&&!express&&Math.random()<0.3,noTime,express,mega:false,auction:false};
+    if(o.urgent){o.bonus*=2;o.totalTime=Math.floor(tt*0.5);o.timeRemaining=o.totalTime;}
+    ordersToday++;activeOrders.push(o);renderOrders();
+}
 function generateAuction(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));let dt=types[Math.floor(Math.random()*types.length)];let scale=getOrderAmountScale();let amt=Math.max(3,Math.floor((3+Math.floor(Math.random()*8))*scale));let o={id:orderIdCounter++,faction:'Аукцион',text:'🔨 '+drone_types[dt].name+' ×'+amt,amount:amt,price:Math.floor(drone_types[dt].base_price*0.5),droneType:dt,totalTime:30,timeRemaining:30,startTime:Date.now(),auction:true,auctionPrice:Math.floor(drone_types[dt].base_price*0.5)};activeOrders.push(o);renderOrders();}
 function generateMegaOrder(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));if(types.length<2)types=['ant','ant'];let dt1=types[Math.floor(Math.random()*types.length)],dt2=types[Math.floor(Math.random()*types.length)];let rewards=['prestige','free_upgrade','lab_points'];let mr=rewards[Math.floor(Math.random()*rewards.length)];let rn=mr==='prestige'?'⭐ ОП':mr==='free_upgrade'?'🎁 Апгрейд':'🔬 Очки';let scale=getOrderAmountScale();let a1=Math.floor((15+Math.floor(Math.random()*10))*scale),a2=Math.floor((10+Math.floor(Math.random()*10))*scale);let o={id:orderIdCounter++,faction:'Галакт. Совет',text:'🏆 '+drone_types[dt1].name+'×'+a1+' + '+drone_types[dt2].name+'×'+a2,bonus:(a1+a2)*5+100,droneType:dt1,droneType2:dt2,amount1:a1,amount2:a2,totalTime:45,timeRemaining:45,startTime:Date.now(),mega:true,megaReward:mr,rewardName:rn};activeOrders.push(o);notify('🏆 МЕГА!','success');renderOrders();}
 function renderOrders(){
@@ -698,6 +782,7 @@ function renderOrders(){
     for(let o of activeOrders){
         if(o.mega){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);h+=`<div class="order-card mega"><div class="order-info">${o.text}<br>💎${o.bonus}+${o.rewardName}|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
         else if(o.auction){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}o.price=Math.floor(o.auctionPrice+Math.sin(Date.now()/2000)*5+Math.random()*3);o.price=Math.max(Math.floor(drone_types[o.droneType].base_price*0.3),o.price);h+=`<div class="order-card auction"><div class="order-info">${o.text}<br>💰<b>${o.price}</b>ГК/шт|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">П</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
+        else if(o.express){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}let dt=drone_types[o.droneType]?.name||'Любой';let rw=(o.price*o.amount+(o.bonus||0))*2;h+=`<div class="order-card express"><div class="order-info">⚡${dt}×${o.amount}<br>💎${rw}ГК|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
         else if(o.noTime){let dt=drone_types[o.droneType]?.name||'Любой';let rw=o.price*o.amount+(o.bonus||0);h+=`<div class="order-card notime"><div class="order-info">${o.text}${dt}×${o.amount}<br>💎${rw}ГК</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
         else{let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}let dt=drone_types[o.droneType]?.name||'Любой';let tr2=Math.max(0.2,o.timeRemaining/o.totalTime);let fullR=o.price*o.amount+(o.bonus||0);let minR=getMinOrderPrice(o.droneType,o.amount);let curR=Math.max(Math.floor(fullR*tr2),minR);h+=`<div class="order-card ${o.urgent?'urgent':''}"><div class="order-info">${o.text}${dt}×${o.amount}<br>💎${curR}ГК|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
     }
@@ -710,36 +795,55 @@ function hitTarget(){if(!minigameActive)return;minigameScore++;minigameReward++;
 function endMinigame(){minigameActive=false;clearInterval(minigameInterval);credits+=minigameReward;totalEarned+=minigameReward;todayEarned+=minigameReward;notify('🎯 +'+minigameReward+' ГК!','success');document.getElementById('minigameTargetContainer').innerHTML='<div>+'+minigameReward+' ГК</div>';setTimeout(()=>{document.getElementById('minigameTargetContainer').innerHTML='<div class="minigame-target" id="minigameTarget" onclick="hitTarget()"></div>';document.getElementById('minigameScore').innerText='0';document.getElementById('minigameReward').innerText='0';document.getElementById('minigameTimer').innerText='30';},2000);updateUI();}
 function selectDrone(type){if(!drones_unlocked.includes(type)){notify('🔒','warning');return;}currentDrone=type;baseDronePrice=drone_types[type].base_price;updateDronePrice();document.getElementById('droneIcon').innerText=drone_types[type].icon;document.getElementById('currentDrone').innerText=drone_types[type].name;renderDroneSelector();updateUI();}
 function renderDroneSelector(){let h='';for(let k in drone_types){let u=drones_unlocked.includes(k);let a=currentDrone===k;h+=`<div class="drone-option ${a?'active':''} ${!u?'locked':''}" onclick="selectDrone('${k}')">${drone_types[k].icon}<br>${drone_types[k].name}<br><span style="color:#ef5350;">м${Math.floor(drone_types[k].base_price*0.2)}</span></div>`;}document.getElementById('droneSelector').innerHTML=h;}
-function renderStorageBreakdown(){let h='';for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<span class="storage-item">${drone_types[k].icon} ${storage[k]||0}</span>`;document.getElementById('storageBreakdown').innerHTML=h||'<span class="storage-item">📦 0</span>';}
+function renderStorageBreakdown(){let h='';for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<span class="storage-item">${drone_types[k].icon} ${storage[k]||0}</span>`;document.getElementById('storageBreakdown').innerHTML=h||'<span class="storage-item">🐜 0</span>';}
 function showTab(tab){document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));let idx={game:0,upgrades:1,lab:2,stats:3};document.querySelectorAll('.nav-btn')[idx[tab]].classList.add('active');if(tab==='lab')renderTree();if(tab==='stats'){renderFactionRep();updatePrestigeInfo();renderAchievements();updateAllSlotInfo();}if(tab==='upgrades')renderUpgrades();document.getElementById('scrollArea').scrollTop=0;}
 function showStatsTab(tab){
-    document.getElementById('statsGeneral').style.display='none';
-    document.getElementById('statsAchievements').style.display='none';
-    document.getElementById('statsRecords').style.display='none';
-    document.getElementById('statsSaves').style.display='none';
-    document.getElementById('stats'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='block';
+    let ids={general:'statsGeneral',achievements:'statsAchievements',records:'statsRecords',saves:'statsSaves'};
+    for(let k in ids)document.getElementById(ids[k]).style.display='none';
+    document.getElementById(ids[tab]).style.display='block';
     document.querySelectorAll('.stats-tab').forEach(t=>t.classList.remove('active'));
     let idx={general:0,achievements:1,records:2,saves:3};
     document.querySelectorAll('.stats-tab')[idx[tab]].classList.add('active');
 }
+// Престиж с сохранением 20% исследований
 function getPrestigeCost(){return{drones:1000+prestigeLevel*500,credits:40000+prestigeLevel*20000};}
 function updatePrestigeInfo(){let c=getPrestigeCost();document.getElementById('prestigeInfo').innerHTML='Требования: '+c.drones+' дронов и '+c.credits+' ГК';}
-function prestige(){let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}credits-=c.credits;prestigeLevel++;prestigePoints++;credits+=500;totalMade=0;for(let k in storage)storage[k]=0;produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();warehouse=20;hasTurrets=false;marketing=1.0;upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;autoSlots=[{type:'ant',active:false}];wheelUsedToday=false;investorActive=false;investorDaysLeft=0;recDronesDay=0;recEarnedDay=0;recBiggestOrder=0;todayDrones=0;todayEarned=0;for(let f in reputation)reputation[f]=50;priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';document.getElementById('burgerBtn').style.display='none';document.getElementById('burgerPanel').classList.remove('open');applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'!','success');}
-function spinWheel(){if(wheelUsedToday){notify('🎰 Уже крутили!','warning');return;}wheelUsedToday=true;document.getElementById('btnWheel').disabled=true;let prizes=[{text:'💰 50 ГК',act:()=>{credits+=50;}},{text:'🔬 +3 очка',act:()=>{labPoints+=3;}},{text:'📦 +5 дронов',act:()=>{storage[currentDrone]+=5;}},{text:'⚡ x2 30с',act:()=>{activatePriceBoost(100,30000);}},{text:'💎 200 ГК',act:()=>{credits+=200;}},{text:'🛡️ +10 реп',act:()=>{for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);}},{text:'Пусто',act:()=>{}},];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('wheelResult').innerText='🎰 '+p.text;p.act();updateUI();notify('🎰 '+p.text,p.text.includes('Пусто')?'':'success');}
-function triggerEvent(){
-    let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'Что предложит?',btn1:'+50% цены 60с (40ГК)',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Другое',act2:function(){let opts=[{text:'-30% апгрейд (30ГК)',act:()=>{if(credits>=30){credits-=30;notify('Скидка на след. апгрейд!','success');}}},{text:'3 очка (50ГК)',act:()=>{if(credits>=50){credits-=50;labPoints+=3;notify('+3 очка!','success');}}},{text:'Чертёж (100ГК)',act:()=>{if(credits>=100){credits-=100;let avail=[];for(let k in treeNodes){if(!treeNodes[k].researched&&treeNodes[k].cost<=300)avail.push(k);}if(avail.length){let rid=avail[Math.floor(Math.random()*avail.length)];treeNodes[rid].researched=true;applyAllEffects();renderTree();renderDroneSelector();notify('🔓 '+treeNodes[rid].name+'!','success');}else{credits+=100;notify('Нет доступных','warning');}}}},];let o=opts[Math.floor(Math.random()*opts.length)];o.act();},},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:hasTurrets?'Сбить?':'Пропустить?',btn1:hasTurrets?'Сбить':'Пропустить',act1:function(){let hitchance=0.6;if(treeNodes.d3?.researched)hitchance=0.8;if(treeNodes.d4?.researched)hitchance=1.0;if(hasTurrets){if(Math.random()<hitchance){credits+=40;notify('🛸 +40','success');}else{for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}}else{credits+=Math.floor(Math.random()*50);}},btn2:hasTurrets?'Мимо':'Ничего',act2:function(){}},{title:'💻 Хакатака',text:cyberShield>=3?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<3){let s=Math.floor(labPoints*(50-cyberShield*15)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},{title:'💼 Инвестор',text:'500 ГК сейчас, -20% дохода на 3 дня.',btn1:'Да',act1:function(){if(!investorActive){credits+=500;investorActive=true;investorDaysLeft=3;notify('💼 Инвестор вошёл!','success');}},btn2:'Нет',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();renderTree();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();renderTree();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
-function renderFactionRep(){let h='';for(let f in reputation){let r=reputation[f];h+=`<div>${f}: ${r}/100<div style="height:3px;background:#333;"><div style="height:100%;width:${r}%;background:${r>70?'#66bb6a':r>30?'#ffd54f':'#ff5252'}"></div></div></div>`;}document.getElementById('factionReputation').innerHTML=h;}
-function renderAchievements(){let ach=[{id:'p100',text:'100 дронов',check:()=>totalMade>=100},{id:'p1000',text:'1000 дронов',check:()=>totalMade>=1000},{id:'prestige',text:'Первый престиж',check:()=>prestigeLevel>=1},{id:'all',text:'Все дроны',check:()=>drones_unlocked.length>=5},{id:'ricman',text:'1000 ГК',check:()=>credits>=1000},{id:'bank',text:'Вклад 500 ГК',check:()=>bankDeposit>=500},];let h='';for(let a of ach){let d=a.check();h+=`<div class="achievement ${d?'done':'pending'}">${d?'✅':'⬜'} ${a.text}</div>`;}document.getElementById('achievements').innerHTML=h;}
-function newDay(){
-    day++;dayStartTime=Date.now();ordersToday=0;
-    for(let i=0;i<Math.floor(Math.random()*3)+1;i++)generateOrder();
-    credits+=5*day+Math.floor(bankDeposit*0.05);
-    if(day>1){if(todayDrones>recDronesDay)recDronesDay=todayDrones;if(todayEarned>recEarnedDay)recEarnedDay=todayEarned;}
-    todayDrones=totalMade;todayEarned=0;
-    wheelUsedToday=false;document.getElementById('btnWheel').disabled=false;document.getElementById('wheelResult').innerText='';
-    if(investorActive){investorDaysLeft--;if(investorDaysLeft<=0){investorActive=false;notify('💼 Инвестор ушёл','');}}
-    updateUI();
+function prestige(){
+    let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}
+    if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}
+    credits-=c.credits;
+    // Сохраняем 20% случайных исследований
+    let allIds = Object.keys(treeNodes);
+    let researchedIds = allIds.filter(k => treeNodes[k].researched);
+    let keepCount = Math.floor(researchedIds.length * 0.2);
+    let shuffled = [...researchedIds].sort(() => Math.random() - 0.5);
+    let toKeep = new Set(shuffled.slice(0, keepCount));
+    // Применяем сброс
+    prestigeLevel++;prestigePoints++;
+    credits=500+permUpgradeLevels['start_credits']*200;
+    totalMade=0;for(let k in storage)storage[k]=0;
+    produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();
+    warehouse=20;hasTurrets=false;marketing=1.0;
+    upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;
+    baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;
+    autoSlots=[{type:'ant',active:false}];wheelUsedToday=false;investorActive=false;investorDaysLeft=0;
+    recDronesDay=0;recEarnedDay=0;recBiggestOrder=0;todayDrones=0;todayEarned=0;
+    parts=Math.ceil(parts*0.2);catalysts=Math.ceil(catalysts*0.2);darkMatter=Math.ceil(darkMatter*0.2);
+    for(let f in reputation)reputation[f]=50;
+    // Сброс исследований
+    for(let k in treeNodes){treeNodes[k].researched=toKeep.has(k);}
+    priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);
+    document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';
+    document.getElementById('sellBurgerBtn').style.display='none';
+    document.getElementById('burgerBtn').style.display='none';document.getElementById('burgerPanel').classList.remove('open');
+    applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'! Сохранено '+keepCount+' иссл.','success');
 }
+function spinWheel(){if(wheelUsedToday){notify('🎰 Уже крутили!','warning');return;}wheelUsedToday=true;document.getElementById('btnWheel').disabled=true;let prizes=[{text:'💰 50 ГК',act:()=>{credits+=50;}},{text:'🔬 +3 очка',act:()=>{labPoints+=3;}},{text:'📦 +5 дронов',act:()=>{storage[currentDrone]+=5;}},{text:'⚡ x2 30с',act:()=>{activatePriceBoost(100,30000);}},{text:'💎 200 ГК',act:()=>{credits+=200;}},{text:'🛡️ +10 реп',act:()=>{for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);}},{text:'🔩 +1 деталь',act:()=>{parts++;}},];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('wheelResult').innerText='🎰 '+p.text;p.act();updateUI();notify('🎰 '+p.text,'success');}
+function triggerEvent(){
+    let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'4 варианта:',btn1:'+50% цены 60с (40ГК)',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Случ. (30ГК)',act2:function(){let opts=[{text:'-30% апгрейд(30ГК)',act:()=>{if(credits>=30){credits-=30;notify('Скидка!','success');}}},{text:'+3 очка(50ГК)',act:()=>{if(credits>=50){credits-=50;labPoints+=3;notify('+3 очка!','success');}}},{text:'🔩+1(100ГК)',act:()=>{if(credits>=100){credits-=100;parts++;notify('+1 деталь!','success');}}},];let o=opts[Math.floor(Math.random()*opts.length)];o.act();},},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:'Сбить?',btn1:'Сбить',act1:function(){let hitchance=0.6;if(treeNodes.d3?.researched)hitchance=0.8;if(treeNodes.d4?.researched)hitchance=1.0;if(Math.random()<hitchance){credits+=40;notify('🛸 +40','success');if(Math.random()<0.2)darkMatter++;}else{for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}},btn2:'Пропустить',act2:function(){credits+=Math.floor(Math.random()*50);}},{title:'💻 Хакатака',text:cyberShield>=3?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<3){let s=Math.floor(labPoints*(50-cyberShield*15)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},{title:'💼 Инвестор',text:'500 ГК сейчас, -20% дохода на 3 дня.',btn1:'Да',act1:function(){if(!investorActive){credits+=500;investorActive=true;investorDaysLeft=3;notify('💼 Инвестор вошёл!','success');}},btn2:'Нет',act2:function(){}},{title:'👥 Миграция',text:'+10% производство на 2 дня!',btn1:'Принять',act1:function(){produceInterval*=0.9;notify('👥 Миграция! +10%','success');setTimeout(()=>{produceInterval/=0.9;notify('👥 Миграция закончилась','');},120000);},btn2:'Отказать',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
+function renderFactionRep(){let h='';for(let f in reputation){let r=reputation[f];h+=`<div>${f}: ${r}/100<div style="height:3px;background:#333;"><div style="height:100%;width:${r}%;background:${r>70?'#66bb6a':r>30?'#ffd54f':'#ff5252'}"></div></div></div>`;}document.getElementById('factionReputation').innerHTML=h;}
+function renderAchievements(){let ach=[{id:'p100',text:'100 дронов',check:()=>totalMade>=100},{id:'p1000',text:'1000 дронов',check:()=>totalMade>=1000},{id:'prestige',text:'Первый престиж',check:()=>prestigeLevel>=1},{id:'all',text:'Все дроны',check:()=>drones_unlocked.length>=6},{id:'rich',text:'10 000 ГК',check:()=>credits>=10000},];let h='';for(let a of ach){let d=a.check();h+=`<div class="achievement ${d?'done':'pending'}">${d?'✅':'⬜'} ${a.text}</div>`;}document.getElementById('achievements').innerHTML=h;}
+function newDay(){day++;dayStartTime=Date.now();ordersToday=0;for(let i=0;i<Math.floor(Math.random()*3)+1;i++)generateOrder();credits+=5*day+Math.floor(bankDeposit*0.05);if(day>1){if(todayDrones>recDronesDay)recDronesDay=todayDrones;if(todayEarned>recEarnedDay)recEarnedDay=todayEarned;}todayDrones=totalMade;todayEarned=0;wheelUsedToday=false;document.getElementById('btnWheel').disabled=false;document.getElementById('wheelResult').innerText='';if(investorActive){investorDaysLeft--;if(investorDaysLeft<=0){investorActive=false;notify('💼 Инвестор ушёл','');}}updateUI();}
 function renderAll(){renderUpgrades();renderDroneSelector();renderOrders();renderTree();renderAutoSellPanel();renderAutoSlots();document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';updateAllSlotInfo();}
 function updateUI(){
     let t=getTotalDrones();
@@ -748,7 +852,7 @@ function updateUI(){
     document.getElementById('baseDronePriceDisplay').innerText=baseDronePrice;
     document.getElementById('intervalText').innerText=canProduce?produceInterval.toFixed(1):'...';
     document.getElementById('warehouseUsed').innerText=t;document.getElementById('warehouseMax').innerText=warehouse;
-    document.getElementById('ordersToday').innerText=activeOrders.length;document.getElementById('ordersMax').innerText=5;
+    document.getElementById('ordersToday').innerText=activeOrders.length;
     document.getElementById('dayRemaining').innerText=Math.max(0,Math.ceil(dayDuration-(Date.now()-dayStartTime)/1000*gameSpeed));
     document.getElementById('day').innerText=day;document.getElementById('statTotal').innerText=totalMade;
     document.getElementById('statEarned').innerText=Math.floor(totalEarned);document.getElementById('statOrders').innerText=ordersCompleted;
@@ -758,13 +862,15 @@ function updateUI(){
     document.getElementById('labPoints').innerText=labPoints;document.getElementById('labRate2').innerText=getLabRate();
     document.getElementById('labPointsDisplay2').innerText=labPoints;
     document.getElementById('bankDeposit').innerText=bankDeposit;document.getElementById('bankIncome').innerText=Math.floor(bankDeposit*0.05);
+    document.getElementById('parts').innerText=parts;document.getElementById('catalysts').innerText=catalysts;
+    document.getElementById('darkMatter').innerText=darkMatter;
     document.getElementById('recDronesDay').innerText=recDronesDay;document.getElementById('recEarnedDay').innerText=recEarnedDay;
     document.getElementById('recBiggestOrder').innerText=recBiggestOrder;
     document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';
     updatePrestigeInfo();renderStorageBreakdown();
 }
 function gameLoop(){
-    if(devStop) { requestAnimationFrame(()=>setTimeout(gameLoop,500)); return; }
+    if(devStop){requestAnimationFrame(()=>setTimeout(gameLoop,500));return;}
     if((Date.now()-dayStartTime)/1000*gameSpeed>=dayDuration)newDay();
     if(hasTurrets){let iv=getAutoInterval();for(let s of autoSlots){if(s.active&&drones_unlocked.includes(s.type)&&Date.now()-lastAutoTick>=iv&&getTotalDrones()<warehouse){let count=gameSpeed===5?5:1;for(let i=0;i<count;i++){storage[s.type]++;totalMade++;}lastAutoTick=Date.now();document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);}}}
     if(Date.now()-autoSellLastCheck>=5000/gameSpeed){processAutoSell();autoSellLastCheck=Date.now();}
