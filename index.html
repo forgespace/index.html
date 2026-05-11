@@ -24,20 +24,21 @@
         }
         .game-notification {
             background: #1a1a2e; border: 1px solid var(--accent);
-            padding: 10px 14px; border-radius: 6px; color: #fff; font-size: 13px;
+            padding: 12px 16px; border-radius: 6px; color: #fff; font-size: 14px;
             font-family: 'Courier New', monospace;
-            position: absolute; top: 10px; right: 10px; left: 10px; z-index: 999;
-            animation: slideDown 0.3s ease-out;
-            pointer-events: none; text-align: center;
+            position: absolute; top: 50px; right: 8px; z-index: 999;
+            animation: slideInRight 0.3s ease-out;
+            pointer-events: auto; cursor: pointer;
+            max-width: 280px; box-shadow: 0 4px 12px rgba(0,0,0,0.7);
         }
         .game-notification.success { border-color: var(--green); background: #0a1a0a; }
         .game-notification.warning { border-color: var(--orange); background: #1a1a0a; }
         .game-notification.error { border-color: var(--red); background: #1a0a0a; }
-        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         .header { text-align: center; border-bottom: 2px solid #2a3a5c; padding: 6px 8px; flex-shrink: 0; background: #0d1520; display: flex; align-items: center; justify-content: space-between; }
         .header h1 { color: var(--accent); font-size: 15px; letter-spacing: 2px; margin: 0; }
-        .header .location { color: #90a4ae; font-size: 9px; }
+        .header .location { color: #90a4ae; font-size: 10px; }
         .btn-speed {
             padding: 4px 10px; border: 1px solid var(--accent); border-radius: 4px;
             background: #0f1a2e; color: var(--accent); cursor: pointer;
@@ -45,26 +46,18 @@
         }
         .btn-speed.slow { border-color: var(--orange); color: var(--orange); }
 
-        .info-panel {
-            background: var(--panel); border-bottom: 1px solid var(--border); padding: 5px 8px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 9px; flex-shrink: 0;
+        .top-resources {
+            background: var(--panel); border-bottom: 1px solid var(--border);
+            padding: 5px 8px; display: flex; justify-content: space-between; flex-shrink: 0; font-size: 9px;
         }
-        .info-block .label { color: #78909c; font-size: 7px; text-transform: uppercase; }
-        .info-block .value { color: var(--gold); font-weight: bold; font-size: 11px; }
+        .top-resources .res-item { color: var(--gold); font-weight: bold; }
+        .top-resources .res-lbl { color: #78909c; font-size: 7px; }
 
         .boost-bar {
             background: #1a0a2e; border-bottom: 1px solid var(--purple);
             padding: 3px 8px; font-size: 9px; color: var(--purple); text-align: center; flex-shrink: 0; display: none;
         }
         .boost-bar.active { display: block; }
-
-        .resources {
-            background: var(--panel); border-bottom: 1px solid var(--border);
-            padding: 5px 8px; display: flex; justify-content: space-between; flex-shrink: 0;
-        }
-        .resource { text-align: center; }
-        .resource .val { color: var(--gold); font-size: 14px; font-weight: bold; }
-        .resource .lbl { color: #78909c; font-size: 8px; }
 
         .scroll-area { flex: 1; overflow-y: auto; padding: 8px; -webkit-overflow-scrolling: touch; }
 
@@ -83,12 +76,16 @@
         .drone-option.active { border-color: var(--orange); background: #1a2a1a; }
         .drone-option.locked { opacity: 0.3; cursor: not-allowed; }
 
+        .btn-row { display: flex; gap: 4px; margin: 6px 0; }
         .btn-produce {
-            width: 100%; padding: 12px; background: var(--orange); border: none; border-radius: 6px;
-            color: #000; font-size: 14px; font-weight: bold; cursor: pointer;
-            margin: 6px 0; font-family: 'Courier New', monospace;
+            flex: 1; padding: 12px; background: var(--orange); border: none; border-radius: 6px;
+            color: #000; font-size: 14px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;
         }
         .btn-produce.cooldown { background: #444; color: #888; cursor: not-allowed; }
+        .btn-sell-all {
+            padding: 12px 10px; background: #ff5252; border: none; border-radius: 6px;
+            color: #fff; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;
+        }
 
         .btn-night {
             width: 100%; padding: 8px; background: #1a1a3e; border: 1px solid #4fc3f7; border-radius: 4px;
@@ -112,22 +109,25 @@
 
         .section-title { color: var(--accent); font-size: 12px; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 3px; margin: 8px 0 5px; }
 
-        .order-card { background: var(--panel); border: 1px solid var(--border); border-radius: 5px; padding: 6px; margin-bottom: 4px; font-size: 9px; }
+        .order-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-bottom: 4px; }
+        .order-header .order-count { color: var(--gold); font-weight: bold; }
+        .order-card { background: var(--panel); border: 1px solid var(--border); border-radius: 5px; padding: 5px; margin-bottom: 3px; font-size: 9px; display: flex; justify-content: space-between; align-items: center; }
         .order-card.urgent { border-color: var(--red); animation: pulse 0.4s infinite alternate; }
         .order-card.mega { border-color: #ffd700; background: #1a1a0a; }
         .order-card.notime { border-color: var(--green); }
-        .order-card.auction { border-color: #ff9800; background: #1a1000; animation: auctionPulse 1s infinite alternate; }
-        @keyframes auctionPulse { from { border-color: #ff9800; } to { border-color: #ffd54f; } }
+        .order-card.auction { border-color: #ff9800; background: #1a1000; }
         @keyframes pulse { from { border-color: var(--red); } to { border-color: var(--orange); } }
-        .btn-small { padding: 3px 6px; border: none; border-radius: 3px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; margin-top: 3px; margin-right: 3px; font-size: 8px; }
-        .btn-accept { background: var(--accent); color: #000; }
-        .btn-decline { background: var(--red); color: #fff; }
+        .order-info { flex: 1; }
+        .order-actions { display: flex; gap: 2px; flex-shrink: 0; }
+        .btn-tiny { padding: 2px 4px; border: none; border-radius: 2px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; font-size: 7px; margin: 1px; }
+        .btn-tiny-accept { background: var(--accent); color: #000; }
+        .btn-tiny-decline { background: var(--red); color: #fff; }
 
         .minigame-area { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 8px; margin: 8px 0; text-align: center; }
         .minigame-target { display: inline-block; width: 42px; height: 42px; background: var(--orange); border-radius: 50%; cursor: pointer; margin: 3px; }
 
-        .bank-panel { background: #0a1a0a; border: 1px solid #ffd700; border-radius: 4px; padding: 6px; margin: 5px 0; font-size: 9px; }
-        .bank-panel h4 { color: #ffd700; margin: 0 0 3px; }
+        .bank-panel { background: #0a1a0a; border: 1px solid #ffd700; border-radius: 4px; padding: 6px; margin: 5px 0; font-size: 9px; display: flex; justify-content: space-between; align-items: center; }
+        .bank-panel h4 { color: #ffd700; margin: 0; font-size: 10px; }
 
         .event-area { background: #1a0a0a; border: 1px solid var(--red); border-radius: 4px; padding: 6px; margin: 5px 0; display: none; }
         .event-area h3 { color: var(--red); font-size: 11px; margin-bottom: 3px; }
@@ -138,8 +138,8 @@
         .upgrade .level { color: var(--gold); font-size: 8px; }
         .upgrade .cost { color: var(--gold); }
 
-        .perm-upgrade { margin-top: 8px; padding: 6px; background: #1a1a0a; border: 1px solid #ffd700; border-radius: 4px; font-size: 9px; }
-        .perm-upgrade h4 { color: #ffd700; margin: 0 0 3px; font-size: 10px; }
+        .perm-row { display: flex; gap: 4px; }
+        .perm-item { flex: 1; background: #1a1a0a; border: 1px solid #ffd700; border-radius: 3px; padding: 4px; cursor: pointer; font-size: 8px; text-align: center; }
 
         .auto-sell-panel { background: #0a0f17; border: 1px solid #4fc3f7; border-radius: 4px; padding: 5px; margin-top: 5px; font-size: 8px; display: none; }
         .auto-sell-item { display: flex; align-items: center; gap: 3px; margin: 2px 0; }
@@ -152,17 +152,27 @@
         }
         .lab-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
 
-        .tree-row { display: flex; flex-direction: column; gap: 3px; margin: 4px 0; padding-left: 8px; border-left: 1px dashed #333; }
+        .tree-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 4px 0; }
         .tree-node {
-            padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px;
-            cursor: pointer; font-size: 9px; text-align: center; width: 100%;
+            padding: 5px 6px; border: 1px solid var(--border); border-radius: 4px;
+            cursor: pointer; font-size: 8px; text-align: center; position: relative;
         }
         .tree-node.locked { opacity: 0.3; cursor: not-allowed; background: #0a0a0a; }
         .tree-node.available { border-color: var(--purple); background: #1a0a2e; }
         .tree-node.researched { border-color: var(--green); background: #0a1a0a; }
-        .tree-arrow { text-align: center; color: #555; font-size: 12px; margin: 2px 0; }
+        .tree-node .node-icon { font-size: 18px; display: block; }
+        .tree-node .node-help {
+            position: absolute; top: 2px; right: 4px; width: 14px; height: 14px;
+            background: #555; color: #fff; border-radius: 50%; font-size: 7px;
+            line-height: 14px; cursor: pointer; z-index: 10;
+        }
+        .tree-tooltip {
+            display: none; position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+            background: #1a1a2e; border: 1px solid var(--accent); padding: 4px 8px;
+            border-radius: 4px; font-size: 8px; white-space: nowrap; z-index: 20;
+        }
 
-        .save-panel { margin-top: 8px; padding: 6px; background: var(--panel); border: 1px solid var(--border); border-radius: 4px; }
+        .save-panel { margin-top: 8px; }
         .save-slots { display: flex; gap: 4px; }
         .save-slot { flex: 1; padding: 5px; background: #0a0f17; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 8px; font-family: 'Courier New', monospace; }
         .save-slot .slot-num { color: var(--accent); font-weight: bold; font-size: 9px; }
@@ -182,6 +192,14 @@
         .achievement { padding: 3px 5px; margin: 2px 0; border-radius: 3px; font-size: 8px; }
         .achievement.done { background: #0a1a0a; border: 1px solid var(--green); color: var(--green); }
         .achievement.pending { background: #0a0a0a; border: 1px solid #555; color: #555; }
+
+        .stats-tabs { display: flex; gap: 2px; margin-bottom: 6px; }
+        .stats-tab {
+            flex: 1; padding: 5px 3px; background: var(--panel); border: 1px solid var(--border);
+            color: #78909c; text-align: center; cursor: pointer; font-size: 8px;
+            font-family: 'Courier New', monospace; border-radius: 3px;
+        }
+        .stats-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
     </style>
 </head>
 <body>
@@ -190,29 +208,24 @@
     <div class="header">
         <div>
             <h1>🚀 DRONE FORGE</h1>
-            <div class="location" id="baseLevel">ГАРАЖ | День <span id="day">1</span> | ⭐<span id="headerPrestige">0</span></div>
+            <div class="location" id="baseLevel">ГАРАЖ | День <span id="day">1</span> | ⭐<span id="headerPrestige">0</span> | ⏳<span id="dayRemaining">60</span>с</div>
         </div>
         <button class="btn-speed" id="btnSpeed" onclick="toggleSpeed()">⏩ 1x</button>
     </div>
 
-    <div class="info-panel">
-        <div class="info-block"><div class="label">⏳ До конца</div><div class="value"><span id="dayRemaining">60</span>с</div></div>
-        <div class="info-block"><div class="label">📋 Заказов</div><div class="value"><span id="ordersToday">1</span></div></div>
-        <div class="info-block"><div class="label">📦 Склад</div><div class="value"><span id="warehouseUsed">0</span>/<span id="warehouseMax">20</span></div></div>
-        <div class="info-block"><div class="label">🔬 Очки</div><div class="value"><span id="labPoints">0</span></div></div>
+    <div class="top-resources">
+        <div><span class="res-lbl">💎</span> <span class="res-item" id="credits">100</span></div>
+        <div><span class="res-lbl">🤖</span> <span class="res-item" id="drones">0</span></div>
+        <div><span class="res-lbl">📦</span> <span class="res-item"><span id="warehouseUsed">0</span>/<span id="warehouseMax">20</span></span></div>
+        <div><span class="res-lbl">🔬</span> <span class="res-item" id="labPoints">0</span></div>
+        <div><span class="res-lbl">📋</span> <span class="res-item"><span id="ordersToday">1</span>/<span id="ordersMax">4</span></span></div>
     </div>
 
     <div class="boost-bar" id="boostBar">⚡ БУСТ: +<span id="boostPercent">50</span>% | <span id="boostTimer">0</span>с</div>
 
-    <div class="resources">
-        <div class="resource"><div class="val" id="credits">100</div><div class="lbl">💎 ГК</div></div>
-        <div class="resource"><div class="val" id="drones">0</div><div class="lbl">🤖 Дроны</div></div>
-        <div class="resource"><div class="val" id="totalMade">0</div><div class="lbl">⚙️ Произв.</div></div>
-    </div>
-
     <div class="scroll-area" id="scrollArea">
 
-        <!-- ИГРА -->
+        <!-- ЦЕХ -->
         <div class="tab-content active" id="tab-game">
             <div class="drone-area">
                 <div class="drone-icon" id="droneIcon">📦</div>
@@ -223,7 +236,10 @@
                 <div class="turret-bar" id="turretBar">🛡️ Турели активны</div>
             </div>
 
-            <button class="btn-produce" id="produceBtn" onclick="produceDrone()">🔨 ПРОИЗВЕСТИ ДРОНА</button>
+            <div class="btn-row">
+                <button class="btn-produce" id="produceBtn" onclick="produceDrone()">🔨 ПРОИЗВЕСТИ ДРОНА</button>
+                <button class="btn-sell-all" onclick="sellAllDrones()">💰<br>ВСЁ</button>
+            </div>
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <button class="btn-night" id="btnNight" onclick="nightShift()">🌙 НОЧНАЯ СМЕНА (2x, 30с)</button>
             <div style="text-align:center;font-size:9px;">Перезарядка: <span id="intervalText">2.0</span>с<span id="autoClickerStatus" style="display:none;"> | 🤖 Авто</span></div>
@@ -232,54 +248,87 @@
             <div class="auto-sell-panel" id="autoSellPanel"><h4>📤 Автопродажа</h4><div id="autoSellOptions"></div></div>
 
             <div class="bank-panel" id="bankPanel">
-                <h4>🏦 Галактический Банк</h4>
-                <div>Вклад: <b id="bankDeposit">0</b> ГК | Доход: +<b id="bankIncome">0</b> ГК/день</div>
-                <button onclick="depositBank()" style="margin:4px 4px 0 0;padding:3px 8px;background:#ffd700;color:#000;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:8px;">Вложить 100</button>
-                <button onclick="withdrawBank()" style="margin:4px 0 0;padding:3px 8px;background:#ff5252;color:#fff;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:8px;">Снять всё</button>
+                <div><h4>🏦 Банк</h4>Вклад: <b id="bankDeposit">0</b> ГК | +<b id="bankIncome">0</b>/день</div>
+                <div>
+                    <button onclick="depositBank()" style="padding:3px 6px;background:#ffd700;color:#000;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:8px;">+100</button>
+                    <button onclick="withdrawBank()" style="padding:3px 6px;background:#ff5252;color:#fff;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:8px;">Снять</button>
+                </div>
             </div>
 
             <div id="eventBox" class="event-area"><h3 id="eventTitle"></h3><p id="eventText"></p><div id="eventBtns"></div></div>
-            <div class="section-title">📦 ЗАКАЗЫ</div><div id="orderList"></div>
+            <div class="order-header"><span>📦 ЗАКАЗЫ</span> <span class="order-count"><span id="activeOrderCount">0</span>/<span id="maxOrderCount">5</span></span></div>
+            <div id="orderList"></div>
             <div class="minigame-area"><h3>🎯 Мини-игра (30с)</h3><div>Очки: <span id="minigameScore">0</span> | +<span id="minigameReward">0</span> ГК | ⏱ <span id="minigameTimer">30</span>с</div><div id="minigameTargetContainer"><div class="minigame-target" id="minigameTarget" onclick="hitTarget()"></div></div></div>
         </div>
 
         <!-- АПГРЕЙДЫ -->
-        <div class="tab-content" id="tab-upgrades"><div id="upgradesList"></div><div class="perm-upgrade" id="permUpgrades"></div></div>
+        <div class="tab-content" id="tab-upgrades">
+            <div id="upgradesList"></div>
+            <div class="section-title">⭐ Перманентные</div>
+            <div class="perm-row" id="permUpgrades"></div>
+        </div>
 
         <!-- ЛАБОРАТОРИЯ -->
         <div class="tab-content" id="tab-lab">
             <div class="section-title">🔬 ДЕРЕВО ИССЛЕДОВАНИЙ</div>
             <div style="font-size:9px;margin-bottom:4px;">Очки: <b id="labPointsDisplay2">0</b> | +<b id="labRate2">1</b> за 2 заказа</div>
             <div class="lab-tabs">
-                <div class="lab-tab active" onclick="showLabBranch('prod')">🏭 Произв.</div>
-                <div class="lab-tab" onclick="showLabBranch('econ')">💰 Эконом.</div>
-                <div class="lab-tab" onclick="showLabBranch('def')">🛡️ Защита</div>
-                <div class="lab-tab" onclick="showLabBranch('drone')">🤖 Дроны</div>
+                <div class="lab-tab active" onclick="showLabBranch('prod')">🏭</div>
+                <div class="lab-tab" onclick="showLabBranch('econ')">💰</div>
+                <div class="lab-tab" onclick="showLabBranch('def')">🛡️</div>
+                <div class="lab-tab" onclick="showLabBranch('drone')">🤖</div>
             </div>
             <div id="treeContainer"></div>
         </div>
 
         <!-- СТАТИСТИКА -->
         <div class="tab-content" id="tab-stats">
-            <p>⚙️ Произведено: <b id="statTotal">0</b></p>
-            <p>💎 Заработано: <b id="statEarned">0</b> ГК</p>
-            <p>📦 Заказов: <b id="statOrders">0</b></p>
-            <p>🔄 Престиж: <b id="statPrestige">0</b> | ⭐ ОП: <b id="statPP">0</b></p>
-            <p>🔬 Очки: <b id="statLab">0</b> | 🤖 Слотов: <b id="statAutoSlots">0</b></p>
-            <div class="section-title">🏆 Достижения</div><div id="achievements"></div>
-            <div id="factionReputation"></div>
-            <button onclick="prestige()" style="padding:10px;background:var(--red);color:#fff;border:none;border-radius:4px;font-family:'Courier New';cursor:pointer;font-size:12px;width:100%;margin-top:8px;">🔄 ПРЕСТИЖ</button>
-            <div id="prestigeInfo" style="font-size:8px;color:#78909c;margin-top:4px;"></div>
-            <div class="save-panel"><h4>💾 Сохранения (авто — 3)</h4><div class="save-slots">
-                <div class="save-slot"><div class="slot-num">1</div><div class="slot-info" id="slot1Info">-</div><div class="slot-btns"><button onclick="saveGame(1)" style="background:#66bb6a;color:#000;">С</button><button onclick="loadGame(1)" style="background:#4fc3f7;color:#000;">З</button></div></div>
-                <div class="save-slot"><div class="slot-num">2</div><div class="slot-info" id="slot2Info">-</div><div class="slot-btns"><button onclick="saveGame(2)" style="background:#66bb6a;color:#000;">С</button><button onclick="loadGame(2)" style="background:#4fc3f7;color:#000;">З</button></div></div>
-                <div class="save-slot"><div class="slot-num">А</div><div class="slot-info" id="slot3Info">-</div><div class="slot-btns"><button onclick="loadGame(3)" style="background:#4fc3f7;color:#000;">З</button></div></div>
-            </div></div>
+            <div class="stats-tabs">
+                <div class="stats-tab active" onclick="showStatsTab('general')">📊 Общее</div>
+                <div class="stats-tab" onclick="showStatsTab('achievements')">🏆</div>
+                <div class="stats-tab" onclick="showStatsTab('records')">📈</div>
+                <div class="stats-tab" onclick="showStatsTab('saves')">💾</div>
+            </div>
+            <div id="statsGeneral">
+                <p>⚙️ Произведено: <b id="statTotal">0</b></p>
+                <p>💎 Заработано: <b id="statEarned">0</b> ГК</p>
+                <p>📦 Заказов: <b id="statOrders">0</b></p>
+                <p>🔄 Престиж: <b id="statPrestige">0</b> | ⭐ ОП: <b id="statPP">0</b></p>
+                <p>🔬 Очки: <b id="statLab">0</b> | 🤖 Слотов: <b id="statAutoSlots">0</b></p>
+                <div id="factionReputation"></div>
+                <br>
+                <button onclick="prestige()" style="padding:10px;background:var(--red);color:#fff;border:none;border-radius:4px;font-family:'Courier New';cursor:pointer;font-size:12px;width:100%;">🔄 ПРЕСТИЖ</button>
+                <div id="prestigeInfo" style="font-size:8px;color:#78909c;margin-top:4px;"></div>
+                <!-- Колесо фортуны -->
+                <div style="background:#1a0a2e;border:1px solid var(--purple);border-radius:4px;padding:6px;margin-top:8px;text-align:center;">
+                    <h4 style="color:var(--purple);margin:0 0 4px;">🎰 Колесо фортуны</h4>
+                    <button id="btnWheel" onclick="spinWheel()" style="padding:6px 12px;background:var(--purple);color:#fff;border:none;border-radius:4px;cursor:pointer;font-family:'Courier New';font-size:10px;">Крутить</button>
+                    <div id="wheelResult" style="font-size:10px;margin-top:4px;color:var(--gold);"></div>
+                </div>
+                <!-- Режим разработчика (спрятан) -->
+                <div style="margin-top:12px;text-align:center;opacity:0.3;">
+                    <button onclick="toggleDevMode()" style="background:none;border:none;color:#555;font-size:7px;cursor:pointer;font-family:'Courier New';">dev</button>
+                    <span id="devModeStatus" style="font-size:7px;color:#555;">x1</span>
+                </div>
+            </div>
+            <div id="statsAchievements" style="display:none;"><div id="achievements"></div></div>
+            <div id="statsRecords" style="display:none;">
+                <p>📈 Рекорд дронов за день: <b id="recDronesDay">0</b></p>
+                <p>💰 Рекорд заработка за день: <b id="recEarnedDay">0</b> ГК</p>
+                <p>🏆 Крупнейший заказ: <b id="recBiggestOrder">0</b> дронов</p>
+            </div>
+            <div id="statsSaves" style="display:none;">
+                <div class="save-slots">
+                    <div class="save-slot"><div class="slot-num">1</div><div class="slot-info" id="slot1Info">-</div><div class="slot-btns"><button onclick="saveGame(1)" style="background:#66bb6a;color:#000;">С</button><button onclick="loadGame(1)" style="background:#4fc3f7;color:#000;">З</button></div></div>
+                    <div class="save-slot"><div class="slot-num">2</div><div class="slot-info" id="slot2Info">-</div><div class="slot-btns"><button onclick="saveGame(2)" style="background:#66bb6a;color:#000;">С</button><button onclick="loadGame(2)" style="background:#4fc3f7;color:#000;">З</button></div></div>
+                    <div class="save-slot"><div class="slot-num">А</div><div class="slot-info" id="slot3Info">-</div><div class="slot-btns"><button onclick="loadGame(3)" style="background:#4fc3f7;color:#000;">З</button></div></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-btn active" onclick="showTab('game')">🏭</div>
+        <div class="nav-btn active" onclick="showTab('game')">🏭 ЦЕХ</div>
         <div class="nav-btn" onclick="showTab('upgrades')">🔧</div>
         <div class="nav-btn" onclick="showTab('lab')">🔬</div>
         <div class="nav-btn" onclick="showTab('stats')">📊</div>
@@ -291,41 +340,46 @@
 function notify(text, type = '') {
     let old = document.querySelectorAll('.game-notification'); old.forEach(el => el.remove());
     let el = document.createElement('div'); el.className = 'game-notification ' + type; el.innerText = text;
-    document.getElementById('game').appendChild(el); setTimeout(() => el.remove(), 2200);
+    el.addEventListener('click', () => el.remove());
+    document.getElementById('game').appendChild(el);
+    setTimeout(() => el.remove(), 3000);
 }
 
-// ==================== СКОРОСТЬ ====================
+// ==================== СКОРОСТЬ / DEV ====================
 let gameSpeed = 1.0;
+let devMultiplier = 1;
 function toggleSpeed() {
     gameSpeed = gameSpeed === 1.0 ? 0.75 : 1.0;
     let btn = document.getElementById('btnSpeed');
     if (gameSpeed === 0.75) { btn.innerText = '🐢 0.75x'; btn.classList.add('slow'); }
     else { btn.innerText = '⏩ 1x'; btn.classList.remove('slow'); }
-    notify(gameSpeed === 0.75 ? '🐢 Замедление 0.75x' : '⏩ Норма', '');
+}
+function toggleDevMode() {
+    if (devMultiplier === 1) devMultiplier = 5;
+    else if (devMultiplier === 5) devMultiplier = 0;
+    else devMultiplier = 1;
+    document.getElementById('devModeStatus').innerText = devMultiplier === 0 ? 'СТОП' : 'x' + devMultiplier;
+    notify('Режим: ' + (devMultiplier === 0 ? 'СТОП' : 'x' + devMultiplier), 'warning');
 }
 
 // ==================== ДЕРЕВО ====================
 const treeNodes = {
-    t0: { id:'t0', name:'Конвейер 2', desc:'Разрешён 2 ур.', cost:5, requires:[], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t1: { id:'t1', name:'Конвейер 3', desc:'Разрешён 3 ур.', cost:7, requires:['t0'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t2: { id:'t2', name:'Конвейер 4', desc:'Разрешён 4 ур.', cost:9, requires:['t1'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t3: { id:'t3', name:'Конвейер 5', desc:'Разрешён 5 ур.', cost:12, requires:['t2'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t4: { id:'t4', name:'Сертифик. 2', desc:'Разрешён 2 ур.', cost:5, requires:[], branch:'econ', researched:false, unlocksUpgrade:1 },
-    t5: { id:'t5', name:'Сертифик. 3', desc:'Разрешён 3 ур.', cost:7, requires:['t4'], branch:'econ', researched:false, unlocksUpgrade:1 },
-    t6: { id:'t6', name:'Сертифик. 4', desc:'Разрешён 4 ур.', cost:10, requires:['t5'], branch:'econ', researched:false, unlocksUpgrade:1 },
-    t7: { id:'t7', name:'Роботиз. 2', desc:'+1 слот', cost:6, requires:[], branch:'prod', researched:false },
-    t8: { id:'t8', name:'Роботиз. 3', desc:'+1 слот', cost:8, requires:['t7'], branch:'prod', researched:false },
-    t9: { id:'t9', name:'Роботиз. 4', desc:'+1 слот', cost:11, requires:['t8'], branch:'prod', researched:false },
-    t10: { id:'t10', name:'Логистика 1', desc:'+15 склада', cost:6, requires:[], branch:'econ', researched:false },
-    t11: { id:'t11', name:'Логистика 2', desc:'+15 склада', cost:8, requires:['t10'], branch:'econ', researched:false },
-    t12: { id:'t12', name:'Турели 2', desc:'Улучш. сбитие', cost:6, requires:[], branch:'def', researched:false },
-    t13: { id:'t13', name:'Брандмауэр', desc:'Защита от хака', cost:6, requires:['t12'], branch:'def', researched:false, maxLevel:5, level:0 },
-    t14: { id:'t14', name:'Противопож.', desc:'-70% пожары', cost:5, requires:['t12'], branch:'def', researched:false, exclusive:true, exclusiveWith:'t13' },
-    d0: { id:'d0', name:'Оса-Боевая', desc:'⚔️', cost:300, requires:[], branch:'drone', researched:false, droneType:'wasp' },
-    d1: { id:'d1', name:'Тяжеловоз', desc:'🚛', cost:300, requires:[], branch:'drone', researched:false, droneType:'cargo' },
-    d2: { id:'d2', name:'Разведчик', desc:'🛰️', cost:300, requires:[], branch:'drone', researched:false, droneType:'scout' },
-    d3: { id:'d3', name:'Камикадзе', desc:'💣', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' },
-};
+    t0: { id:'t0', icon:'⚙️', name:'Конвейер 2', desc:'Разрешён 2 ур.', cost:5, requires:[], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t1: { id:'t1', icon:'⚙️', name:'Конвейер 3', desc:'Разрешён 3 ур.', cost:7, requires:['t0'], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t2: { id:'t2', icon:'⚙️', name:'Конвейер 4', desc:'Разрешён 4 ур.', cost:9, requires:['t1'], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t3: { id:'t3', icon:'🤖', name:'Роботиз. 2', desc:'+1 слот', cost:6, requires:[], branch:'prod', researched:false },
+    t4: { id:'t4', icon:'🤖', name:'Роботиз. 3', desc:'+1 слот', cost:8, requires:['t3'], branch:'prod', researched:false },
+    t5: { id:'t5', icon:'📜', name:'Сертифик. 2', desc:'Разрешён 2 ур.', cost:5, requires:[], branch:'econ', researched:false, unlocksUpgrade:1 },
+    t6: { id:'t6', icon:'📜', name:'Сертифик. 3', desc:'Разрешён 3 ур.', cost:7, requires:['t5'], branch:'econ', researched:false, unlocksUpgrade:1 },
+    t7: { id:'t7', icon:'📦', name:'Логистика 1', desc:'+15 склада', cost:6, requires:[], branch:'econ', researched:false },
+    t8: { id:'t8', icon:'📦', name:'Логистика 2', desc:'+15 склада', cost:8, requires:['t7'], branch:'econ', researched:false },
+    t9: { id:'t9', icon:'🔥', name:'Противопож.', desc:'-70% пожары', cost:5, requires:[], branch:'def', researched:false },
+    t10: { id:'t10', icon:'🛡️', name:'Брандмауэр', desc:'Защита от хака', cost:6, requires:[], branch:'def', researched:false, maxLevel:5, level:0 },
+    d0: { id:'d0', icon:'⚔️', name:'Оса-Боевая', desc:'Боевой дрон', cost:300, requires:[], branch:'drone', researched:false, droneType:'wasp' },
+    d1: { id:'d1', icon:'🚛', name:'Тяжеловоз', desc:'Грузовой дрон', cost:300, requires:[], branch:'drone', researched:false, droneType:'cargo' },
+    d2: { id:'d2', icon:'🛰️', name:'Разведчик', desc:'Зонд', cost:300, requires:[], branch:'drone', researched:false, droneType:'scout' },
+    d3: { id:'d3', icon:'💣', name:'Камикадзе', desc:'Одноразовый', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' },
+();
 
 let currentLabBranch = 'prod';
 function showLabBranch(branch) {
@@ -336,12 +390,14 @@ function showLabBranch(branch) {
     });
     renderTree();
 }
+
 function getMaxUpgradeLevel(id) {
-    let base = 1;
+    if (id === 7) return 5;
+    let maxLvl = 1;
     for (let k in treeNodes) {
-        if (treeNodes[k].researched && treeNodes[k].unlocksUpgrade === id) base++;
+        if (treeNodes[k].researched && treeNodes[k].unlocksUpgrade === id) maxLvl++;
     }
-    return base;
+    return maxLvl;
 }
 
 // ==================== СОХРАНЕНИЯ ====================
@@ -360,7 +416,9 @@ function getState() {
         autoSellEnabled: JSON.parse(JSON.stringify(autoSellEnabled)),
         activeOrders: activeOrders.map(o=>({...o, startTime: o.startTime})),
         orderIdCounter, dayStartTime, ordersSinceLabTick, cyberShield,
-        bankDeposit, nightShiftReady, gameSpeed,
+        bankDeposit, nightShiftReady, gameSpeed, wheelUsedToday,
+        recDronesDay, recEarnedDay, recBiggestOrder, todayDrones, todayEarned,
+        investorActive, investorDaysLeft,
         treeResearched: Object.keys(treeNodes).filter(k=>treeNodes[k].researched),
         treeLevels: Object.fromEntries(Object.entries(treeNodes).filter(([k,v])=>v.maxLevel).map(([k,v])=>[k,v.level]))
     };
@@ -376,7 +434,11 @@ function loadGame(slot) {
     ordersToday=s.ordersToday||0; baseLevelName=s.baseLevelName||'ГАРАЖ'; fireChance=s.fireChance||0.22;
     hasOrbitalModule=s.hasOrbitalModule||false; hasTurrets=s.hasTurrets||false;
     labPoints=s.labPoints||0; autoSlots=(s.autoSlots||[{type:'ant',active:false}]).map(sl=>({...sl}));
-    cyberShield=s.cyberShield||0; bankDeposit=s.bankDeposit||0; nightShiftReady=s.nightShiftReady!==false; gameSpeed=s.gameSpeed||1.0;
+    cyberShield=s.cyberShield||0; bankDeposit=s.bankDeposit||0; nightShiftReady=s.nightShiftReady!==false;
+    gameSpeed=s.gameSpeed||1.0; wheelUsedToday=s.wheelUsedToday||false;
+    recDronesDay=s.recDronesDay||0; recEarnedDay=s.recEarnedDay||0; recBiggestOrder=s.recBiggestOrder||0;
+    todayDrones=s.todayDrones||0; todayEarned=s.todayEarned||0;
+    investorActive=s.investorActive||false; investorDaysLeft=s.investorDaysLeft||0;
     ordersSinceLabTick=s.ordersSinceLabTick||0;
     storage=JSON.parse(JSON.stringify(s.storage||{ant:0,wasp:0,cargo:0,scout:0,bomb:0}));
     reputation=JSON.parse(JSON.stringify(s.reputation||{'Имперский флот':50,'КорпТорг':50,'Синдикат «Ржавый»':50,'Гильдия Исследователей':50}));
@@ -389,9 +451,6 @@ function loadGame(slot) {
     for (let [k,v] of Object.entries(s.treeLevels||{})) if (treeNodes[k]) treeNodes[k].level = v;
     priceBoostActive=false; if(boostTimerInterval)clearInterval(boostTimerInterval);
     document.getElementById('boostBar').classList.remove('active'); document.getElementById('eventBox').style.display='none';
-    document.getElementById('btnSpeed').innerText = gameSpeed === 0.75 ? '🐢 0.75x' : '⏩ 1x';
-    if (gameSpeed === 0.75) document.getElementById('btnSpeed').classList.add('slow');
-    else document.getElementById('btnSpeed').classList.remove('slow');
     applyAllEffects(); renderAll(); updateUI(); updateAllSlotInfo(); notify('📂 Загружено!','success');
 }
 function updateAllSlotInfo() { for(let i=1;i<=3;i++){let d=localStorage.getItem('df_slot_'+i);let el=document.getElementById('slot'+i+'Info');if(d){let s=JSON.parse(d);el.innerText='Д.'+s.day+'|'+Math.floor(s.credits)+'ГК';}else el.innerText='-';} }
@@ -413,15 +472,16 @@ const upgradeNames=['Конвейер','Сертифик.','Робот','Скл�
 const upgradeDescs=['-7%','+12% цены','Слоты авто','+10 склада','+10% заказов','Уровень','+20 склада','Защита'];
 let permUpgradeLevels={base_prod:0,start_credits:0,rep_bonus:0};
 const permUpgradeNames={base_prod:'Чертежи',start_credits:'Капитал',rep_bonus:'Дип. корпус'};
-const permUpgradeDescs={base_prod:'+10% скор.',start_credits:'+50 ГК',rep_bonus:'+10 реп.'};
 const permUpgradeCost={base_prod:2,start_credits:2,rep_bonus:3};
 let activeOrders=[],orderIdCounter=1;
 let minigameActive=false,minigameScore=0,minigameReward=0,minigameTimer=30,minigameInterval=null;
+let wheelUsedToday=false,recDronesDay=0,recEarnedDay=0,recBiggestOrder=0,todayDrones=0,todayEarned=0;
+let investorActive=false,investorDaysLeft=0;
 
 // ==================== ФУНКЦИИ ====================
 function getTotalDrones(){return Object.values(storage).reduce((a,b)=>a+b,0);}
 function getLabRate(){return Math.max(1,Math.floor(1*Math.pow(1.5,prestigeLevel)));}
-function getMaxAutoSlots(){let base=1;if(treeNodes.t7?.researched)base++;if(treeNodes.t8?.researched)base++;if(treeNodes.t9?.researched)base++;return base+Math.floor(prestigeLevel/3);}
+function getMaxAutoSlots(){let base=1;if(treeNodes.t3?.researched)base++;if(treeNodes.t4?.researched)base++;return base+Math.floor(prestigeLevel/3);}
 function getAutoInterval(){return (3000+Math.max(0,autoSlots.length-3)*500)/gameSpeed;}
 function getMinOrderPrice(type,amt){return Math.floor(drone_types[type].base_price*0.2*amt);}
 function updateDronePrice(){let b=baseDronePrice;if(priceBoostActive)b=Math.floor(b*(1+priceBoostPercent/100));dronePrice=b;}
@@ -433,122 +493,175 @@ function applyAllEffects(){
     for(let i=0;i<upgradeLevels[0];i++)produceInterval*=0.93;
     for(let i=0;i<upgradeLevels[1];i++)baseDronePrice=Math.floor(baseDronePrice*1.12);
     if(upgradeLevels[2])hasTurrets=true;
-    if(treeNodes.t10?.researched)warehouse+=15;
-    if(treeNodes.t11?.researched)warehouse+=15;
-    if(treeNodes.t12?.researched)hasTurrets=true;
-    if(treeNodes.t13?.level>0)cyberShield=treeNodes.t13.level;
-    if(treeNodes.t14?.researched)fireChance=0.06;
+    if(treeNodes.t7?.researched)warehouse+=15;
+    if(treeNodes.t8?.researched)warehouse+=15;
+    if(treeNodes.t9?.researched)fireChance=0.06;
+    if(treeNodes.t10?.level>0)cyberShield=treeNodes.t10.level;
     for(let k of['d0','d1','d2','d3']){if(treeNodes[k]?.researched&&treeNodes[k].droneType&&!drones_unlocked.includes(treeNodes[k].droneType))drones_unlocked.push(treeNodes[k].droneType);}
     updateDronePrice();
 }
 
 function activatePriceBoost(pct,dur){priceBoostActive=true;priceBoostPercent=pct;priceBoostEndTime=Date.now()+dur;document.getElementById('boostBar').classList.add('active');document.getElementById('boostPercent').innerText=pct;if(boostTimerInterval)clearInterval(boostTimerInterval);boostTimerInterval=setInterval(()=>{let r=Math.max(0,Math.ceil((priceBoostEndTime-Date.now())/1000));document.getElementById('boostTimer').innerText=r;if(r<=0){priceBoostActive=false;document.getElementById('boostBar').classList.remove('active');clearInterval(boostTimerInterval);updateDronePrice();updateUI();}},500);updateDronePrice();}
 function processAutoSell(){if(!hasOrbitalModule)return;if(getTotalDrones()>=warehouse){for(let k in autoSellEnabled){if(autoSellEnabled[k]&&(storage[k]||0)>0){let s=Math.ceil(storage[k]*0.3);s=Math.max(1,Math.min(s,storage[k]));storage[k]-=s;credits+=s*Math.floor(drone_types[k].base_price*0.2);if(getTotalDrones()<warehouse)break;}}}}
+function sellAllDrones(){let total=0;for(let k in storage){if(drones_unlocked.includes(k)&&storage[k]>0){let price=Math.floor(drone_types[k].base_price*0.2);total+=storage[k]*price;storage[k]=0;}}credits+=total;notify('💰 Продано всё! +'+total+' ГК','success');updateUI();}
 function renderAutoSlots(){if(!hasTurrets&&!upgradeLevels[2]){document.getElementById('autoSlots').style.display='none';document.getElementById('autoClickerStatus').style.display='none';return;}document.getElementById('autoSlots').style.display='block';document.getElementById('autoClickerStatus').style.display='inline';let max=getMaxAutoSlots();while(autoSlots.length<max)autoSlots.push({type:'ant',active:false});while(autoSlots.length>max)autoSlots.pop();let h='';for(let i=0;i<autoSlots.length;i++){let s=autoSlots[i];h+=`<div class="auto-slot"><span>С${i+1}:</span><select onchange="autoSlots[${i}].type=this.value;renderAutoSlots();">${Object.keys(drone_types).filter(k=>drones_unlocked.includes(k)).map(k=>`<option value="${k}" ${s.type===k?'selected':''}>${drone_types[k].icon}</option>`).join('')}</select><button class="btn-slot ${s.active?'btn-slot-on':'btn-slot-off'}" onclick="autoSlots[${i}].active=!autoSlots[${i}].active;renderAutoSlots();">${s.active?'ON':'OFF'}</button></div>`;}document.getElementById('autoSlots').innerHTML=h;}
-function nightShift(){if(!nightShiftReady){notify('🌙 Ждите 5 мин!','warning');return;}nightShiftReady=false;document.getElementById('btnNight').disabled=true;document.getElementById('btnNight').innerText='🌙 АКТИВНА!';notify('🌙 x2 на 30с!','success');let old=produceInterval;produceInterval/=2;setTimeout(()=>{produceInterval=old;document.getElementById('btnNight').innerText='🌙 Ждите...';notify('🌙 Конец','');},30000);setTimeout(()=>{nightShiftReady=true;document.getElementById('btnNight').innerText='🌙 НОЧНАЯ СМЕНА (2x, 30с)';document.getElementById('btnNight').disabled=false;},300000);}
+function nightShift(){if(!nightShiftReady){notify('🌙 Ждите 5 мин!','warning');return;}nightShiftReady=false;document.getElementById('btnNight').disabled=true;document.getElementById('btnNight').innerText='🌙 АКТИВНА!';notify('🌙 x2 на 30с!','success');let old=produceInterval;produceInterval/=2;setTimeout(()=>{produceInterval=old;document.getElementById('btnNight').innerText='🌙 Ждите...';},30000);setTimeout(()=>{nightShiftReady=true;document.getElementById('btnNight').innerText='🌙 НОЧНАЯ СМЕНА (2x, 30с)';document.getElementById('btnNight').disabled=false;},300000);}
 function depositBank(){if(credits<100){notify('💎 Мин. 100!','warning');return;}credits-=100;bankDeposit+=100;updateUI();}
 function withdrawBank(){credits+=bankDeposit;bankDeposit=0;updateUI();}
-function researchNode(id){let n=treeNodes[id];if(!n)return;if(n.researched&&!n.maxLevel){notify('Уже изучено!','warning');return;}if(n.maxLevel&&(n.level||0)>=(n.maxLevel||5)){notify('Макс. уровень!','warning');return;}for(let r of(n.requires||[])){if(!treeNodes[r]?.researched){notify('Нужен: '+treeNodes[r]?.name,'warning');return;}}if(n.exclusive&&n.exclusiveWith&&treeNodes[n.exclusiveWith]?.researched){notify('Взаимоисключает: '+treeNodes[n.exclusiveWith].name,'warning');return;}if(labPoints<n.cost){notify('Нужно '+n.cost+' очков!','error');return;}labPoints-=n.cost;if(n.maxLevel){n.level=(n.level||0)+1;if(n.level>=n.maxLevel)n.researched=true;}else{n.researched=true;}if(n.effect)n.effect();applyAllEffects();renderTree();renderAutoSlots();renderDroneSelector();renderUpgrades();document.getElementById('turretBar').classList.toggle('active',hasTurrets);updateUI();notify('🔬 '+n.name+' разблокировано! Купите улучшение во вкладке Апгрейды.','success');}
+function researchNode(id){let n=treeNodes[id];if(!n)return;if(n.researched&&!n.maxLevel){notify('Уже изучено!','warning');return;}if(n.maxLevel&&(n.level||0)>=(n.maxLevel||5)){notify('Макс. уровень!','warning');return;}for(let r of(n.requires||[])){if(!treeNodes[r]?.researched){notify('Нужен: '+treeNodes[r]?.name,'warning');return;}}if(labPoints<n.cost){notify('Нужно '+n.cost+' очков!','error');return;}labPoints-=n.cost;if(n.maxLevel){n.level=(n.level||0)+1;if(n.level>=n.maxLevel)n.researched=true;}else{n.researched=true;}applyAllEffects();renderTree();renderAutoSlots();renderDroneSelector();renderUpgrades();document.getElementById('turretBar').classList.toggle('active',hasTurrets);updateUI();notify('🔬 '+n.name+' разблокировано!','success');}
 function renderTree(){
     let h='';
     let nodes = Object.values(treeNodes).filter(n => n.branch === currentLabBranch);
-    // Группируем цепочки
-    let chains = [];
-    let visited = new Set();
+    if (nodes.length === 0) { document.getElementById('treeContainer').innerHTML = '<p style="color:#78909c;">Пусто</p>'; return; }
+    h += '<div class="tree-grid">';
     for (let n of nodes) {
-        if (visited.has(n.id)) continue;
-        let chain = [n];
-        visited.add(n.id);
-        // Ищем продолжение
-        let next = nodes.find(x => x.requires && x.requires.includes(n.id));
-        while (next) {
-            chain.push(next);
-            visited.add(next.id);
-            next = nodes.find(x => x.requires && x.requires.includes(next.id));
+        let cls = 'tree-node ';
+        if (n.researched && !n.maxLevel) cls += 'researched';
+        else if (n.maxLevel && (n.level||0) >= (n.maxLevel||5)) cls += 'researched';
+        else {
+            let can = true;
+            for (let r of (n.requires||[])) if (!treeNodes[r]?.researched) { can = false; break; }
+            cls += can ? 'available' : 'locked';
         }
-        chains.push(chain);
+        let costT = n.maxLevel ? ((n.level||0)+'/'+(n.maxLevel||5)) : '';
+        let title = n.maxLevel ? n.name+' '+costT : n.name;
+        h += `<div class="${cls}" onclick="researchNode('${n.id}')">
+            <span class="node-icon">${n.icon||'?'}</span>
+            <span class="node-help" onclick="event.stopPropagation();notify('${n.desc} (${n.cost} очк.)','');">?</span>
+            <b>${title}</b>
+        </div>`;
     }
-    for (let chain of chains) {
-        h += '<div class="tree-row">';
-        for (let i = 0; i < chain.length; i++) {
-            let n = chain[i];
-            let cls = 'tree-node ';
-            if (n.researched && !n.maxLevel) cls += 'researched';
-            else if (n.maxLevel && (n.level||0) >= (n.maxLevel||5)) cls += 'researched';
-            else {
-                let can = true;
-                for (let r of (n.requires||[])) if (!treeNodes[r]?.researched) { can = false; break; }
-                if (n.exclusive && n.exclusiveWith && treeNodes[n.exclusiveWith]?.researched) can = false;
-                cls += can ? 'available' : 'locked';
-            }
-            let costT = n.maxLevel ? ((n.level||0)+'/'+(n.maxLevel||5)) : '';
-            let title = n.maxLevel ? n.name+' '+costT : n.name;
-            h += `<div class="${cls}" onclick="researchNode('${n.id}')"><b>${title}</b><br><span style="font-size:7px;">${n.desc} (${n.cost} очк.)</span></div>`;
-            if (i < chain.length - 1) h += '<div class="tree-arrow">▼</div>';
-        }
-        h += '</div>';
-    }
-    if (h === '') h = '<p style="color:#78909c;text-align:center;">Нет узлов в этой ветке</p>';
+    h += '</div>';
     document.getElementById('treeContainer').innerHTML = h;
     document.getElementById('labPointsDisplay2').innerText = labPoints;
     document.getElementById('labRate2').innerText = getLabRate();
 }
 function renderAutoSellPanel(){if(!hasOrbitalModule){document.getElementById('autoSellPanel').style.display='none';return;}document.getElementById('autoSellPanel').style.display='block';let h='';for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<div class="auto-sell-item"><input type="checkbox" ${autoSellEnabled[k]?'checked':''} onchange="autoSellEnabled['${k}']=this.checked"><label>${drone_types[k].icon} ${drone_types[k].name}</label></div>`;document.getElementById('autoSellOptions').innerHTML=h;}
-function addLabPoints(){ordersSinceLabTick++;if(ordersSinceLabTick>=2){ordersSinceLabTick-=2;labPoints+=getLabRate();}renderTree();updateUI();}
-function produceDrone(){if(!canProduce)return;if(getTotalDrones()>=warehouse){processAutoSell();if(getTotalDrones()>=warehouse){notify('📦 Склад полон!','warning');return;}}storage[currentDrone]++;totalMade++;document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);canProduce=false;let btn=document.getElementById('produceBtn');btn.classList.add('cooldown');btn.innerText='⏳...';let i=produceInterval/gameSpeed;if(currentDrone==='wasp')i*=1.3;if(currentDrone==='cargo')i*=1.5;if(currentDrone==='scout')i*=0.7;if(currentDrone==='bomb')i*=2.0;let st=Date.now();let timer=setInterval(()=>{let rem=Math.max(0,i-(Date.now()-st)/1000);document.getElementById('progressFill').style.width=((i-rem)/i*100)+'%';document.getElementById('intervalText').innerText=rem.toFixed(1);if(rem<=0){clearInterval(timer);canProduce=true;btn.classList.remove('cooldown');btn.innerText='🔨 ПРОИЗВЕСТИ';document.getElementById('progressFill').style.width='0%';document.getElementById('intervalText').innerText=i.toFixed(1);}},50);updateUI();}
+function addLabPoints(){ordersSinceLabTick++;if(ordersSinceLabTick>=2){ordersSinceLabTick-=2;labPoints+=getLabRate()*devMultiplier;}renderTree();updateUI();}
+function produceDrone(){if(!canProduce||devMultiplier===0)return;if(getTotalDrones()>=warehouse){processAutoSell();if(getTotalDrones()>=warehouse){notify('📦 Склад полон!','warning');return;}}let count=devMultiplier;for(let i=0;i<count;i++){storage[currentDrone]++;totalMade++;}document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);canProduce=false;let btn=document.getElementById('produceBtn');btn.classList.add('cooldown');btn.innerText='⏳...';let i=produceInterval/gameSpeed;if(currentDrone==='wasp')i*=1.3;if(currentDrone==='cargo')i*=1.5;if(currentDrone==='scout')i*=0.7;if(currentDrone==='bomb')i*=2.0;let st=Date.now();let timer=setInterval(()=>{let rem=Math.max(0,i-(Date.now()-st)/1000);document.getElementById('progressFill').style.width=((i-rem)/i*100)+'%';document.getElementById('intervalText').innerText=rem.toFixed(1);if(rem<=0){clearInterval(timer);canProduce=true;btn.classList.remove('cooldown');btn.innerText='🔨 ПРОИЗВЕСТИ';document.getElementById('progressFill').style.width='0%';document.getElementById('intervalText').innerText=i.toFixed(1);}},50);updateUI();}
 function tryBuyUpgrade(id){
-    let maxLvl = id === 7 ? 5 : (id === 0 || id === 1) ? getMaxUpgradeLevel(id) : 10;
+    let maxLvl = getMaxUpgradeLevel(id);
     if ((upgradeLevels[id]||0) >= maxLvl) {
-        notify('🔧 Макс. уровень ' + maxLvl + '! Исследуйте дальше в Лаборатории.','warning');
+        let extraMsg = (id===0||id===1)&&maxLvl===1?' Исследуйте в Лаборатории.':'';
+        notify('🔧 Макс. уровень '+maxLvl+'!'+extraMsg,'warning');
         return;
     }
-    let cost = id === 7 ? 2000*((upgradeLevels[7]||0)+1) : getUpgradeCost(id);
-    if (credits < cost) { notify('💎 Нужно: '+cost+' ГК','error'); return; }
-    credits -= cost;
-    upgradeLevels[id] = (upgradeLevels[id]||0) + 1;
+    let cost = id===7?2000*((upgradeLevels[7]||0)+1):getUpgradeCost(id);
+    if(credits<cost){notify('💎 Нужно: '+cost+' ГК','error');return;}
+    credits-=cost;upgradeLevels[id]=(upgradeLevels[id]||0)+1;
     switch(id){
-        case 0: produceInterval*=0.93; break;
-        case 1: baseDronePrice=Math.floor(baseDronePrice*1.12); updateDronePrice(); break;
-        case 2: hasTurrets=true; document.getElementById('turretBar').classList.add('active'); renderAutoSlots(); break;
-        case 3: warehouse+=10; break;
-        case 4: marketing+=0.1; break;
-        case 5: let l=upgradeLevels[5]; if(l>=5)baseLevelName='ОРБИТАЛЬНАЯ ВЕРФЬ';else if(l>=4)baseLevelName='МЕГА-ЗАВОД';else if(l>=3)baseLevelName='ЗАВОД';else if(l>=2)baseLevelName='ЦЕХ';else baseLevelName='МАСТЕРСКАЯ'; break;
-        case 6: warehouse+=20; hasOrbitalModule=true; renderAutoSellPanel(); break;
-        case 7: cyberShield=upgradeLevels[7]; break;
+        case 0:produceInterval*=0.93;break;case 1:baseDronePrice=Math.floor(baseDronePrice*1.12);updateDronePrice();break;
+        case 2:hasTurrets=true;document.getElementById('turretBar').classList.add('active');renderAutoSlots();break;
+        case 3:warehouse+=10;break;case 4:marketing+=0.1;break;
+        case 5:let l=upgradeLevels[5];if(l>=5)baseLevelName='ОРБИТАЛЬНАЯ ВЕРФЬ';else if(l>=4)baseLevelName='МЕГА-ЗАВОД';else if(l>=3)baseLevelName='ЗАВОД';else if(l>=2)baseLevelName='ЦЕХ';else baseLevelName='МАСТЕРСКАЯ';break;
+        case 6:warehouse+=20;hasOrbitalModule=true;renderAutoSellPanel();break;
+        case 7:cyberShield=upgradeLevels[7];break;
     }
-    notify('✅ '+upgradeNames[id]+' → '+upgradeLevels[id],'success');
-    renderUpgrades(); updateUI();
+    notify('✅ '+upgradeNames[id]+' → '+upgradeLevels[id],'success');renderUpgrades();updateUI();
 }
 function getUpgradeCost(id){return Math.floor(upgradeBaseCost[id]*Math.pow(1.5,upgradeLevels[id]||0));}
 function tryBuyPermUpgrade(key){if(permUpgradeLevels[key]>=5){notify('⭐ Макс.','warning');return;}if(prestigePoints<permUpgradeCost[key]){notify('⭐ Мало ОП!','error');return;}prestigePoints-=permUpgradeCost[key];permUpgradeLevels[key]++;if(key==='base_prod')produceInterval*=0.9;if(key==='start_credits')credits+=50;if(key==='rep_bonus')for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);notify('⭐ '+permUpgradeNames[key]+' → '+permUpgradeLevels[key],'success');renderUpgrades();updateUI();}
-function renderUpgrades(){let h='';for(let i=0;i<upgradeNames.length;i++){let maxLvl=i===7?5:(i===0||i===1)?getMaxUpgradeLevel(i):10;let lvl=upgradeLevels[i]||0;let maxed=lvl>=maxLvl;let cost=i===7?2000*(lvl+1):getUpgradeCost(i);h+=`<div class="upgrade" onclick="tryBuyUpgrade(${i})"><span class="name">${upgradeNames[i]}</span><span class="level">${maxed?'MAX':lvl+'/'+maxLvl}</span><span style="font-size:7px;">${upgradeDescs[i]}</span><span class="cost">${maxed?'✓':cost+' ГК'}</span></div>`;}h+='<div class="perm-upgrade"><h4>⭐ Перманентные</h4>';for(let key in permUpgradeLevels){let lvl=permUpgradeLevels[key];let cost=permUpgradeCost[key];let maxed=lvl>=5;h+=`<div class="upgrade" onclick="tryBuyPermUpgrade('${key}')"><span class="name">${permUpgradeNames[key]}</span><span class="level">${maxed?'MAX':lvl+'/5'}</span><span style="font-size:7px;">${permUpgradeDescs[key]}</span><span class="cost">${maxed?'✓':cost+' ОП'}</span></div>`;}h+='<div style="font-size:8px;">⭐ ОП: <b>'+prestigePoints+'</b></div></div>';document.getElementById('upgradesList').innerHTML=h;}
-function completeOrder(id){let o=activeOrders.find(x=>x.id===id);if(!o)return;if(o.mega){if((storage[o.droneType]||0)<o.amount1||(storage[o.droneType2]||0)<o.amount2){notify('❌ Не хватает!','error');return;}storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;credits+=o.bonus;totalEarned+=o.bonus;ordersCompleted++;if(o.megaReward==='prestige'){prestigePoints++;notify('⭐ +1 ОП!','success');}if(o.megaReward==='free_upgrade'){let avail=[];for(let i=0;i<upgradeLevels.length;i++)if((upgradeLevels[i]||0)<(i===7?5:getMaxUpgradeLevel(i)))avail.push(i);if(avail.length){let uid=avail[Math.floor(Math.random()*avail.length)];upgradeLevels[uid]=(upgradeLevels[uid]||0)+1;notify('🎁 '+upgradeNames[uid]+' +1','success');}}if(o.megaReward==='lab_points'){labPoints+=getLabRate()*5;notify('🔬 +'+getLabRate()*5+' очков!','success');}for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();notify('🏆 +'+o.bonus+' ГК','success');return;}if(o.auction){let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}storage[rt]-=o.amount;credits+=o.price*o.amount;totalEarned+=o.price*o.amount;ordersCompleted++;activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();updateUI();return;}let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}storage[rt]-=o.amount;let reward;if(o.noTime){reward=o.price*o.amount+(o.bonus||0);}else{let tr=Math.max(0.2,o.timeRemaining/o.totalTime);reward=Math.floor((o.price*o.amount+(o.bonus||0))*tr);reward=Math.max(reward,getMinOrderPrice(rt,o.amount));}credits+=reward;totalEarned+=reward;ordersCompleted++;if(reputation[o.faction]!==undefined)reputation[o.faction]=Math.min(100,reputation[o.faction]+5);activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();notify('📦 +'+reward+' ГК','success');}
-function declineOrder(id){let o=activeOrders.find(x=>x.id===id);if(o){if(o.mega)for(let f in reputation)reputation[f]=Math.max(0,reputation[f]-10);if(o.faction&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.max(0,reputation[o.faction]-3);}activeOrders=activeOrders.filter(x=>x.id!==id);renderOrders();}
-function generateOrder(){if(activeOrders.length>=5)return;let pool=[{name:'КорпТорг',bonus:15,amount:5,price:12,droneType:'ant'},{name:'Имперский флот',bonus:0,amount:3,price:18,droneType:'ant'},{name:'Синдикат «Ржавый»',bonus:30,amount:2,price:8,droneType:'ant'},{name:'Гильдия Исследователей',bonus:10,amount:4,price:11,droneType:'ant'}];if(drones_unlocked.includes('wasp'))pool.push({name:'Имперский флот',bonus:20,amount:2,price:25,droneType:'wasp'});if(drones_unlocked.includes('cargo'))pool.push({name:'КорпТорг',bonus:30,amount:2,price:30,droneType:'cargo'});if(drones_unlocked.includes('scout'))pool.push({name:'Гильдия Исследователей',bonus:15,amount:3,price:20,droneType:'scout'});if(drones_unlocked.includes('bomb'))pool.push({name:'Синдикат «Ржавый»',bonus:50,amount:1,price:50,droneType:'bomb'});let f=pool[Math.floor(Math.random()*pool.length)];let noTime=Math.random()<0.35;let tt=noTime?999:(25+Math.floor(Math.random()*35));let scale=getOrderAmountScale();let o={id:orderIdCounter++,faction:f.name,text:noTime?'📌 Фикс.':'',amount:Math.max(1,Math.floor(f.amount*scale)),price:Math.floor(f.price*(1+prestigeLevel*0.1)),bonus:f.bonus,droneType:f.droneType,totalTime:tt,timeRemaining:tt,startTime:Date.now(),urgent:!noTime&&Math.random()<0.3,noTime,mega:false,auction:false};if(o.urgent){o.text='⚡ '+o.text;o.bonus*=2;o.totalTime=Math.floor(tt*0.5);o.timeRemaining=o.totalTime;}ordersToday++;activeOrders.push(o);renderOrders();}
-function generateAuction(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));let dt=types[Math.floor(Math.random()*types.length)];let scale=getOrderAmountScale();let amt=Math.max(3,Math.floor((3+Math.floor(Math.random()*8))*scale));let o={id:orderIdCounter++,faction:'Аукцион',text:'🔨 АУКЦИОН: '+drone_types[dt].name+' ×'+amt,amount:amt,price:Math.floor(drone_types[dt].base_price*0.5),droneType:dt,totalTime:30,timeRemaining:30,startTime:Date.now(),auction:true,auctionPrice:Math.floor(drone_types[dt].base_price*0.5)};activeOrders.push(o);renderOrders();}
-function generateMegaOrder(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));if(types.length<2)types=['ant','ant'];let dt1=types[Math.floor(Math.random()*types.length)],dt2=types[Math.floor(Math.random()*types.length)];let rewards=['prestige','free_upgrade','lab_points'];let mr=rewards[Math.floor(Math.random()*rewards.length)];let rn=mr==='prestige'?'⭐ ОП':mr==='free_upgrade'?'🎁 Апгрейд':'🔬 Очки';let scale=getOrderAmountScale();let a1=Math.floor((15+Math.floor(Math.random()*10))*scale),a2=Math.floor((10+Math.floor(Math.random()*10))*scale);let o={id:orderIdCounter++,faction:'Галакт. Совет',text:'🏆 МЕГА: '+drone_types[dt1].name+'×'+a1+' + '+drone_types[dt2].name+'×'+a2,bonus:(a1+a2)*5+100,droneType:dt1,droneType2:dt2,amount1:a1,amount2:a2,totalTime:45,timeRemaining:45,startTime:Date.now(),mega:true,megaReward:mr,rewardName:rn};activeOrders.push(o);notify('🏆 МЕГА!','success');renderOrders();}
-function renderOrders(){let h='';let tr=[];for(let o of activeOrders){if(o.mega){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);h+=`<div class="order-card mega"><b>${o.faction}</b><br>${o.text}<br>💎${o.bonus}+${o.rewardName}|⏰${Math.ceil(o.timeRemaining)}с<br><button class="btn-small btn-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-small btn-decline" onclick="declineOrder(${o.id})">✕</button></div>`;continue;}if(o.auction){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}o.price=Math.floor(o.auctionPrice+Math.sin(Date.now()/2000)*5+Math.random()*3);o.price=Math.max(Math.floor(drone_types[o.droneType].base_price*0.3),o.price);h+=`<div class="order-card auction"><b>${o.faction}</b><br>${o.text}<br>💰<b>${o.price}</b>ГК/шт|⏰${Math.ceil(o.timeRemaining)}с<br><button class="btn-small btn-accept" onclick="completeOrder(${o.id})">ПРОДАТЬ</button><button class="btn-small btn-decline" onclick="declineOrder(${o.id})">✕</button></div>`;continue;}if(o.noTime){let dt=drone_types[o.droneType]?.name||'Любой';let rw=o.price*o.amount+(o.bonus||0);h+=`<div class="order-card notime"><b>${o.faction}</b><br>${o.text}${dt}×${o.amount}<br>💎${rw}ГК|🕒<br><button class="btn-small btn-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-small btn-decline" onclick="declineOrder(${o.id})">✕</button></div>`;continue;}let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}let dt=drone_types[o.droneType]?.name||'Любой';let tr2=Math.max(0.2,o.timeRemaining/o.totalTime);let fullR=o.price*o.amount+(o.bonus||0);let minR=getMinOrderPrice(o.droneType,o.amount);let curR=Math.max(Math.floor(fullR*tr2),minR);h+=`<div class="order-card ${o.urgent?'urgent':''}"><b>${o.faction}</b><br>${o.text}${dt}×${o.amount}<br>💎${curR}ГК|⏰${Math.ceil(o.timeRemaining)}с<br><button class="btn-small btn-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-small btn-decline" onclick="declineOrder(${o.id})">✕</button></div>`;}for(let id of tr)activeOrders=activeOrders.filter(o=>o.id!==id);document.getElementById('orderList').innerHTML=h||'<p style="color:#78909c;text-align:center;">Нет заказов</p>';}
+function renderUpgrades(){
+    let h='';
+    for(let i=0;i<upgradeNames.length;i++){
+        let maxLvl=getMaxUpgradeLevel(i);let lvl=upgradeLevels[i]||0;let maxed=lvl>=maxLvl;let cost=i===7?2000*(lvl+1):getUpgradeCost(i);
+        h+=`<div class="upgrade" onclick="tryBuyUpgrade(${i})"><span class="name">${upgradeNames[i]}</span><span class="level">${maxed?'MAX':lvl+'/'+maxLvl}</span><span style="font-size:7px;">${upgradeDescs[i]}</span><span class="cost">${maxed?'✓':cost+' ГК'}</span></div>`;
+    }
+    document.getElementById('upgradesList').innerHTML=h;
+    h='';
+    for(let key in permUpgradeLevels){
+        let lvl=permUpgradeLevels[key];let cost=permUpgradeCost[key];let maxed=lvl>=5;
+        h+=`<div class="perm-item" onclick="tryBuyPermUpgrade('${key}')"><b>${permUpgradeNames[key]}</b><br>${maxed?'MAX':lvl+'/5'}<br>${maxed?'✓':cost+' ОП'}</div>`;
+    }
+    h+='<div style="font-size:8px;text-align:center;">⭐ ОП: <b>'+prestigePoints+'</b></div>';
+    document.getElementById('permUpgrades').innerHTML=h;
+}
+function completeOrder(id){let o=activeOrders.find(x=>x.id===id);if(!o)return;if(o.mega){if((storage[o.droneType]||0)<o.amount1||(storage[o.droneType2]||0)<o.amount2){notify('❌ Не хватает!','error');return;}storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;credits+=o.bonus;totalEarned+=o.bonus;ordersCompleted++;todayEarned+=o.bonus;if(o.amount1+o.amount2>recBiggestOrder)recBiggestOrder=o.amount1+o.amount2;if(o.megaReward==='prestige'){prestigePoints++;notify('⭐ +1 ОП!','success');}if(o.megaReward==='free_upgrade'){let avail=[];for(let i=0;i<upgradeLevels.length;i++)if((upgradeLevels[i]||0)<getMaxUpgradeLevel(i))avail.push(i);if(avail.length){let uid=avail[Math.floor(Math.random()*avail.length)];upgradeLevels[uid]++;notify('🎁 '+upgradeNames[uid]+' +1','success');}}if(o.megaReward==='lab_points'){labPoints+=getLabRate()*5;notify('🔬 +'+getLabRate()*5+' очков!','success');}for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();notify('🏆 +'+o.bonus+' ГК','success');return;}if(o.auction){let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}storage[rt]-=o.amount;credits+=o.price*o.amount;totalEarned+=o.price*o.amount;ordersCompleted++;todayEarned+=o.price*o.amount;if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();updateUI();return;}let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}storage[rt]-=o.amount;let reward;if(o.noTime){reward=o.price*o.amount+(o.bonus||0);}else{let tr=Math.max(0.2,o.timeRemaining/o.totalTime);reward=Math.floor((o.price*o.amount+(o.bonus||0))*tr);reward=Math.max(reward,getMinOrderPrice(rt,o.amount));}if(investorActive)reward=Math.floor(reward*0.8);credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;if(reputation[o.faction]!==undefined)reputation[o.faction]=Math.min(100,reputation[o.faction]+5);activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();notify('📦 +'+reward+' ГК','success');}
+function declineOrder(id){let o=activeOrders.find(x=>x.id===id);if(o&&reputation[o.faction]!==undefined)reputation[o.faction]=Math.max(0,reputation[o.faction]-3);activeOrders=activeOrders.filter(x=>x.id!==id);renderOrders();}
+function generateOrder(){if(activeOrders.length>=5)return;let pool=[{name:'КорпТорг',bonus:15,amount:5,price:12,droneType:'ant'},{name:'Имперский флот',bonus:0,amount:3,price:18,droneType:'ant'},{name:'Синдикат «Ржавый»',bonus:30,amount:2,price:8,droneType:'ant'},{name:'Гильдия Исследователей',bonus:10,amount:4,price:11,droneType:'ant'}];if(drones_unlocked.includes('wasp'))pool.push({name:'Имперский флот',bonus:20,amount:2,price:25,droneType:'wasp'});if(drones_unlocked.includes('cargo'))pool.push({name:'КорпТорг',bonus:30,amount:2,price:30,droneType:'cargo'});if(drones_unlocked.includes('scout'))pool.push({name:'Гильдия Исследователей',bonus:15,amount:3,price:20,droneType:'scout'});if(drones_unlocked.includes('bomb'))pool.push({name:'Синдикат «Ржавый»',bonus:50,amount:1,price:50,droneType:'bomb'});let f=pool[Math.floor(Math.random()*pool.length)];let noTime=Math.random()<0.35;let tt=noTime?999:(25+Math.floor(Math.random()*35));let scale=getOrderAmountScale();let o={id:orderIdCounter++,faction:f.name,text:noTime?'📌':'',amount:Math.max(1,Math.floor(f.amount*scale)),price:Math.floor(f.price*(1+prestigeLevel*0.1)),bonus:f.bonus,droneType:f.droneType,totalTime:tt,timeRemaining:tt,startTime:Date.now(),urgent:!noTime&&Math.random()<0.3,noTime,mega:false,auction:false};if(o.urgent){o.bonus*=2;o.totalTime=Math.floor(tt*0.5);o.timeRemaining=o.totalTime;}ordersToday++;activeOrders.push(o);renderOrders();}
+function generateAuction(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));let dt=types[Math.floor(Math.random()*types.length)];let scale=getOrderAmountScale();let amt=Math.max(3,Math.floor((3+Math.floor(Math.random()*8))*scale));let o={id:orderIdCounter++,faction:'Аукцион',text:'🔨 '+drone_types[dt].name+' ×'+amt,amount:amt,price:Math.floor(drone_types[dt].base_price*0.5),droneType:dt,totalTime:30,timeRemaining:30,startTime:Date.now(),auction:true,auctionPrice:Math.floor(drone_types[dt].base_price*0.5)};activeOrders.push(o);renderOrders();}
+function generateMegaOrder(){if(activeOrders.length>=5)return;let types=Object.keys(drone_types).filter(k=>drones_unlocked.includes(k));if(types.length<2)types=['ant','ant'];let dt1=types[Math.floor(Math.random()*types.length)],dt2=types[Math.floor(Math.random()*types.length)];let rewards=['prestige','free_upgrade','lab_points'];let mr=rewards[Math.floor(Math.random()*rewards.length)];let rn=mr==='prestige'?'⭐ ОП':mr==='free_upgrade'?'🎁 Апгрейд':'🔬 Очки';let scale=getOrderAmountScale();let a1=Math.floor((15+Math.floor(Math.random()*10))*scale),a2=Math.floor((10+Math.floor(Math.random()*10))*scale);let o={id:orderIdCounter++,faction:'Галакт. Совет',text:'🏆 '+drone_types[dt1].name+'×'+a1+' + '+drone_types[dt2].name+'×'+a2,bonus:(a1+a2)*5+100,droneType:dt1,droneType2:dt2,amount1:a1,amount2:a2,totalTime:45,timeRemaining:45,startTime:Date.now(),mega:true,megaReward:mr,rewardName:rn};activeOrders.push(o);notify('🏆 МЕГА!','success');renderOrders();}
+function renderOrders(){
+    let h='';let tr=[];
+    for(let o of activeOrders){
+        if(o.mega){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);h+=`<div class="order-card mega"><div class="order-info">${o.text}<br>💎${o.bonus}+${o.rewardName}|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
+        else if(o.auction){let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}o.price=Math.floor(o.auctionPrice+Math.sin(Date.now()/2000)*5+Math.random()*3);o.price=Math.max(Math.floor(drone_types[o.droneType].base_price*0.3),o.price);h+=`<div class="order-card auction"><div class="order-info">${o.text}<br>💰<b>${o.price}</b>ГК/шт|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">П</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
+        else if(o.noTime){let dt=drone_types[o.droneType]?.name||'Любой';let rw=o.price*o.amount+(o.bonus||0);h+=`<div class="order-card notime"><div class="order-info">${o.text}${dt}×${o.amount}<br>💎${rw}ГК</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
+        else{let el=(Date.now()-o.startTime)/1000*gameSpeed;o.timeRemaining=Math.max(0,o.totalTime-el);if(o.timeRemaining<=0){tr.push(o.id);continue;}let dt=drone_types[o.droneType]?.name||'Любой';let tr2=Math.max(0.2,o.timeRemaining/o.totalTime);let fullR=o.price*o.amount+(o.bonus||0);let minR=getMinOrderPrice(o.droneType,o.amount);let curR=Math.max(Math.floor(fullR*tr2),minR);h+=`<div class="order-card ${o.urgent?'urgent':''}"><div class="order-info">${o.text}${dt}×${o.amount}<br>💎${curR}ГК|⏰${Math.ceil(o.timeRemaining)}с</div><div class="order-actions"><button class="btn-tiny btn-tiny-accept" onclick="completeOrder(${o.id})">✓</button><button class="btn-tiny btn-tiny-decline" onclick="declineOrder(${o.id})">✕</button></div></div>`;}
+    }
+    for(let id of tr)activeOrders=activeOrders.filter(o=>o.id!==id);
+    document.getElementById('activeOrderCount').innerText=activeOrders.length;
+    document.getElementById('orderList').innerHTML=h||'<p style="color:#78909c;text-align:center;">Нет заказов</p>';
+}
 function startMinigame(){if(minigameActive)return;minigameActive=true;minigameScore=0;minigameReward=0;let st=Date.now();document.getElementById('minigameScore').innerText='0';document.getElementById('minigameReward').innerText='0';document.getElementById('minigameTargetContainer').innerHTML='<div class="minigame-target" id="minigameTarget" onclick="hitTarget()"></div>';minigameInterval=setInterval(()=>{let rem=Math.max(0,30-(Date.now()-st)/1000);document.getElementById('minigameTimer').innerText=Math.ceil(rem);if(rem<=0)endMinigame();let t=document.getElementById('minigameTarget');if(t&&Math.random()<0.25){t.style.position='relative';t.style.left=Math.random()*60+'px';t.style.top=Math.random()*30+'px';}},350);}
 function hitTarget(){if(!minigameActive)return;minigameScore++;minigameReward++;document.getElementById('minigameScore').innerText=minigameScore;document.getElementById('minigameReward').innerText=minigameReward;}
-function endMinigame(){minigameActive=false;clearInterval(minigameInterval);credits+=minigameReward;totalEarned+=minigameReward;notify('🎯 +'+minigameReward+' ГК!','success');document.getElementById('minigameTargetContainer').innerHTML='<div>+'+minigameReward+' ГК</div>';setTimeout(()=>{document.getElementById('minigameTargetContainer').innerHTML='<div class="minigame-target" id="minigameTarget" onclick="hitTarget()"></div>';document.getElementById('minigameScore').innerText='0';document.getElementById('minigameReward').innerText='0';document.getElementById('minigameTimer').innerText='30';},2000);updateUI();}
+function endMinigame(){minigameActive=false;clearInterval(minigameInterval);credits+=minigameReward;totalEarned+=minigameReward;todayEarned+=minigameReward;notify('🎯 +'+minigameReward+' ГК!','success');document.getElementById('minigameTargetContainer').innerHTML='<div>+'+minigameReward+' ГК</div>';setTimeout(()=>{document.getElementById('minigameTargetContainer').innerHTML='<div class="minigame-target" id="minigameTarget" onclick="hitTarget()"></div>';document.getElementById('minigameScore').innerText='0';document.getElementById('minigameReward').innerText='0';document.getElementById('minigameTimer').innerText='30';},2000);updateUI();}
 function selectDrone(type){if(!drones_unlocked.includes(type)){notify('🔒','warning');return;}currentDrone=type;baseDronePrice=drone_types[type].base_price;updateDronePrice();document.getElementById('droneIcon').innerText=drone_types[type].icon;document.getElementById('currentDrone').innerText=drone_types[type].name;renderDroneSelector();updateUI();}
 function renderDroneSelector(){let h='';for(let k in drone_types){let u=drones_unlocked.includes(k);let a=currentDrone===k;h+=`<div class="drone-option ${a?'active':''} ${!u?'locked':''}" onclick="selectDrone('${k}')">${drone_types[k].icon}<br>${drone_types[k].name}<br><span style="color:#ef5350;">м${Math.floor(drone_types[k].base_price*0.2)}</span></div>`;}document.getElementById('droneSelector').innerHTML=h;}
 function renderStorageBreakdown(){let h='';for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<span class="storage-item">${drone_types[k].icon} ${storage[k]||0}</span>`;document.getElementById('storageBreakdown').innerHTML=h||'<span class="storage-item">📦 0</span>';}
 function showTab(tab){document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));document.getElementById('tab-'+tab).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));let idx={game:0,upgrades:1,lab:2,stats:3};document.querySelectorAll('.nav-btn')[idx[tab]].classList.add('active');if(tab==='lab')renderTree();if(tab==='stats'){renderFactionRep();updatePrestigeInfo();renderAchievements();updateAllSlotInfo();}if(tab==='upgrades')renderUpgrades();document.getElementById('scrollArea').scrollTop=0;}
+function showStatsTab(tab){
+    document.getElementById('statsGeneral').style.display='none';
+    document.getElementById('statsAchievements').style.display='none';
+    document.getElementById('statsRecords').style.display='none';
+    document.getElementById('statsSaves').style.display='none';
+    document.getElementById('stats'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='block';
+    document.querySelectorAll('.stats-tab').forEach(t=>t.classList.remove('active'));
+    let idx={general:0,achievements:1,records:2,saves:3};
+    document.querySelectorAll('.stats-tab')[idx[tab]].classList.add('active');
+}
 function getPrestigeCost(){return{drones:1000+prestigeLevel*500,credits:40000+prestigeLevel*20000};}
 function updatePrestigeInfo(){let c=getPrestigeCost();document.getElementById('prestigeInfo').innerHTML='Требования: '+c.drones+' дронов и '+c.credits+' ГК';}
-function prestige(){let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}credits-=c.credits;prestigeLevel++;prestigePoints++;credits+=500+permUpgradeLevels['start_credits']*200;totalMade=0;for(let k in storage)storage[k]=0;produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();warehouse=20;hasTurrets=false;marketing=1.0+permUpgradeLevels['rep_bonus']*0.05;upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;autoSlots=[{type:'ant',active:false}];for(let f in reputation)reputation[f]=50+permUpgradeLevels['rep_bonus']*10;priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';document.getElementById('turretBar').classList.remove('active');document.getElementById('autoSlots').style.display='none';document.getElementById('autoClickerStatus').style.display='none';applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'! +1 ОП','success');}
-function triggerEvent(){let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'+50% цены на 60с (40 ГК).',btn1:'Купить',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Нет',act2:function(){}},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:hasTurrets?'Сбить?':'Пропустить?',btn1:hasTurrets?'Сбить':'Пропустить',act1:function(){if(hasTurrets){if(Math.random()<0.4){for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}else{credits+=40;notify('🛸 +40','success');}}else{credits+=Math.floor(Math.random()*50);}},btn2:hasTurrets?'Мимо':'Ничего',act2:function(){}},{title:'💻 Хакатака',text:cyberShield>=5?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<5){let s=Math.floor(labPoints*(50-cyberShield*10)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();renderTree();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();renderTree();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
+function prestige(){let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}credits-=c.credits;prestigeLevel++;prestigePoints++;credits+=500;totalMade=0;for(let k in storage)storage[k]=0;produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();warehouse=20;hasTurrets=false;marketing=1.0;upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;autoSlots=[{type:'ant',active:false}];wheelUsedToday=false;investorActive=false;investorDaysLeft=0;recDronesDay=0;recEarnedDay=0;recBiggestOrder=0;todayDrones=0;todayEarned=0;for(let f in reputation)reputation[f]=50;priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';document.getElementById('turretBar').classList.remove('active');document.getElementById('autoSlots').style.display='none';document.getElementById('autoClickerStatus').style.display='none';applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'!','success');}
+function spinWheel(){if(wheelUsedToday){notify('🎰 Уже крутили!','warning');return;}wheelUsedToday=true;document.getElementById('btnWheel').disabled=true;let prizes=[{text:'💰 50 ГК',act:()=>{credits+=50;}},{text:'🔬 +3 очка',act:()=>{labPoints+=3;}},{text:'📦 +5 дронов',act:()=>{storage[currentDrone]+=5;}},{text:'⚡ x2 30с',act:()=>{activatePriceBoost(100,30000);}},{text:'💎 200 ГК',act:()=>{credits+=200;}},{text:'🛡️ +10 реп',act:()=>{for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);}},{text:'💣 -3 дрона',act:()=>{for(let k in storage)storage[k]=Math.max(0,storage[k]-1);}},{text:'Пусто',act:()=>{}},];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('wheelResult').innerText='🎰 '+p.text;p.act();updateUI();notify('🎰 '+p.text,p.text.includes('-')?'error':'success');}
+function triggerEvent(){let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'+50% цены на 60с (40 ГК).',btn1:'Купить',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Нет',act2:function(){}},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:hasTurrets?'Сбить?':'Пропустить?',btn1:hasTurrets?'Сбить':'Пропустить',act1:function(){if(hasTurrets){if(Math.random()<0.4){for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}else{credits+=40;notify('🛸 +40','success');}}else{credits+=Math.floor(Math.random()*50);}},btn2:hasTurrets?'Мимо':'Ничего',act2:function(){}},{title:'💻 Хакатака',text:cyberShield>=5?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<5){let s=Math.floor(labPoints*(50-cyberShield*10)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},{title:'💼 Инвестор',text:'500 ГК сейчас, но -20% дохода на 3 дня.',btn1:'Да',act1:function(){if(!investorActive){credits+=500;investorActive=true;investorDaysLeft=3;notify('💼 Инвестор вошёл!','success');}},btn2:'Нет',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
 function renderFactionRep(){let h='<p><b>Репутация:</b></p>';for(let f in reputation){let r=reputation[f];h+=`<div>${f}: ${r}/100<div style="height:3px;background:#333;"><div style="height:100%;width:${r}%;background:${r>70?'#66bb6a':r>30?'#ffd54f':'#ff5252'}"></div></div></div>`;}document.getElementById('factionReputation').innerHTML=h;}
-function renderAchievements(){let ach=[{id:'p100',text:'100 дронов',check:()=>totalMade>=100},{id:'p1000',text:'1000 дронов',check:()=>totalMade>=1000},{id:'prestige',text:'Первый престиж',check:()=>prestigeLevel>=1},{id:'all',text:'Все дроны',check:()=>drones_unlocked.length>=Object.keys(drone_types).length},];let h='';for(let a of ach){let d=a.check();h+=`<div class="achievement ${d?'done':'pending'}">${d?'✅':'⬜'} ${a.text}</div>`;}document.getElementById('achievements').innerHTML=h;}
-function newDay(){day++;dayStartTime=Date.now();ordersToday=0;for(let i=0;i<Math.floor(Math.random()*3)+1;i++)generateOrder();credits+=5*day+Math.floor(bankDeposit*0.05);notify('🌅 День '+day+'!','success');updateUI();}
+function renderAchievements(){let ach=[{id:'p100',text:'100 дронов',check:()=>totalMade>=100},{id:'p1000',text:'1000 дронов',check:()=>totalMade>=1000},{id:'prestige',text:'Первый престиж',check:()=>prestigeLevel>=1},{id:'all',text:'Все дроны',check:()=>drones_unlocked.length>=5},{id:'ricman',text:'1000 ГК',check:()=>credits>=1000},{id:'bank',text:'Вклад 500 ГК',check:()=>bankDeposit>=500},];let h='';for(let a of ach){let d=a.check();h+=`<div class="achievement ${d?'done':'pending'}">${d?'✅':'⬜'} ${a.text}</div>`;}document.getElementById('achievements').innerHTML=h;}
+function newDay(){
+    day++;dayStartTime=Date.now();ordersToday=0;
+    for(let i=0;i<Math.floor(Math.random()*3)+1;i++)generateOrder();
+    credits+=5*day+Math.floor(bankDeposit*0.05);
+    // Рекорды дня
+    if(day>1){if(todayDrones>recDronesDay)recDronesDay=todayDrones;if(todayEarned>recEarnedDay)recEarnedDay=todayEarned;}
+    todayDrones=totalMade;todayEarned=0;
+    wheelUsedToday=false;document.getElementById('btnWheel').disabled=false;document.getElementById('wheelResult').innerText='';
+    if(investorActive){investorDaysLeft--;if(investorDaysLeft<=0){investorActive=false;notify('💼 Инвестор ушёл','');}}
+    updateUI();
+}
 function renderAll(){renderUpgrades();renderDroneSelector();renderOrders();renderTree();renderAutoSellPanel();renderAutoSlots();document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';document.getElementById('turretBar').classList.toggle('active',hasTurrets);updateAllSlotInfo();}
-function updateUI(){let t=getTotalDrones();document.getElementById('credits').innerText=Math.floor(credits);document.getElementById('drones').innerText=t;document.getElementById('totalMade').innerText=totalMade;document.getElementById('minDronePrice').innerText=Math.floor(drone_types[currentDrone].base_price*0.2);document.getElementById('baseDronePriceDisplay').innerText=baseDronePrice;document.getElementById('intervalText').innerText=canProduce?produceInterval.toFixed(1):'...';document.getElementById('warehouseUsed').innerText=t;document.getElementById('warehouseMax').innerText=warehouse;document.getElementById('ordersToday').innerText=ordersToday;document.getElementById('dayRemaining').innerText=Math.max(0,Math.ceil(dayDuration-(Date.now()-dayStartTime)/1000*gameSpeed));document.getElementById('day').innerText=day;document.getElementById('statTotal').innerText=totalMade;document.getElementById('statEarned').innerText=Math.floor(totalEarned);document.getElementById('statOrders').innerText=ordersCompleted;document.getElementById('statPrestige').innerText=prestigeLevel;document.getElementById('statPP').innerText=prestigePoints;document.getElementById('statLab').innerText=labPoints;document.getElementById('statAutoSlots').innerText=getMaxAutoSlots();document.getElementById('headerPrestige').innerText=prestigeLevel;document.getElementById('labPoints').innerText=labPoints;document.getElementById('labRate2').innerText=getLabRate();document.getElementById('labPointsDisplay2').innerText=labPoints;document.getElementById('bankDeposit').innerText=bankDeposit;document.getElementById('bankIncome').innerText=Math.floor(bankDeposit*0.05);document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';updatePrestigeInfo();renderStorageBreakdown();}
-function gameLoop(){if((Date.now()-dayStartTime)/1000*gameSpeed>=dayDuration)newDay();if(hasTurrets){let iv=getAutoInterval();for(let s of autoSlots){if(s.active&&drones_unlocked.includes(s.type)&&Date.now()-lastAutoTick>=iv&&getTotalDrones()<warehouse){storage[s.type]++;totalMade++;lastAutoTick=Date.now();document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);}}}if(Date.now()-autoSellLastCheck>=5000/gameSpeed){processAutoSell();autoSellLastCheck=Date.now();}updateUI();requestAnimationFrame(()=>setTimeout(gameLoop,500));}
+function updateUI(){
+    let t=getTotalDrones();
+    document.getElementById('credits').innerText=Math.floor(credits);document.getElementById('drones').innerText=t;
+    document.getElementById('minDronePrice').innerText=Math.floor(drone_types[currentDrone].base_price*0.2);
+    document.getElementById('baseDronePriceDisplay').innerText=baseDronePrice;
+    document.getElementById('intervalText').innerText=canProduce?produceInterval.toFixed(1):'...';
+    document.getElementById('warehouseUsed').innerText=t;document.getElementById('warehouseMax').innerText=warehouse;
+    document.getElementById('ordersToday').innerText=activeOrders.length;document.getElementById('ordersMax').innerText=5;
+    document.getElementById('dayRemaining').innerText=Math.max(0,Math.ceil(dayDuration-(Date.now()-dayStartTime)/1000*gameSpeed));
+    document.getElementById('day').innerText=day;document.getElementById('statTotal').innerText=totalMade;
+    document.getElementById('statEarned').innerText=Math.floor(totalEarned);document.getElementById('statOrders').innerText=ordersCompleted;
+    document.getElementById('statPrestige').innerText=prestigeLevel;document.getElementById('statPP').innerText=prestigePoints;
+    document.getElementById('statLab').innerText=labPoints;document.getElementById('statAutoSlots').innerText=getMaxAutoSlots();
+    document.getElementById('headerPrestige').innerText=prestigeLevel;
+    document.getElementById('labPoints').innerText=labPoints;document.getElementById('labRate2').innerText=getLabRate();
+    document.getElementById('labPointsDisplay2').innerText=labPoints;
+    document.getElementById('bankDeposit').innerText=bankDeposit;document.getElementById('bankIncome').innerText=Math.floor(bankDeposit*0.05);
+    document.getElementById('recDronesDay').innerText=recDronesDay;document.getElementById('recEarnedDay').innerText=recEarnedDay;
+    document.getElementById('recBiggestOrder').innerText=recBiggestOrder;
+    document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';
+    updatePrestigeInfo();renderStorageBreakdown();
+}
+function gameLoop(){
+    if(devMultiplier===0) { requestAnimationFrame(()=>setTimeout(gameLoop,500)); return; }
+    if((Date.now()-dayStartTime)/1000*gameSpeed>=dayDuration)newDay();
+    if(hasTurrets){let iv=getAutoInterval();for(let s of autoSlots){if(s.active&&drones_unlocked.includes(s.type)&&Date.now()-lastAutoTick>=iv&&getTotalDrones()<warehouse){for(let i=0;i<devMultiplier;i++){storage[s.type]++;totalMade++;}lastAutoTick=Date.now();document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);}}}
+    if(Date.now()-autoSellLastCheck>=5000/gameSpeed){processAutoSell();autoSellLastCheck=Date.now();}
+    updateUI();requestAnimationFrame(()=>setTimeout(gameLoop,500));
+}
 
 // Старт
 document.getElementById('droneIcon').addEventListener('click',()=>{if(!minigameActive)startMinigame();});
-applyAllEffects();renderAll();dayStartTime=Date.now();ordersToday=1;generateOrder();
+applyAllEffects();renderAll();dayStartTime=Date.now();ordersToday=1;todayDrones=0;todayEarned=0;generateOrder();
 setInterval(()=>{if(Math.random()<0.3*marketing*gameSpeed)generateOrder();},12000);
 setInterval(()=>{if(Math.random()<0.5*gameSpeed&&activeOrders.length<5)generateMegaOrder();},120000);
 setInterval(()=>{if(Math.random()<0.35*gameSpeed&&activeOrders.length<5)generateAuction();},180000);
@@ -556,7 +669,6 @@ setInterval(renderOrders,1000);
 setInterval(()=>{if(Math.random()<0.3*gameSpeed)triggerEvent();},25000);
 setInterval(()=>{saveGame(3);},30000);
 gameLoop();updateUI();
-notify('🚀 Добро пожаловать!','');
 </script>
 </body>
 </html>
