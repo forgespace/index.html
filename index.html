@@ -36,15 +36,34 @@
         .game-notification.error { border-color: var(--red); background: #1a0a0a; }
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+        /* Модальное окно */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 1000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #111827; border: 2px solid var(--accent); border-radius: 8px;
+            padding: 16px; max-width: 320px; text-align: center; font-size: 12px;
+        }
+        .modal-box h3 { color: var(--accent); margin-bottom: 8px; }
+        .modal-box button {
+            margin-top: 10px; padding: 6px 14px; background: var(--accent);
+            color: #000; border: none; border-radius: 4px; cursor: pointer;
+            font-family: 'Courier New', monospace; font-weight: bold;
+        }
+
         .header { text-align: center; border-bottom: 2px solid #2a3a5c; padding: 6px 8px; flex-shrink: 0; background: #0d1520; display: flex; align-items: center; justify-content: space-between; }
         .header h1 { color: var(--accent); font-size: 15px; letter-spacing: 2px; margin: 0; }
         .header .location { color: #90a4ae; font-size: 10px; }
+        .speed-btns { display: flex; gap: 2px; }
         .btn-speed {
-            padding: 4px 10px; border: 1px solid var(--accent); border-radius: 4px;
+            padding: 4px 8px; border: 1px solid var(--accent); border-radius: 4px;
             background: #0f1a2e; color: var(--accent); cursor: pointer;
-            font-family: 'Courier New', monospace; font-size: 11px; font-weight: bold;
+            font-family: 'Courier New', monospace; font-size: 10px; font-weight: bold;
         }
-        .btn-speed.slow { border-color: var(--orange); color: var(--orange); }
+        .btn-speed.active-speed { background: var(--accent); color: #000; }
 
         .top-resources {
             background: var(--panel); border-bottom: 1px solid var(--border);
@@ -78,13 +97,13 @@
 
         .btn-row { display: flex; gap: 4px; margin: 6px 0; }
         .btn-produce {
-            flex: 1; padding: 12px; background: var(--orange); border: none; border-radius: 6px;
-            color: #000; font-size: 14px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;
+            flex: 1; padding: 10px; background: var(--orange); border: none; border-radius: 6px;
+            color: #000; font-size: 13px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;
         }
         .btn-produce.cooldown { background: #444; color: #888; cursor: not-allowed; }
         .btn-sell-all {
-            padding: 12px 10px; background: #ff5252; border: none; border-radius: 6px;
-            color: #fff; font-size: 11px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;
+            padding: 10px 8px; background: #ff5252; border: none; border-radius: 6px;
+            color: #fff; font-size: 10px; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace;
         }
 
         .btn-night {
@@ -96,8 +115,19 @@
         .progress-bar { width: 100%; height: 3px; background: #333; border-radius: 2px; margin-top: 2px; margin-bottom: 4px; }
         .progress-fill { height: 100%; background: var(--orange); width: 0%; border-radius: 2px; }
 
-        .auto-slots { margin: 4px 0; }
-        .auto-slot { display: flex; align-items: center; gap: 4px; padding: 3px 6px; background: var(--panel); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 2px; font-size: 8px; }
+        /* Бургер-меню авто */
+        .burger-btn {
+            width: 100%; padding: 8px; background: var(--panel); border: 1px solid var(--border);
+            border-radius: 4px; color: var(--accent); cursor: pointer; font-family: 'Courier New', monospace;
+            font-size: 10px; font-weight: bold; text-align: center; margin: 4px 0;
+        }
+        .burger-panel { display: none; margin: 4px 0; }
+        .burger-panel.open { display: block; }
+        .auto-slot {
+            display: flex; align-items: center; gap: 4px; padding: 3px 6px;
+            background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
+            margin-bottom: 2px; font-size: 8px;
+        }
         .auto-slot select { background: #0a0f17; color: #e8e8e8; border: 1px solid var(--border); padding: 1px 3px; font-family: 'Courier New', monospace; font-size: 8px; border-radius: 2px; flex: 1; }
         .btn-slot { padding: 2px 6px; border: none; border-radius: 2px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; font-size: 7px; }
         .btn-slot-on { background: var(--green); color: #000; }
@@ -107,15 +137,15 @@
 
         .order-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-bottom: 4px; }
         .order-header .order-count { color: var(--gold); font-weight: bold; }
-        .order-card { background: var(--panel); border: 1px solid var(--border); border-radius: 5px; padding: 5px; margin-bottom: 3px; font-size: 9px; display: flex; justify-content: space-between; align-items: center; }
+        .order-card { background: var(--panel); border: 1px solid var(--border); border-radius: 5px; padding: 5px; margin-bottom: 3px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; }
         .order-card.urgent { border-color: var(--red); animation: pulse 0.4s infinite alternate; }
         .order-card.mega { border-color: #ffd700; background: #1a1a0a; }
         .order-card.notime { border-color: var(--green); }
         .order-card.auction { border-color: #ff9800; background: #1a1000; }
         @keyframes pulse { from { border-color: var(--red); } to { border-color: var(--orange); } }
         .order-info { flex: 1; }
-        .order-actions { display: flex; gap: 2px; flex-shrink: 0; }
-        .btn-tiny { padding: 2px 4px; border: none; border-radius: 2px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; font-size: 7px; margin: 1px; }
+        .order-actions { display: flex; gap: 3px; flex-shrink: 0; }
+        .btn-tiny { padding: 3px 5px; border: none; border-radius: 2px; cursor: pointer; font-family: 'Courier New', monospace; font-weight: bold; font-size: 8px; margin: 1px; }
         .btn-tiny-accept { background: var(--accent); color: #000; }
         .btn-tiny-decline { background: var(--red); color: #fff; }
 
@@ -144,15 +174,14 @@
         .lab-tab { flex: 1; padding: 6px 4px; background: var(--panel); border: 1px solid var(--border); color: #78909c; text-align: center; cursor: pointer; font-size: 9px; font-family: 'Courier New', monospace; border-radius: 3px; }
         .lab-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
 
-        .tree-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 4px 0; }
-        .tree-node { padding: 5px 6px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 8px; text-align: center; position: relative; }
+        .tree-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin: 4px 0; }
+        .tree-node { padding: 5px 4px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-size: 7px; text-align: center; position: relative; }
         .tree-node.locked { opacity: 0.3; cursor: not-allowed; background: #0a0a0a; }
         .tree-node.available { border-color: var(--purple); background: #1a0a2e; }
         .tree-node.researched { border-color: var(--green); background: #0a1a0a; }
-        .tree-node .node-icon { font-size: 18px; display: block; }
-        .tree-node .node-help { position: absolute; top: 2px; right: 4px; width: 14px; height: 14px; background: #555; color: #fff; border-radius: 50%; font-size: 7px; line-height: 14px; cursor: pointer; z-index: 10; }
+        .tree-node .node-icon { font-size: 16px; display: block; }
+        .tree-node .node-help { position: absolute; top: 2px; right: 3px; width: 12px; height: 12px; background: #555; color: #fff; border-radius: 50%; font-size: 6px; line-height: 12px; cursor: pointer; z-index: 10; }
 
-        .save-panel { margin-top: 8px; }
         .save-slots { display: flex; gap: 4px; }
         .save-slot { flex: 1; padding: 5px; background: #0a0f17; border: 1px solid var(--border); border-radius: 4px; text-align: center; font-size: 8px; font-family: 'Courier New', monospace; }
         .save-slot .slot-num { color: var(--accent); font-weight: bold; font-size: 9px; }
@@ -166,16 +195,13 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .turret-bar { background: #0a1a0a; border: 1px solid var(--green); border-radius: 4px; padding: 4px 6px; margin: 4px 0; font-size: 8px; color: var(--green); text-align: center; display: none; }
-        .turret-bar.active { display: block; }
+        .stats-tabs { display: flex; gap: 2px; margin-bottom: 6px; }
+        .stats-tab { flex: 1; padding: 5px 3px; background: var(--panel); border: 1px solid var(--border); color: #78909c; text-align: center; cursor: pointer; font-size: 8px; font-family: 'Courier New', monospace; border-radius: 3px; }
+        .stats-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
 
         .achievement { padding: 3px 5px; margin: 2px 0; border-radius: 3px; font-size: 8px; }
         .achievement.done { background: #0a1a0a; border: 1px solid var(--green); color: var(--green); }
         .achievement.pending { background: #0a0a0a; border: 1px solid #555; color: #555; }
-
-        .stats-tabs { display: flex; gap: 2px; margin-bottom: 6px; }
-        .stats-tab { flex: 1; padding: 5px 3px; background: var(--panel); border: 1px solid var(--border); color: #78909c; text-align: center; cursor: pointer; font-size: 8px; font-family: 'Courier New', monospace; border-radius: 3px; }
-        .stats-tab.active { border-color: var(--accent); color: var(--accent); background: #0f1a2e; }
     </style>
 </head>
 <body>
@@ -186,7 +212,11 @@
             <h1>🚀 DRONE FORGE</h1>
             <div class="location" id="baseLevel">ГАРАЖ | День <span id="day">1</span> | ⭐<span id="headerPrestige">0</span> | ⏳<span id="dayRemaining">60</span>с</div>
         </div>
-        <button class="btn-speed" id="btnSpeed" onclick="toggleSpeed()">⏩ 1x</button>
+        <div class="speed-btns">
+            <button class="btn-speed active-speed" onclick="setSpeed(1)">1x</button>
+            <button class="btn-speed" onclick="setSpeed(0.75)">0.75x</button>
+            <button class="btn-speed" id="btnDevSpeed" onclick="setSpeed(5)" style="opacity:0.4;font-size:8px;">x5</button>
+        </div>
     </div>
 
     <div class="top-resources">
@@ -204,12 +234,11 @@
         <!-- ЦЕХ -->
         <div class="tab-content active" id="tab-game">
             <div class="drone-area">
-                <div class="drone-icon" id="droneIcon">📦</div>
+                <div class="drone-icon" id="droneIcon">🛸</div>
                 <div class="drone-name" id="currentDrone">Муравей МК-1</div>
                 <div class="min-price">Мин: <span id="minDronePrice">2</span> | База: <span id="baseDronePriceDisplay">10</span> ГК</div>
                 <div class="storage-breakdown" id="storageBreakdown"></div>
                 <div class="drone-selector" id="droneSelector"></div>
-                <div class="turret-bar" id="turretBar">🛡️ Турели активны</div>
             </div>
 
             <div class="btn-row">
@@ -218,16 +247,21 @@
             </div>
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <button class="btn-night" id="btnNight" onclick="nightShift()">🌙 НОЧНАЯ СМЕНА (2x, 30с)</button>
-            <div style="text-align:center;font-size:9px;">Перезарядка: <span id="intervalText">2.0</span>с<span id="autoClickerStatus" style="display:none;"> | 🤖 Авто</span></div>
-            <div class="auto-slots" id="autoSlots" style="display:none;"></div>
+            <div style="text-align:center;font-size:9px;">Перезарядка: <span id="intervalText">2.0</span>с</div>
+
+            <!-- Бургер авто-кликера -->
+            <div class="burger-btn" id="burgerBtn" onclick="toggleBurger()" style="display:none;">🤖 Автопроизводство</div>
+            <div class="burger-panel" id="burgerPanel"></div>
 
             <div class="auto-sell-panel" id="autoSellPanel"><h4>📤 Автопродажа</h4><div id="autoSellOptions"></div></div>
 
             <div class="bank-panel" id="bankPanel">
                 <div><h4>🏦 Банк</h4>Вклад: <b id="bankDeposit">0</b> ГК | +<b id="bankIncome">0</b>/день</div>
                 <div>
-                    <button onclick="depositBank()" style="padding:3px 6px;background:#ffd700;color:#000;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:8px;">+100</button>
-                    <button onclick="withdrawBank()" style="padding:3px 6px;background:#ff5252;color:#fff;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:8px;">Снять</button>
+                    <button onclick="depositBank(100)" style="padding:4px 8px;background:#ffd700;color:#000;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:9px;">+100</button>
+                    <button onclick="depositBank(500)" style="padding:4px 8px;background:#ffd700;color:#000;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:9px;">+500</button>
+                    <button onclick="depositBank(1000)" style="padding:4px 8px;background:#ffd700;color:#000;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:9px;">+1к</button>
+                    <button onclick="withdrawBank()" style="padding:4px 8px;background:#ff5252;color:#fff;border:none;border-radius:3px;cursor:pointer;font-family:'Courier New';font-size:9px;">Снять</button>
                 </div>
             </div>
 
@@ -281,8 +315,8 @@
                     <div id="wheelResult" style="font-size:10px;margin-top:4px;color:var(--gold);"></div>
                 </div>
                 <div style="margin-top:12px;text-align:center;opacity:0.3;">
-                    <button onclick="toggleDevMode()" style="background:none;border:none;color:#555;font-size:7px;cursor:pointer;font-family:'Courier New';">dev</button>
-                    <span id="devModeStatus" style="font-size:7px;color:#555;">x1</span>
+                    <button onclick="toggleDevStop()" style="background:none;border:none;color:#555;font-size:7px;cursor:pointer;font-family:'Courier New';">dev стоп</button>
+                    <span id="devStopStatus" style="font-size:7px;color:#555;">выкл</span>
                 </div>
             </div>
             <div id="statsAchievements" style="display:none;"><div id="achievements"></div></div>
@@ -309,7 +343,24 @@
     </div>
 </div>
 
+<!-- Модальное окно -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal-box" id="modalBox" onclick="event.stopPropagation()">
+        <h3 id="modalTitle"></h3>
+        <p id="modalText"></p>
+        <button onclick="closeModal()">OK</button>
+    </div>
+</div>
+
 <script>
+// ==================== МОДАЛЬНОЕ ОКНО ====================
+function showModal(title, text) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalText').innerText = text;
+    document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
 // ==================== УВЕДОМЛЕНИЯ ====================
 function notify(text, type = '') {
     let old = document.querySelectorAll('.game-notification'); old.forEach(el => el.remove());
@@ -321,38 +372,50 @@ function notify(text, type = '') {
 
 // ==================== СКОРОСТЬ / DEV ====================
 let gameSpeed = 1.0;
-let devMultiplier = 1;
-function toggleSpeed() {
-    gameSpeed = gameSpeed === 1.0 ? 0.75 : 1.0;
-    let btn = document.getElementById('btnSpeed');
-    if (gameSpeed === 0.75) { btn.innerText = '🐢 0.75x'; btn.classList.add('slow'); }
-    else { btn.innerText = '⏩ 1x'; btn.classList.remove('slow'); }
+let devStop = false;
+function setSpeed(s) {
+    gameSpeed = s;
+    document.querySelectorAll('.btn-speed').forEach(b => b.classList.remove('active-speed'));
+    if (s === 1) document.querySelectorAll('.btn-speed')[0].classList.add('active-speed');
+    if (s === 0.75) document.querySelectorAll('.btn-speed')[1].classList.add('active-speed');
+    if (s === 5) document.querySelectorAll('.btn-speed')[2].classList.add('active-speed');
 }
-function toggleDevMode() {
-    if (devMultiplier === 1) devMultiplier = 5;
-    else if (devMultiplier === 5) devMultiplier = 0;
-    else devMultiplier = 1;
-    document.getElementById('devModeStatus').innerText = devMultiplier === 0 ? 'СТОП' : 'x' + devMultiplier;
-    notify('Режим: ' + (devMultiplier === 0 ? 'СТОП' : 'x' + devMultiplier), 'warning');
+function toggleDevStop() {
+    devStop = !devStop;
+    document.getElementById('devStopStatus').innerText = devStop ? 'СТОП' : 'выкл';
+    notify(devStop ? '⏸ Игра остановлена' : '▶ Игра продолжается', 'warning');
 }
 
 // ==================== ДЕРЕВО ====================
 const treeNodes = {
-    t0: { id:'t0', icon:'⚙️', name:'Конвейер 2', desc:'Разрешён 2 ур.', cost:5, requires:[], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t1: { id:'t1', icon:'⚙️', name:'Конвейер 3', desc:'Разрешён 3 ур.', cost:7, requires:['t0'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t2: { id:'t2', icon:'⚙️', name:'Конвейер 4', desc:'Разрешён 4 ур.', cost:9, requires:['t1'], branch:'prod', researched:false, unlocksUpgrade:0 },
-    t3: { id:'t3', icon:'🤖', name:'Роботиз. 2', desc:'+1 слот', cost:6, requires:[], branch:'prod', researched:false },
-    t4: { id:'t4', icon:'🤖', name:'Роботиз. 3', desc:'+1 слот', cost:8, requires:['t3'], branch:'prod', researched:false },
-    t5: { id:'t5', icon:'📜', name:'Сертифик. 2', desc:'Разрешён 2 ур.', cost:5, requires:[], branch:'econ', researched:false, unlocksUpgrade:1 },
-    t6: { id:'t6', icon:'📜', name:'Сертифик. 3', desc:'Разрешён 3 ур.', cost:7, requires:['t5'], branch:'econ', researched:false, unlocksUpgrade:1 },
-    t7: { id:'t7', icon:'📦', name:'Логистика 1', desc:'+15 склада', cost:6, requires:[], branch:'econ', researched:false },
-    t8: { id:'t8', icon:'📦', name:'Логистика 2', desc:'+15 склада', cost:8, requires:['t7'], branch:'econ', researched:false },
-    t9: { id:'t9', icon:'🔥', name:'Противопож.', desc:'-70% пожары', cost:5, requires:[], branch:'def', researched:false },
-    t10: { id:'t10', icon:'🛡️', name:'Брандмауэр', desc:'Защита от хака', cost:6, requires:[], branch:'def', researched:false, maxLevel:5, level:0 },
-    d0: { id:'d0', icon:'⚔️', name:'Оса-Боевая', desc:'Боевой дрон', cost:300, requires:[], branch:'drone', researched:false, droneType:'wasp' },
-    d1: { id:'d1', icon:'🚛', name:'Тяжеловоз', desc:'Грузовой дрон', cost:300, requires:[], branch:'drone', researched:false, droneType:'cargo' },
-    d2: { id:'d2', icon:'🛰️', name:'Разведчик', desc:'Зонд', cost:300, requires:[], branch:'drone', researched:false, droneType:'scout' },
-    d3: { id:'d3', icon:'💣', name:'Камикадзе', desc:'Одноразовый', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' }
+    t0: { id:'t0', icon:'⚙️', name:'Конвейер 2', desc:'Разрешён 2 ур. Конвейера (покупка за ГК)', cost:5, requires:[], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t1: { id:'t1', icon:'⚙️', name:'Конвейер 3', desc:'Разрешён 3 ур. Конвейера', cost:7, requires:['t0'], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t2: { id:'t2', icon:'⚙️', name:'Конвейер 4', desc:'Разрешён 4 ур. Конвейера', cost:9, requires:['t1'], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t3: { id:'t3', icon:'⚙️', name:'Конвейер 5', desc:'Разрешён 5 ур. Конвейера', cost:12, requires:['t2'], branch:'prod', researched:false, unlocksUpgrade:0 },
+    t4: { id:'t4', icon:'🤖', name:'Роботиз. 2', desc:'Разрешён 2 ур. Робота (покупка за ГК)', cost:6, requires:[], branch:'prod', researched:false, unlocksUpgrade:2 },
+    t5: { id:'t5', icon:'🤖', name:'Роботиз. 3', desc:'Разрешён 3 ур. Робота', cost:8, requires:['t4'], branch:'prod', researched:false, unlocksUpgrade:2 },
+    t6: { id:'t6', icon:'🤖', name:'Роботиз. 4', desc:'Разрешён 4 ур. Робота + бесплатный слот', cost:11, requires:['t5'], branch:'prod', researched:false, unlocksUpgrade:2, freeSlot:true },
+    t7: { id:'t7', icon:'🏭', name:'Цех 2', desc:'+5% производства, уровень верфи', cost:8, requires:[], branch:'prod', researched:false },
+    t8: { id:'t8', icon:'🏭', name:'Цех 3', desc:'+10% производства, уровень верфи', cost:10, requires:['t7'], branch:'prod', researched:false },
+    e0: { id:'e0', icon:'📜', name:'Сертифик. 2', desc:'Разрешён 2 ур. Сертификации', cost:5, requires:[], branch:'econ', researched:false, unlocksUpgrade:1 },
+    e1: { id:'e1', icon:'📜', name:'Сертифик. 3', desc:'Разрешён 3 ур. Сертификации', cost:7, requires:['e0'], branch:'econ', researched:false, unlocksUpgrade:1 },
+    e2: { id:'e2', icon:'📜', name:'Сертифик. 4', desc:'Разрешён 4 ур. Сертификации', cost:10, requires:['e1'], branch:'econ', researched:false, unlocksUpgrade:1 },
+    e3: { id:'e3', icon:'📦', name:'Логистика 1', desc:'+15 склада сразу', cost:6, requires:[], branch:'econ', researched:false },
+    e4: { id:'e4', icon:'📦', name:'Логистика 2', desc:'Разрешён 2 ур. Склада', cost:8, requires:['e3'], branch:'econ', researched:false, unlocksUpgrade:3 },
+    e5: { id:'e5', icon:'📦', name:'Логистика 3', desc:'Разрешён 3 ур. Склада', cost:10, requires:['e4'], branch:'econ', researched:false, unlocksUpgrade:3 },
+    e6: { id:'e6', icon:'📋', name:'Маркетинг 2', desc:'Разрешён 2 ур. Маркетинга', cost:6, requires:[], branch:'econ', researched:false, unlocksUpgrade:4 },
+    e7: { id:'e7', icon:'📋', name:'Маркетинг 3', desc:'Разрешён 3 ур. Маркетинга', cost:8, requires:['e6'], branch:'econ', researched:false, unlocksUpgrade:4 },
+    d0: { id:'d0', icon:'🔥', name:'Противопожарка', desc:'-70% пожары', cost:5, requires:[], branch:'def', researched:false },
+    d1: { id:'d1', icon:'🔥', name:'Противопожарка 2', desc:'Пожары устранены', cost:8, requires:['d0'], branch:'def', researched:false },
+    d2: { id:'d2', icon:'🛡️', name:'Брандмауэр 1', desc:'Защита от хака', cost:6, requires:[], branch:'def', researched:false, maxLevel:3, level:0 },
+    d3: { id:'d3', icon:'🛰️', name:'Орбит. щит 1', desc:'+20% сбитие НЛО', cost:7, requires:[], branch:'def', researched:false },
+    d4: { id:'d4', icon:'🛰️', name:'Орбит. щит 2', desc:'+40% сбитие НЛО', cost:10, requires:['d3'], branch:'def', researched:false },
+    d5: { id:'d5', icon:'👮', name:'Патруль 1', desc:'-50% диверсанты', cost:6, requires:[], branch:'def', researched:false },
+    d6: { id:'d6', icon:'👮', name:'Патруль 2', desc:'-75% диверсанты', cost:9, requires:['d5'], branch:'def', researched:false },
+    dr0: { id:'dr0', icon:'⚔️', name:'Оса-Боевая', desc:'Боевой дрон. +10% к боевым заказам', cost:300, requires:[], branch:'drone', researched:false, droneType:'wasp' },
+    dr1: { id:'dr1', icon:'🚛', name:'Тяжеловоз', desc:'Грузовой дрон. +10 к складу', cost:300, requires:[], branch:'drone', researched:false, droneType:'cargo' },
+    dr2: { id:'dr2', icon:'🛰️', name:'Разведчик', desc:'Зонд. +1 очко за заказ', cost:300, requires:[], branch:'drone', researched:false, droneType:'scout' },
+    dr3: { id:'dr3', icon:'💣', name:'Камикадзе', desc:'Одноразовый. +20% к мега-заказам', cost:300, requires:[], branch:'drone', researched:false, droneType:'bomb' },
 };
 
 let currentLabBranch = 'prod';
@@ -392,8 +455,7 @@ function getState() {
         orderIdCounter, dayStartTime, ordersSinceLabTick, cyberShield,
         bankDeposit, nightShiftReady, gameSpeed, wheelUsedToday,
         recDronesDay, recEarnedDay, recBiggestOrder, todayDrones, todayEarned,
-        investorActive, investorDaysLeft,
-        treeResearched: Object.keys(treeNodes).filter(k=>treeNodes[k].researched),
+        investorActive, investorDaysLeft, treeResearched: Object.keys(treeNodes).filter(k=>treeNodes[k].researched),
         treeLevels: Object.fromEntries(Object.entries(treeNodes).filter(([k,v])=>v.maxLevel).map(([k,v])=>[k,v.level]))
     };
 }
@@ -439,7 +501,7 @@ let labPoints=0,ordersSinceLabTick=0,autoSlots=[{type:'ant',active:false}],cyber
 let storage={ant:0,wasp:0,cargo:0,scout:0,bomb:0};
 let reputation={'Имперский флот':50,'КорпТорг':50,'Синдикат «Ржавый»':50,'Гильдия Исследователей':50};
 let drones_unlocked=['ant'],currentDrone='ant';
-const drone_types={ant:{name:'Муравей МК-1',icon:'📦',base_price:10},wasp:{name:'Оса-Боевая',icon:'⚔️',base_price:18},cargo:{name:'Тяжеловоз',icon:'🚛',base_price:22},scout:{name:'Разведчик',icon:'🛰️',base_price:15},bomb:{name:'Камикадзе',icon:'💣',base_price:35}};
+const drone_types={ant:{name:'Муравей МК-1',icon:'🛸',base_price:10,bonus:'+5% производство'},wasp:{name:'Оса-Боевая',icon:'⚔️',base_price:18,bonus:'+10% боевые заказы'},cargo:{name:'Тяжеловоз',icon:'🚛',base_price:22,bonus:'+10 склада'},scout:{name:'Разведчик',icon:'🛰️',base_price:15,bonus:'+1 очко/заказ'},bomb:{name:'Камикадзе',icon:'💣',base_price:35,bonus:'+20% мега-заказы'}};
 let upgradeLevels=[0,0,0,0,0,0,0,0];
 const upgradeBaseCost=[50,200,500,150,300,1000,600,2000];
 const upgradeNames=['Конвейер','Сертифик.','Робот','Склад','Маркетинг','Цех','Орб.модуль','Брандмауэр'];
@@ -451,11 +513,19 @@ let activeOrders=[],orderIdCounter=1;
 let minigameActive=false,minigameScore=0,minigameReward=0,minigameTimer=30,minigameInterval=null;
 let wheelUsedToday=false,recDronesDay=0,recEarnedDay=0,recBiggestOrder=0,todayDrones=0,todayEarned=0;
 let investorActive=false,investorDaysLeft=0;
+let burgerOpen = false;
 
 // ==================== ФУНКЦИИ ====================
 function getTotalDrones(){return Object.values(storage).reduce((a,b)=>a+b,0);}
 function getLabRate(){return Math.max(1,Math.floor(1*Math.pow(1.5,prestigeLevel)));}
-function getMaxAutoSlots(){let base=1;if(treeNodes.t3?.researched)base++;if(treeNodes.t4?.researched)base++;return base+Math.floor(prestigeLevel/3);}
+function getMaxAutoSlots(){
+    let base = 1;
+    // Бесплатные слоты от престижа
+    base += Math.floor(prestigeLevel / 3);
+    // Бесплатный слот от Роботиз. 4
+    if (treeNodes.t6?.researched) base++;
+    return base;
+}
 function getAutoInterval(){return (3000+Math.max(0,autoSlots.length-3)*500)/gameSpeed;}
 function getMinOrderPrice(type,amt){return Math.floor(drone_types[type].base_price*0.2*amt);}
 function updateDronePrice(){let b=baseDronePrice;if(priceBoostActive)b=Math.floor(b*(1+priceBoostPercent/100));dronePrice=b;}
@@ -467,56 +537,94 @@ function applyAllEffects(){
     for(let i=0;i<upgradeLevels[0];i++)produceInterval*=0.93;
     for(let i=0;i<upgradeLevels[1];i++)baseDronePrice=Math.floor(baseDronePrice*1.12);
     if(upgradeLevels[2])hasTurrets=true;
-    if(treeNodes.t7?.researched)warehouse+=15;
-    if(treeNodes.t8?.researched)warehouse+=15;
-    if(treeNodes.t9?.researched)fireChance=0.06;
-    if(treeNodes.t10?.level>0)cyberShield=treeNodes.t10.level;
-    for(let k of['d0','d1','d2','d3']){if(treeNodes[k]?.researched&&treeNodes[k].droneType&&!drones_unlocked.includes(treeNodes[k].droneType))drones_unlocked.push(treeNodes[k].droneType);}
+    // Бонусы дронов
+    if(drones_unlocked.includes('ant'))produceInterval*=0.95;
+    if(drones_unlocked.includes('cargo'))warehouse+=10;
+    // Исследования
+    if(treeNodes.e3?.researched)warehouse+=15;
+    if(treeNodes.d0?.researched)fireChance=0.06;
+    if(treeNodes.d1?.researched)fireChance=0;
+    if(treeNodes.d2?.level>0)cyberShield=treeNodes.d2.level;
+    if(treeNodes.t7?.researched)produceInterval*=0.95;
+    if(treeNodes.t8?.researched)produceInterval*=0.90;
+    for(let k of['dr0','dr1','dr2','dr3']){if(treeNodes[k]?.researched&&treeNodes[k].droneType&&!drones_unlocked.includes(treeNodes[k].droneType))drones_unlocked.push(treeNodes[k].droneType);}
     updateDronePrice();
 }
 
 function activatePriceBoost(pct,dur){priceBoostActive=true;priceBoostPercent=pct;priceBoostEndTime=Date.now()+dur;document.getElementById('boostBar').classList.add('active');document.getElementById('boostPercent').innerText=pct;if(boostTimerInterval)clearInterval(boostTimerInterval);boostTimerInterval=setInterval(()=>{let r=Math.max(0,Math.ceil((priceBoostEndTime-Date.now())/1000));document.getElementById('boostTimer').innerText=r;if(r<=0){priceBoostActive=false;document.getElementById('boostBar').classList.remove('active');clearInterval(boostTimerInterval);updateDronePrice();updateUI();}},500);updateDronePrice();}
 function processAutoSell(){if(!hasOrbitalModule)return;if(getTotalDrones()>=warehouse){for(let k in autoSellEnabled){if(autoSellEnabled[k]&&(storage[k]||0)>0){let s=Math.ceil(storage[k]*0.3);s=Math.max(1,Math.min(s,storage[k]));storage[k]-=s;credits+=s*Math.floor(drone_types[k].base_price*0.2);if(getTotalDrones()<warehouse)break;}}}}
 function sellAllDrones(){let total=0;for(let k in storage){if(drones_unlocked.includes(k)&&storage[k]>0){let price=Math.floor(drone_types[k].base_price*0.2);total+=storage[k]*price;storage[k]=0;}}credits+=total;notify('💰 Продано всё! +'+total+' ГК','success');updateUI();}
-function renderAutoSlots(){if(!hasTurrets&&!upgradeLevels[2]){document.getElementById('autoSlots').style.display='none';document.getElementById('autoClickerStatus').style.display='none';return;}document.getElementById('autoSlots').style.display='block';document.getElementById('autoClickerStatus').style.display='inline';let max=getMaxAutoSlots();while(autoSlots.length<max)autoSlots.push({type:'ant',active:false});while(autoSlots.length>max)autoSlots.pop();let h='';for(let i=0;i<autoSlots.length;i++){let s=autoSlots[i];h+=`<div class="auto-slot"><span>С${i+1}:</span><select onchange="autoSlots[${i}].type=this.value;renderAutoSlots();">${Object.keys(drone_types).filter(k=>drones_unlocked.includes(k)).map(k=>`<option value="${k}" ${s.type===k?'selected':''}>${drone_types[k].icon}</option>`).join('')}</select><button class="btn-slot ${s.active?'btn-slot-on':'btn-slot-off'}" onclick="autoSlots[${i}].active=!autoSlots[${i}].active;renderAutoSlots();">${s.active?'ON':'OFF'}</button></div>`;}document.getElementById('autoSlots').innerHTML=h;}
+function toggleBurger(){burgerOpen=!burgerOpen;document.getElementById('burgerPanel').classList.toggle('open',burgerOpen);renderAutoSlots();}
+function renderAutoSlots(){
+    if(!hasTurrets&&!upgradeLevels[2]){document.getElementById('burgerBtn').style.display='none';document.getElementById('burgerPanel').classList.remove('open');return;}
+    document.getElementById('burgerBtn').style.display='block';
+    let max=getMaxAutoSlots();
+    while(autoSlots.length<max)autoSlots.push({type:'ant',active:false});
+    while(autoSlots.length>max)autoSlots.pop();
+    let h='';
+    for(let i=0;i<autoSlots.length;i++){let s=autoSlots[i];h+=`<div class="auto-slot"><span>С${i+1}:</span><select onchange="autoSlots[${i}].type=this.value;renderAutoSlots();">${Object.keys(drone_types).filter(k=>drones_unlocked.includes(k)).map(k=>`<option value="${k}" ${s.type===k?'selected':''}>${drone_types[k].icon}</option>`).join('')}</select><button class="btn-slot ${s.active?'btn-slot-on':'btn-slot-off'}" onclick="autoSlots[${i}].active=!autoSlots[${i}].active;renderAutoSlots();">${s.active?'ON':'OFF'}</button></div>`;}
+    document.getElementById('burgerPanel').innerHTML=h;
+}
 function nightShift(){if(!nightShiftReady){notify('🌙 Ждите 5 мин!','warning');return;}nightShiftReady=false;document.getElementById('btnNight').disabled=true;document.getElementById('btnNight').innerText='🌙 АКТИВНА!';notify('🌙 x2 на 30с!','success');let old=produceInterval;produceInterval/=2;setTimeout(()=>{produceInterval=old;document.getElementById('btnNight').innerText='🌙 Ждите...';},30000);setTimeout(()=>{nightShiftReady=true;document.getElementById('btnNight').innerText='🌙 НОЧНАЯ СМЕНА (2x, 30с)';document.getElementById('btnNight').disabled=false;},300000);}
-function depositBank(){if(credits<100){notify('💎 Мин. 100!','warning');return;}credits-=100;bankDeposit+=100;updateUI();}
+function depositBank(amt){if(credits<amt){notify('💎 Недостаточно!','warning');return;}credits-=amt;bankDeposit+=amt;updateUI();}
 function withdrawBank(){credits+=bankDeposit;bankDeposit=0;updateUI();}
-function researchNode(id){let n=treeNodes[id];if(!n)return;if(n.researched&&!n.maxLevel){notify('Уже изучено!','warning');return;}if(n.maxLevel&&(n.level||0)>=(n.maxLevel||5)){notify('Макс. уровень!','warning');return;}for(let r of(n.requires||[])){if(!treeNodes[r]?.researched){notify('Нужен: '+treeNodes[r]?.name,'warning');return;}}if(labPoints<n.cost){notify('Нужно '+n.cost+' очков!','error');return;}labPoints-=n.cost;if(n.maxLevel){n.level=(n.level||0)+1;if(n.level>=n.maxLevel)n.researched=true;}else{n.researched=true;}applyAllEffects();renderTree();renderAutoSlots();renderDroneSelector();renderUpgrades();document.getElementById('turretBar').classList.toggle('active',hasTurrets);updateUI();notify('🔬 '+n.name+' разблокировано!','success');}
+function researchNode(id){let n=treeNodes[id];if(!n)return;if(n.researched&&!n.maxLevel){notify('Уже изучено!','warning');return;}if(n.maxLevel&&(n.level||0)>=(n.maxLevel||5)){notify('Макс. уровень!','warning');return;}for(let r of(n.requires||[])){if(!treeNodes[r]?.researched){notify('Нужен: '+treeNodes[r]?.name,'warning');return;}}if(labPoints<n.cost){notify('Нужно '+n.cost+' очков!','error');return;}labPoints-=n.cost;if(n.maxLevel){n.level=(n.level||0)+1;if(n.level>=n.maxLevel)n.researched=true;}else{n.researched=true;}applyAllEffects();renderTree();renderAutoSlots();renderDroneSelector();renderUpgrades();updateUI();notify('🔬 '+n.name+' разблокировано!','success');}
 function renderTree(){
     let h='';
     let nodes = Object.values(treeNodes).filter(n => n.branch === currentLabBranch);
     if (nodes.length === 0) { document.getElementById('treeContainer').innerHTML = '<p style="color:#78909c;">Пусто</p>'; return; }
-    h += '<div class="tree-grid">';
-    for (let n of nodes) {
-        let cls = 'tree-node ';
-        if (n.researched && !n.maxLevel) cls += 'researched';
-        else if (n.maxLevel && (n.level||0) >= (n.maxLevel||5)) cls += 'researched';
-        else {
-            let can = true;
-            for (let r of (n.requires||[])) if (!treeNodes[r]?.researched) { can = false; break; }
-            cls += can ? 'available' : 'locked';
-        }
-        let costT = n.maxLevel ? ((n.level||0)+'/'+(n.maxLevel||5)) : '';
-        let title = n.maxLevel ? n.name+' '+costT : n.name;
-        h += `<div class="${cls}" onclick="researchNode('${n.id}')">
-            <span class="node-icon">${n.icon||'?'}</span>
-            <span class="node-help" onclick="event.stopPropagation();notify('${n.desc} (${n.cost} очк.)','');">?</span>
-            <b>${title}</b>
-        </div>`;
+    let sorted = nodes.sort((a,b) => {
+        let aRow = a.requires&&a.requires.length>0 ? 1 : 0;
+        let bRow = b.requires&&b.requires.length>0 ? 1 : 0;
+        if (aRow !== bRow) return aRow - bRow;
+        return 0;
+    });
+    // Группируем в цепочки
+    let chains = [];
+    let visited = new Set();
+    for (let n of sorted) {
+        if (visited.has(n.id)) continue;
+        let chain = [n];
+        visited.add(n.id);
+        let next = sorted.find(x => x.requires && x.requires.includes(n.id));
+        while (next) { chain.push(next); visited.add(next.id); next = sorted.find(x => x.requires && x.requires.includes(next.id)); }
+        chains.push(chain);
     }
-    h += '</div>';
-    document.getElementById('treeContainer').innerHTML = h;
+    // Рендерим цепочки вертикально
+    for (let chain of chains) {
+        h += '<div style="display:flex;flex-direction:column;align-items:center;margin:0 2px;">';
+        for (let i = 0; i < chain.length; i++) {
+            let n = chain[i];
+            let cls = 'tree-node ';
+            if (n.researched && !n.maxLevel) cls += 'researched';
+            else if (n.maxLevel && (n.level||0) >= (n.maxLevel||5)) cls += 'researched';
+            else {
+                let can = true;
+                for (let r of (n.requires||[])) if (!treeNodes[r]?.researched) { can = false; break; }
+                cls += can ? 'available' : 'locked';
+            }
+            let costT = n.maxLevel ? ((n.level||0)+'/'+(n.maxLevel||5)) : '';
+            let title = n.maxLevel ? n.name+' '+costT : n.name;
+            h += `<div class="${cls}" onclick="researchNode('${n.id}')" style="width:100px;margin:2px 0;">
+                <span class="node-icon">${n.icon||'?'}</span>
+                <span class="node-help" onclick="event.stopPropagation();showModal('${n.name}','${n.desc} (Стоимость: ${n.cost} очк.)')">?</span>
+                <b>${title}</b>
+            </div>`;
+            if (i < chain.length - 1) h += '<div style="color:#555;">▼</div>';
+        }
+        h += '</div>';
+    }
+    document.getElementById('treeContainer').innerHTML = '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;">' + h + '</div>';
     document.getElementById('labPointsDisplay2').innerText = labPoints;
     document.getElementById('labRate2').innerText = getLabRate();
 }
 function renderAutoSellPanel(){if(!hasOrbitalModule){document.getElementById('autoSellPanel').style.display='none';return;}document.getElementById('autoSellPanel').style.display='block';let h='';for(let k in drone_types)if(drones_unlocked.includes(k))h+=`<div class="auto-sell-item"><input type="checkbox" ${autoSellEnabled[k]?'checked':''} onchange="autoSellEnabled['${k}']=this.checked"><label>${drone_types[k].icon} ${drone_types[k].name}</label></div>`;document.getElementById('autoSellOptions').innerHTML=h;}
-function addLabPoints(){ordersSinceLabTick++;if(ordersSinceLabTick>=2){ordersSinceLabTick-=2;labPoints+=getLabRate()*devMultiplier;}renderTree();updateUI();}
-function produceDrone(){if(!canProduce||devMultiplier===0)return;if(getTotalDrones()>=warehouse){processAutoSell();if(getTotalDrones()>=warehouse){notify('📦 Склад полон!','warning');return;}}let count=devMultiplier;for(let i=0;i<count;i++){storage[currentDrone]++;totalMade++;}document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);canProduce=false;let btn=document.getElementById('produceBtn');btn.classList.add('cooldown');btn.innerText='⏳...';let i=produceInterval/gameSpeed;if(currentDrone==='wasp')i*=1.3;if(currentDrone==='cargo')i*=1.5;if(currentDrone==='scout')i*=0.7;if(currentDrone==='bomb')i*=2.0;let st=Date.now();let timer=setInterval(()=>{let rem=Math.max(0,i-(Date.now()-st)/1000);document.getElementById('progressFill').style.width=((i-rem)/i*100)+'%';document.getElementById('intervalText').innerText=rem.toFixed(1);if(rem<=0){clearInterval(timer);canProduce=true;btn.classList.remove('cooldown');btn.innerText='🔨 ПРОИЗВЕСТИ';document.getElementById('progressFill').style.width='0%';document.getElementById('intervalText').innerText=i.toFixed(1);}},50);updateUI();}
+function addLabPoints(){ordersSinceLabTick++;if(ordersSinceLabTick>=2){ordersSinceLabTick-=2;labPoints+=getLabRate();}if(drones_unlocked.includes('scout'))labPoints+=1;renderTree();updateUI();}
+function produceDrone(){if(!canProduce||devStop)return;if(getTotalDrones()>=warehouse){processAutoSell();if(getTotalDrones()>=warehouse){notify('📦 Склад полон!','warning');return;}}let count=gameSpeed===5?5:1;for(let i=0;i<count;i++){storage[currentDrone]++;totalMade++;}document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);canProduce=false;let btn=document.getElementById('produceBtn');btn.classList.add('cooldown');btn.innerText='⏳...';let i=produceInterval/gameSpeed;if(currentDrone==='wasp')i*=1.3;if(currentDrone==='cargo')i*=1.5;if(currentDrone==='scout')i*=0.7;if(currentDrone==='bomb')i*=2.0;let st=Date.now();let timer=setInterval(()=>{let rem=Math.max(0,i-(Date.now()-st)/1000);document.getElementById('progressFill').style.width=((i-rem)/i*100)+'%';document.getElementById('intervalText').innerText=rem.toFixed(1);if(rem<=0){clearInterval(timer);canProduce=true;btn.classList.remove('cooldown');btn.innerText='🔨 ПРОИЗВЕСТИ';document.getElementById('progressFill').style.width='0%';document.getElementById('intervalText').innerText=i.toFixed(1);}},50);updateUI();}
 function tryBuyUpgrade(id){
     let maxLvl = getMaxUpgradeLevel(id);
     if ((upgradeLevels[id]||0) >= maxLvl) {
-        let extraMsg = (id===0||id===1)&&maxLvl===1?' Исследуйте в Лаборатории.':'';
+        let extraMsg = (id===0||id===1||id===2||id===3||id===4)&&maxLvl===1?' Исследуйте в Лаборатории.':'';
         notify('🔧 Макс. уровень '+maxLvl+'!'+extraMsg,'warning');
         return;
     }
@@ -525,7 +633,7 @@ function tryBuyUpgrade(id){
     credits-=cost;upgradeLevels[id]=(upgradeLevels[id]||0)+1;
     switch(id){
         case 0:produceInterval*=0.93;break;case 1:baseDronePrice=Math.floor(baseDronePrice*1.12);updateDronePrice();break;
-        case 2:hasTurrets=true;document.getElementById('turretBar').classList.add('active');renderAutoSlots();break;
+        case 2:hasTurrets=true;renderAutoSlots();document.getElementById('burgerBtn').style.display='block';break;
         case 3:warehouse+=10;break;case 4:marketing+=0.1;break;
         case 5:let l=upgradeLevels[5];if(l>=5)baseLevelName='ОРБИТАЛЬНАЯ ВЕРФЬ';else if(l>=4)baseLevelName='МЕГА-ЗАВОД';else if(l>=3)baseLevelName='ЗАВОД';else if(l>=2)baseLevelName='ЦЕХ';else baseLevelName='МАСТЕРСКАЯ';break;
         case 6:warehouse+=20;hasOrbitalModule=true;renderAutoSellPanel();break;
@@ -554,14 +662,17 @@ function completeOrder(id){
     let o=activeOrders.find(x=>x.id===id);if(!o)return;
     if(o.mega){
         if((storage[o.droneType]||0)<o.amount1||(storage[o.droneType2]||0)<o.amount2){notify('❌ Не хватает!','error');return;}
-        storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;credits+=o.bonus;totalEarned+=o.bonus;ordersCompleted++;todayEarned+=o.bonus;
+        storage[o.droneType]-=o.amount1;storage[o.droneType2]-=o.amount2;
+        let bonusMult = drones_unlocked.includes('bomb') ? 1.2 : 1;
+        let reward = Math.floor(o.bonus * bonusMult);
+        credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;
         if(o.amount1+o.amount2>recBiggestOrder)recBiggestOrder=o.amount1+o.amount2;
         if(o.megaReward==='prestige'){prestigePoints++;notify('⭐ +1 ОП!','success');}
         if(o.megaReward==='free_upgrade'){let avail=[];for(let i=0;i<upgradeLevels.length;i++)if((upgradeLevels[i]||0)<getMaxUpgradeLevel(i))avail.push(i);if(avail.length){let uid=avail[Math.floor(Math.random()*avail.length)];upgradeLevels[uid]++;notify('🎁 '+upgradeNames[uid]+' +1','success');}}
         if(o.megaReward==='lab_points'){labPoints+=getLabRate()*5;notify('🔬 +'+getLabRate()*5+' очков!','success');}
         for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);
         activeOrders=activeOrders.filter(x=>x.id!==id);addLabPoints();renderOrders();renderDroneSelector();renderTree();updateUI();
-        notify('🏆 +'+o.bonus+' ГК','success');return;
+        notify('🏆 +'+reward+' ГК','success');return;
     }
     let rt=o.droneType||'ant';if((storage[rt]||0)<o.amount){notify('❌ Нет дронов!','error');return;}
     storage[rt]-=o.amount;
@@ -569,6 +680,8 @@ function completeOrder(id){
     if(o.auction){reward=o.price*o.amount;}
     else if(o.noTime){reward=o.price*o.amount+(o.bonus||0);}
     else{let tr=Math.max(0.2,o.timeRemaining/o.totalTime);reward=Math.floor((o.price*o.amount+(o.bonus||0))*tr);reward=Math.max(reward,getMinOrderPrice(rt,o.amount));}
+    // Бонус Осы для боевых заказов
+    if(drones_unlocked.includes('wasp')&&o.faction==='Имперский флот')reward=Math.floor(reward*1.1);
     if(investorActive)reward=Math.floor(reward*0.8);
     credits+=reward;totalEarned+=reward;ordersCompleted++;todayEarned+=reward;
     if(o.amount>recBiggestOrder)recBiggestOrder=o.amount;
@@ -611,9 +724,10 @@ function showStatsTab(tab){
 }
 function getPrestigeCost(){return{drones:1000+prestigeLevel*500,credits:40000+prestigeLevel*20000};}
 function updatePrestigeInfo(){let c=getPrestigeCost();document.getElementById('prestigeInfo').innerHTML='Требования: '+c.drones+' дронов и '+c.credits+' ГК';}
-function prestige(){let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}credits-=c.credits;prestigeLevel++;prestigePoints++;credits+=500;totalMade=0;for(let k in storage)storage[k]=0;produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();warehouse=20;hasTurrets=false;marketing=1.0;upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;autoSlots=[{type:'ant',active:false}];wheelUsedToday=false;investorActive=false;investorDaysLeft=0;recDronesDay=0;recEarnedDay=0;recBiggestOrder=0;todayDrones=0;todayEarned=0;for(let f in reputation)reputation[f]=50;priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';document.getElementById('turretBar').classList.remove('active');document.getElementById('autoSlots').style.display='none';document.getElementById('autoClickerStatus').style.display='none';applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'!','success');}
+function prestige(){let c=getPrestigeCost();if(totalMade<c.drones){notify('🔄 Нужно '+c.drones+' дронов!','warning');return;}if(credits<c.credits){notify('💎 Нужно '+c.credits+' ГК!','error');return;}credits-=c.credits;prestigeLevel++;prestigePoints++;credits+=500;totalMade=0;for(let k in storage)storage[k]=0;produceInterval=2.0*Math.pow(0.9,permUpgradeLevels['base_prod']);baseDronePrice=10;updateDronePrice();warehouse=20;hasTurrets=false;marketing=1.0;upgradeLevels=[0,0,0,0,0,0,0,0];activeOrders=[];day=1;ordersToday=0;baseLevelName='ГАРАЖ';hasOrbitalModule=false;fireChance=0.22;autoSellEnabled={};labPoints=0;ordersSinceLabTick=0;autoSlots=[{type:'ant',active:false}];wheelUsedToday=false;investorActive=false;investorDaysLeft=0;recDronesDay=0;recEarnedDay=0;recBiggestOrder=0;todayDrones=0;todayEarned=0;for(let f in reputation)reputation[f]=50;priceBoostActive=false;if(boostTimerInterval)clearInterval(boostTimerInterval);document.getElementById('boostBar').classList.remove('active');document.getElementById('autoSellPanel').style.display='none';document.getElementById('burgerBtn').style.display='none';document.getElementById('burgerPanel').classList.remove('open');applyAllEffects();renderAll();updateUI();notify('🔄 ПРЕСТИЖ '+prestigeLevel+'!','success');}
 function spinWheel(){if(wheelUsedToday){notify('🎰 Уже крутили!','warning');return;}wheelUsedToday=true;document.getElementById('btnWheel').disabled=true;let prizes=[{text:'💰 50 ГК',act:()=>{credits+=50;}},{text:'🔬 +3 очка',act:()=>{labPoints+=3;}},{text:'📦 +5 дронов',act:()=>{storage[currentDrone]+=5;}},{text:'⚡ x2 30с',act:()=>{activatePriceBoost(100,30000);}},{text:'💎 200 ГК',act:()=>{credits+=200;}},{text:'🛡️ +10 реп',act:()=>{for(let f in reputation)reputation[f]=Math.min(100,reputation[f]+10);}},{text:'Пусто',act:()=>{}},];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('wheelResult').innerText='🎰 '+p.text;p.act();updateUI();notify('🎰 '+p.text,p.text.includes('Пусто')?'':'success');}
-function triggerEvent(){let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'+50% цены на 60с (40 ГК).',btn1:'Купить',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Нет',act2:function(){}},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:hasTurrets?'Сбить?':'Пропустить?',btn1:hasTurrets?'Сбить':'Пропустить',act1:function(){if(hasTurrets){if(Math.random()<0.4){for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}else{credits+=40;notify('🛸 +40','success');}}else{credits+=Math.floor(Math.random()*50);}},btn2:hasTurrets?'Мимо':'Ничего',act2:function(){}},{title:'💻 Хакатака',text:cyberShield>=5?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<5){let s=Math.floor(labPoints*(50-cyberShield*10)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},{title:'💼 Инвестор',text:'500 ГК сейчас, но -20% дохода на 3 дня.',btn1:'Да',act1:function(){if(!investorActive){credits+=500;investorActive=true;investorDaysLeft=3;notify('💼 Инвестор вошёл!','success');}},btn2:'Нет',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
+function triggerEvent(){
+    let evts=[{title:'⚠ Пожар!',text:'30 ГК или потеря.',btn1:'Тушить',act1:function(){if(credits>=30)credits-=30;else for(let k in storage)storage[k]=Math.floor(storage[k]/2);},btn2:'Риск',act2:function(){for(let k in storage)storage[k]=Math.floor(storage[k]/2);}},{title:'💰 Торговец',text:'Что предложит?',btn1:'+50% цены 60с (40ГК)',act1:function(){if(credits>=40){credits-=40;activatePriceBoost(50,60000);}},btn2:'Другое',act2:function(){let opts=[{text:'-30% апгрейд (30ГК)',act:()=>{if(credits>=30){credits-=30;notify('Скидка на след. апгрейд!','success');}}},{text:'3 очка (50ГК)',act:()=>{if(credits>=50){credits-=50;labPoints+=3;notify('+3 очка!','success');}}},{text:'Чертёж (100ГК)',act:()=>{if(credits>=100){credits-=100;let avail=[];for(let k in treeNodes){if(!treeNodes[k].researched&&treeNodes[k].cost<=300)avail.push(k);}if(avail.length){let rid=avail[Math.floor(Math.random()*avail.length)];treeNodes[rid].researched=true;applyAllEffects();renderTree();renderDroneSelector();notify('🔓 '+treeNodes[rid].name+'!','success');}else{credits+=100;notify('Нет доступных','warning');}}}},];let o=opts[Math.floor(Math.random()*opts.length)];o.act();},},{title:'🔍 Инспектор',text:'Взятка 25 ГК (50%).',btn1:'Дать',act1:function(){if(credits>=25){credits-=25;if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},btn2:'Риск',act2:function(){if(Math.random()<0.5)notify('✅','success');else{credits=Math.max(0,credits-50);notify('❌ Штраф','error');}}},{title:'🛸 НЛО',text:hasTurrets?'Сбить?':'Пропустить?',btn1:hasTurrets?'Сбить':'Пропустить',act1:function(){let hitchance=0.6;if(treeNodes.d3?.researched)hitchance=0.8;if(treeNodes.d4?.researched)hitchance=1.0;if(hasTurrets){if(Math.random()<hitchance){credits+=40;notify('🛸 +40','success');}else{for(let k in storage)storage[k]=Math.max(0,storage[k]-2);notify('❌ Мимо','error');}}else{credits+=Math.floor(Math.random()*50);}},btn2:hasTurrets?'Мимо':'Ничего',act2:function(){}},{title:'💻 Хакатака',text:cyberShield>=3?'Брандмауэр отразил!':'Украдёт очки!',btn1:'Ок',act1:function(){if(cyberShield<3){let s=Math.floor(labPoints*(50-cyberShield*15)/100);labPoints=Math.max(0,labPoints-s);notify('💻 -'+s+' очков!','error');}},btn2:'Закрыть',act2:function(){}},{title:'💼 Инвестор',text:'500 ГК сейчас, -20% дохода на 3 дня.',btn1:'Да',act1:function(){if(!investorActive){credits+=500;investorActive=true;investorDaysLeft=3;notify('💼 Инвестор вошёл!','success');}},btn2:'Нет',act2:function(){}},];let ev=evts[Math.floor(Math.random()*evts.length)];document.getElementById('eventBox').style.display='block';document.getElementById('eventTitle').innerText=ev.title;document.getElementById('eventText').innerText=ev.text;document.getElementById('eventBtns').innerHTML='<button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev1();updateUI();renderTree();">'+ev.btn1+'</button><button class="btn-event" onclick="document.getElementById(\'eventBox\').style.display=\'none\';window._ev2();updateUI();renderTree();">'+ev.btn2+'</button>';window._ev1=ev.act1;window._ev2=ev.act2;}
 function renderFactionRep(){let h='';for(let f in reputation){let r=reputation[f];h+=`<div>${f}: ${r}/100<div style="height:3px;background:#333;"><div style="height:100%;width:${r}%;background:${r>70?'#66bb6a':r>30?'#ffd54f':'#ff5252'}"></div></div></div>`;}document.getElementById('factionReputation').innerHTML=h;}
 function renderAchievements(){let ach=[{id:'p100',text:'100 дронов',check:()=>totalMade>=100},{id:'p1000',text:'1000 дронов',check:()=>totalMade>=1000},{id:'prestige',text:'Первый престиж',check:()=>prestigeLevel>=1},{id:'all',text:'Все дроны',check:()=>drones_unlocked.length>=5},{id:'ricman',text:'1000 ГК',check:()=>credits>=1000},{id:'bank',text:'Вклад 500 ГК',check:()=>bankDeposit>=500},];let h='';for(let a of ach){let d=a.check();h+=`<div class="achievement ${d?'done':'pending'}">${d?'✅':'⬜'} ${a.text}</div>`;}document.getElementById('achievements').innerHTML=h;}
 function newDay(){
@@ -626,7 +740,7 @@ function newDay(){
     if(investorActive){investorDaysLeft--;if(investorDaysLeft<=0){investorActive=false;notify('💼 Инвестор ушёл','');}}
     updateUI();
 }
-function renderAll(){renderUpgrades();renderDroneSelector();renderOrders();renderTree();renderAutoSellPanel();renderAutoSlots();document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';document.getElementById('turretBar').classList.toggle('active',hasTurrets);updateAllSlotInfo();}
+function renderAll(){renderUpgrades();renderDroneSelector();renderOrders();renderTree();renderAutoSellPanel();renderAutoSlots();document.getElementById('baseLevel').childNodes[0].nodeValue=baseLevelName+' | ';updateAllSlotInfo();}
 function updateUI(){
     let t=getTotalDrones();
     document.getElementById('credits').innerText=Math.floor(credits);document.getElementById('drones').innerText=t;
@@ -650,9 +764,9 @@ function updateUI(){
     updatePrestigeInfo();renderStorageBreakdown();
 }
 function gameLoop(){
-    if(devMultiplier===0) { requestAnimationFrame(()=>setTimeout(gameLoop,500)); return; }
+    if(devStop) { requestAnimationFrame(()=>setTimeout(gameLoop,500)); return; }
     if((Date.now()-dayStartTime)/1000*gameSpeed>=dayDuration)newDay();
-    if(hasTurrets){let iv=getAutoInterval();for(let s of autoSlots){if(s.active&&drones_unlocked.includes(s.type)&&Date.now()-lastAutoTick>=iv&&getTotalDrones()<warehouse){for(let i=0;i<devMultiplier;i++){storage[s.type]++;totalMade++;}lastAutoTick=Date.now();document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);}}}
+    if(hasTurrets){let iv=getAutoInterval();for(let s of autoSlots){if(s.active&&drones_unlocked.includes(s.type)&&Date.now()-lastAutoTick>=iv&&getTotalDrones()<warehouse){let count=gameSpeed===5?5:1;for(let i=0;i<count;i++){storage[s.type]++;totalMade++;}lastAutoTick=Date.now();document.getElementById('droneIcon').classList.add('pulse');setTimeout(()=>document.getElementById('droneIcon').classList.remove('pulse'),150);}}}
     if(Date.now()-autoSellLastCheck>=5000/gameSpeed){processAutoSell();autoSellLastCheck=Date.now();}
     updateUI();requestAnimationFrame(()=>setTimeout(gameLoop,500));
 }
