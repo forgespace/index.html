@@ -1,39 +1,39 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Drone Forge</title>
-    <style>
-        :root {
-            --bg: #0a0e17; --panel: #0d1520; --border: #2a3a5c;
-            --accent: #4fc3f7; --gold: #ffd54f; --green: #66bb6a;
-            --red: #ff5252; --orange: #ff9800; --purple: #ce93d8;
+<html язык="ру">
+<голова>
+    <мета набор символов="УТФ-8">
+    <мета имя="область просмотра" содержание="ширина=ширина устройства, начальный масштаб=1.0, масштабируемый пользователем=нет">
+    <заголовок>Кузница дронов</заголовок>
+    <стиль>
+        :корень {
+            --бг: #0a0e17; --панель: #0d1520; --граница: #2a3a5c;
+            --акцент: #4fc3f7; --золото: #ffd54f; --зеленый: #66bb6a;
+            --красный: #ff5252; --оранжевый: #ff9800; --фиолетовый: #ce93d8;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #050810; color: #e8e8e8;
-            font-family: 'Courier New', monospace;
-            display: flex; justify-content: center; align-items: flex-start;
-            min-height: 100vh; padding: 0;
+        * { маржа: 0; прокладка: 0; размер коробки: пограничная коробка; }
+        тело {
+            фон: #050810; цвет: #e8e8e8;
+            семейство шрифтов: «Курьер Новый», моноширинный;
+            отображать: сгибать; оправдать-содержание: центр; выравнивание элементов: гибкий старт;
+            мин-высота: 100вх; прокладка: 0;
         }
-        #game {
-            width: 100%; max-width: 440px; background: #111827;
-            border: 1px solid #2a3a5c; position: relative; user-select: none;
-            display: flex; flex-direction: column; height: 100vh; max-height: 100vh;
+        #игра {
+            ширина: 100%; максимальная ширина: 440пх; фон: #111827;
+            граница: 1пх твердый #2а3а5с; позиция: родственник; выбор пользователя: никто;
+            отображать: сгибать; гибкое направление: столбец; высота: 100вх; максимальная высота: 100вх;
         }
-        .game-notification {
-            background: #1a1a2e; border: 1px solid var(--accent);
-            padding: 12px 16px; border-radius: 6px; color: #fff; font-size: 14px;
-            font-family: 'Courier New', monospace;
-            position: absolute; top: 50px; right: 8px; z-index: 999;
-            animation: slideInRight 0.3s ease-out;
-            pointer-events: auto; cursor: pointer;
-            max-width: 280px; box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+        .уведомление об игре {
+            фон: #1a1a2e; граница: 1пх твердый вар(--акцент);
+            прокладка: 12пх 16пх; радиус границы: 6пх; цвет: #fff; размер шрифта: 14пх;
+            семейство шрифтов: «Курьер Новый», моноширинный;
+            позиция: абсолютный; вершина: 50пх; верно: 8пх; z-индекс: 999;
+            анимация: слайдВправо 0,3s ослабление;
+            указатель-события: авто; курсор: указатель;
+            максимальная ширина: 280пх; тень от ящика: 0 4пх 12пх ргба(0,0,0,0,7);
         }
-        .game-notification.success { border-color: var(--green); background: #0a1a0a; }
-        .game-notification.warning { border-color: var(--orange); background: #1a1a0a; }
-        .game-notification.error { border-color: var(--red); background: #1a0a0a; }
+        .уведомление об игре.успех { цвет границы: вар(--зеленый); фон: #0а1а0а; }
+        .уведомление об игре.предупреждение { цвет границы: вар(--оранжевый); фон: #1а1а0а; }
+        .уведомление об игре.ошибка { цвет границы: вар(--красный); фон: #1а0а0а; }
         @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         .modal-overlay {
