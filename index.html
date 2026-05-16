@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Forge - Тест с апгрейдами</title>
+    <style>
+        body { background:#050810; color:#e8e8e8; font-family:monospace; padding:20px; }
+        .big { font-size:20px; color:#4fc3f7; }
+        button { padding:8px 14px; margin:3px; font-size:14px; cursor:pointer; }
+        .order { border:1px solid #2a3a5c; padding:8px; margin:5px 0; }
+        .upgrade { border:1px solid #2a3a5c; padding:5px; margin:3px 0; cursor:pointer; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Drone Forge</h1>
+    <p>День: <span id="d" class="big">1</span> | Осталось: <span id="r" class="big">10</span>с | ⭐<span id="p">0</span></p>
+    <p>ГК: <span id="c">100</span> | Дронов: <span id="t">0</span> | Склад: <span id="w">0</span>/<span id="wm">20</span></p>
+    <p>Интервал: <span id="int">2.0</span>с</p>
+    <button onclick="produce()">🔨 Произвести дрона</button>
+    <h3>Апгрейды:</h3>
+    <div id="upgrades"></div>
+    <h3>Заказы:</h3>
+    <div id="orders">Нет заказов</div>
+
+    <script>
+        let day = 1, credits = 100, total = 0, prestige = 0, warehouse = 20;
+        let dayDuration = 10, dayStart = Date.now();
+        let canProduce = true, storage = 0, produceInterval = 2.0;
+        let activeOrders = [], orderId = 1;
+        let upgradeLevel = 0;
+
+        function produce() {
+            if (!canProduce) return;
+            if (storage >= warehouse) { alert('Склад полон!'); return; }
+            storage++; total++;
+            document.getElementById('t').innerText = total;
+            document.getElementById('w').innerText = storage + '/' + warehouse;
+            canProduce = false;
+            setTimeout(() => { canProduce = true; }, produceInterval * 1000);
+        }
+
+        function buyUpgrade() {
+            let cost = 50 * (upgradeLevel + 1);
+            if (credits < cost) { alert('Недостаточно ГК! Нужно: ' + cost); return; }
+            credits -= cost;
+            upgradeLevel++;
+            produceInterval *= 0.8;
+            document.getElementById('c').innerText = credits;
+            document.getElementById('int').innerText = produceInterval.toFixed(1);
+            renderUpgrades();
+        }
+
+        function renderUpgrades() {
+            let cost = 50 * (upgradeLevel + 1);
+            document.getElementById('upgrades').innerHTML = 
+                `<div class="upgrade" onclick="buyUpgrade()">⚙️ Конвейер (ур.${upgradeLevel}) | -20% времени | ${cost} ГК</div>`;
+        }
+
+        function addOrder() {
+            if (activeOrders.length >= 3) return;
+            let o = { id: orderId++, text: 'Заказ: 3 дрона за 30 ГК', amount: 3, reward: 30, time: 8, start: Date.now() };
+            activeOrders.push(o);
+            renderOrders();
+        }
+
+        function completeOrder(id) {
+            let o = activeOrders.find(x => x.id === id);
+            if (!o) return;
+            if (storage < o.amount) { alert('Не хватает дронов!'); return; }
+            storage -= o.amount;
+            credits += o.reward;
+            activeOrders = activeOrders.filter(x => x.id !== id);
+            document.getElementById('c').innerText = credits;
+            document.getElementById('w').innerText = storage + '/' + warehouse;
+            renderOrders();
+        }
+
+        function renderOrders() {
+            let h = '';
+            for (let o of activeOrders) {
+                let elapsed = (Date.now() - o.start) / 1000;
+                let remaining = Math.max(0, o.time - elapsed);
+                if (remaining <= 0) { activeOrders = activeOrders.filter(x => x.id !== o.id); continue; }
+                h += `<div class="order">${o.text} | ⏰${Math.ceil(remaining)}с <button onclick="completeOrder(${o.id})">✓</button></div>`;
+            }
+            document.getElementById('orders').innerHTML = h || 'Нет заказов';
+        }
+
+        function loop() {
+            let elapsed = (Date.now() - dayStart) / 1000;
+            let remaining = Math.max(0, Math.ceil(dayDuration - elapsed));
+            document.getElementById('r').innerText = remaining;
+
+            if (elapsed >= dayDuration) {
+                day++;
+                dayStart = Date.now();
+                document.getElementById('d').innerText = day;
+                addOrder();
+            }
+
+            renderOrders();
+            requestAnimationFrame(() => setTimeout(loop, 200));
+        }
+
+        addOrder();
+        setInterval(addOrder, 5000);
+        renderUpgrades();
+        loop();
+    </script>
+</body>
+</html>
