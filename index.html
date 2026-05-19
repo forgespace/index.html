@@ -190,13 +190,13 @@ function produce() {
     canProduce = false;
     document.getElementById('produceBtn').classList.add('cooldown');
     document.getElementById('produceBtn').innerText = '⏳...';
-    let interval = produceInterval / gameSpeed;
+    let interval = produceInterval / gameSpeed; // ТОЛЬКО производство зависит от скорости
     let start = Date.now();
     let timer = setInterval(() => {
         let rem = Math.max(0, interval - (Date.now() - start) / 1000);
         document.getElementById('progFill').style.width = ((interval - rem) / interval * 100) + '%';
         document.getElementById('intervalText').innerText = rem.toFixed(1);
-        if (rem <= 0) { clearInterval(timer); canProduce = true; document.getElementById('produceBtn').classList.remove('cooldown'); document.getElementById('produceBtn').innerText = '🔨 ПРОИЗВЕСТИ'; document.getElementById('progFill').style.width = '0%'; document.getElementById('intervalText').innerText = interval.toFixed(1); }
+        if (rem <= 0) { clearInterval(timer); canProduce = true; document.getElementById('produceBtn').classList.remove('cooldown'); document.getElementById('produceBtn').innerText = '🔨 ПРОИЗВЕСТИ'; document.getElementById('progFill').style.width = '0%'; document.getElementById('intervalText').innerText = (produceInterval / gameSpeed).toFixed(1); }
     }, 50);
 }
 
@@ -342,7 +342,7 @@ function updateUI() {
     document.getElementById('drones').innerText = totalMade; document.getElementById('whUsed').innerText = t;
     document.getElementById('whMax').innerText = warehouse; document.getElementById('lab').innerText = labPoints;
     document.getElementById('lab2').innerText = labPoints;
-    document.getElementById('intervalText').innerText = produceInterval.toFixed(1);
+    document.getElementById('intervalText').innerText = (produceInterval / gameSpeed).toFixed(1);
     document.getElementById('parts').innerText = parts; document.getElementById('catalysts').innerText = catalysts;
     document.getElementById('dark').innerText = darkMatter; document.getElementById('bankDep').innerText = bankDeposit;
     document.getElementById('bankInc').innerText = Math.floor(bankDeposit * 0.05);
@@ -364,14 +364,27 @@ function updateUI() {
 }
 function showTab(tab) { document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active')); document.getElementById('tab-' + tab).classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active')); let idx = { game: 0, upgrades: 1, lab: 2, stats: 3 }; document.querySelectorAll('.nav-btn')[idx[tab]].classList.add('active'); if (tab === 'upgrades') renderUpgrades(); if (tab === 'lab') renderTree(); if (tab === 'stats') showStats('general'); }
 function renderAll() { renderUpgrades(); renderDroneSelector(); renderOrders(); renderTree(); }
-function newDay() { day++; dayStart = Date.now(); for (let i = 0; i < 2; i++) addOrder(); if (todayDrones > recDronesDay) recDronesDay = todayDrones; if (todayEarned > recEarnedDay) recEarnedDay = todayEarned; todayDrones = totalMade; todayEarned = 0; if (investorActive) { investorDays--; if (investorDays <= 0) investorActive = false; } credits += 5 * day + Math.floor(bankDeposit * 0.05); notify('🌅 День ' + day + '!',''); updateUI(); }
 
-// === ГЛАВНЫЙ ЦИКЛ ===
+// === НОВЫЙ ДЕНЬ (день ВСЕГДА 60 секунд) ===
+function newDay() {
+    day++;
+    dayStart = Date.now();
+    for (let i = 0; i < 2; i++) addOrder();
+    if (todayDrones > recDronesDay) recDronesDay = todayDrones;
+    if (todayEarned > recEarnedDay) recEarnedDay = todayEarned;
+    todayDrones = totalMade; todayEarned = 0;
+    if (investorActive) { investorDays--; if (investorDays <= 0) investorActive = false; }
+    credits += 5 * day + Math.floor(bankDeposit * 0.05);
+    notify('🌅 День ' + day + '!','');
+    updateUI();
+}
+
+// === ГЛАВНЫЙ ЦИКЛ (день НЕ зависит от скорости) ===
 function gameLoop() {
     let elapsed = (Date.now() - dayStart) / 1000;
-    let remaining = Math.max(0, Math.ceil(dayDuration / gameSpeed - elapsed));
+    let remaining = Math.max(0, Math.ceil(dayDuration - elapsed));
     document.getElementById('timer').innerText = remaining;
-    if (elapsed >= dayDuration / gameSpeed) newDay();
+    if (elapsed >= dayDuration) newDay();
     renderOrders(); updateUI();
     requestAnimationFrame(() => setTimeout(gameLoop, 200));
 }
